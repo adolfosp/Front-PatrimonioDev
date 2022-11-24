@@ -1,0 +1,75 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+#main {
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  background-image: url("../../../assets/img/background-login.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+#main_card {
+  align-self: center;
+  padding: 30px;
+  width: 25vw;
+  height: auto;
+  backdrop-filter: blur(25px) saturate(200%);
+  -webkit-backdrop-filter: blur(25px) saturate(200%);
+  background-color: rgba(255, 255, 255, 0.79);
+  border-radius: 7px;
+  border: 1px solid rgba(255, 255, 255, 0.125);
+}
+#main_card img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+#main_card h2 {
+  font-family: "Poppins-SemiBold";
+  text-align: center;
+  font-size: 25px;
+  font-weight: bolder;
+}
+#main_card #main_button-entrar {
+  font-family: "Poppins-Regular";
+  margin-top: 20px;
+  width: 100%;
+  border-radius: 25px;
+  background: #3344db;
+  background: linear-gradient(90deg, #3344db 0%, #009ae0 70%, #0591e0 100%, #00d4ff 100%);
+  color: white;
+}
+#main_card p {
+  text-align: center;
+  margin-top: 20px;
+  font-family: "Poppins-Regular";
+}
+#main_card #main_grupo-button-fab {
+  display: flex;
+  justify-content: center;
+}
+#main_card #main_grupo-button-fab .main_button-fab {
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  box-shadow: none;
+  margin-top: 30px;
+  width: 35px;
+  height: 35px;
+  padding: 0 !important;
+  margin-left: 15px;
+}
+
+.main_card_input {
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+::ng-deep .mat-fab .mat-button-wrapper {
+  padding: 0 !important;
+}

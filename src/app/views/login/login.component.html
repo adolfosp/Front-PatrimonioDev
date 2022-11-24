@@ -1,0 +1,46 @@
+<main id="main">
+  <section id="main_card">
+    <img src="../../../assets/img/ps.png" width="50" height="50" alt="logo da precisão sistemas">
+    <h2>Login</h2>
+    <mat-form-field class="main_card_input" appearance="standard">
+      <mat-icon matSuffix>alternate_email</mat-icon>
+      <mat-label>Entre com o seu e-mail</mat-label>
+      <input matInput placeholder="pat@example.com" [formControl]="f.email" required
+        aria-label="campo para inserir o e-mail">
+      <mat-error *ngIf="f.email.errors?.required">O e-mail é obrigatório</mat-error>
+    </mat-form-field>
+    <mat-form-field class="main_card_input" appearance="standard">
+      <mat-icon matSuffix>password</mat-icon>
+      <mat-label>Entre com a sua senha </mat-label>
+      <input matInput type="password" placeholder="********" [formControl]="f.senha" required aria-label="campo para inserir a senha">
+      <mat-error *ngIf="f.senha.errors?.required">A senha é obrigatória</mat-error>
+    </mat-form-field>
+    <mat-slide-toggle color="primary" (change)="alterarLembrarMe()" [(ngModel)]="lembrarMe">Lembrar-me
+    </mat-slide-toggle>
+
+    <button mat-raised-button id="main_button-entrar" (click)="validarCredenciais()"
+      [disabled]="!form.valid">Entrar</button>
+    <!-- <div id="main_grupo-button-fab">
+
+      <button style="padding: 0 !important;"mat-fab (click)="logarComFacebook()"
+       class="main_button-fab"
+        aria-label="botão de acessar a plataforma com o login do facebook">
+        <asl-google-signin-button type='icon' shape='circle' size='large'></asl-google-signin-button>
+
+      </button>
+
+      <button mat-fab (click)="logarComFacebook()"
+        [style.backgroundImage]="'url(../../../assets/img/icon-facebook.png)'" class="main_button-fab"
+        aria-label="botão de acessar a plataforma com o login do facebook">
+      </button>
+
+    </div> -->
+
+
+    <p>Ou <a href="#" routerLink="/registrar"> cadastre-se</a></p>
+  </section>
+</main>
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box"
+  [fullScreen]="true">
+  <p style="color: white"> Validando credenciais... </p>
+</ngx-spinner>

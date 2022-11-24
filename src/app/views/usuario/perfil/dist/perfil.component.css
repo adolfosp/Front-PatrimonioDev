@@ -1,0 +1,92 @@
+@font-face {
+  font-family: "brandon";
+  src: url("./fonts/brandon.otf") format("opentype");
+}
+@font-face {
+  font-family: "Roboto-Black";
+  src: url("./fonts/Roboto-Black.otf") format("opentype");
+}
+@font-face {
+  font-family: "Poppins-Regular";
+  src: url("./fonts/Poppins-Regular.otf") format("opentype");
+}
+@font-face {
+  font-family: "Roboto-Regular";
+  src: url("./fonts/Roboto-Regular.ttf") format("opentype");
+}
+@font-face {
+  font-family: "Poppins-SemiBold";
+  src: url("./fonts/Poppins-SemiBold.otf") format("opentype");
+}
+@font-face {
+  font-family: "brandon";
+  src: url("./fonts/brandon.otf") format("opentype");
+}
+@font-face {
+  font-family: "Roboto-Black";
+  src: url("./fonts/Roboto-Black.otf") format("opentype");
+}
+@font-face {
+  font-family: "Poppins-Regular";
+  src: url("./fonts/Poppins-Regular.otf") format("opentype");
+}
+@font-face {
+  font-family: "Roboto-Regular";
+  src: url("./fonts/Roboto-Regular.ttf") format("opentype");
+}
+@font-face {
+  font-family: "Poppins-SemiBold";
+  src: url("./fonts/Poppins-SemiBold.otf") format("opentype");
+}
+.texto-destaque {
+  font-family: "Roboto-Black";
+  border-bottom: #009AE0 solid;
+  border-width: 3px;
+  word-wrap: normal;
+  padding-bottom: 3px;
+  color: black;
+  border-radius: 3px;
+  line-height: 2;
+}
+
+.tamanho-fonte {
+  font-size: 16px !important;
+}
+
+.botao-alterar {
+  background-color: #FFC107;
+}
+
+.botao-excluir {
+  background-color: #F86C6B;
+}
+
+.botao-expandir {
+  background-color: #009AE0;
+}
+
+.base-alterar-excluir-expandir {
+  border-radius: 5px;
+  color: white !important;
+  font-family: "Roboto-Regular";
+  cursor: pointer;
+}
+
+#card-footer-imagem {
+  background-color: #009AE0 !important;
+  color: white;
+  height: 17vh;
+}
+
+.cor-card-footer {
+  background-color: white;
+}
+
+#imagem-usuario {
+  cursor: pointer;
+}
+#imagem-usuario #row-card-sombra {
+  -webkit-box-shadow: -12px -7px 53px -29px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: -12px -7px 53px -29px rgba(0, 0, 0, 0.75);
+  box-shadow: -12px -7px 53px -29px rgba(0, 0, 0, 0.75);
+}

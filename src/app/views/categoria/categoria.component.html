@@ -1,0 +1,39 @@
+<div class="card border-0 rounded shadow-sm ml-3 m-3 p-3" id="formulario">
+  <form [formGroup]="form" id="card_categoriaForm">
+    <h1 class="col-4 col-lg-2"><span class="texto-destaque">Categoria</span></h1>
+      <div class="p-3">
+          <div class="row">
+              <div class="col-6">
+                <mat-form-field class="full-width" appearance="fill">
+                  <mat-label>Código da categoria</mat-label>
+                  <input matInput readonly [formControl]="f.codigoCategoria" name="codigoCategoria">
+                </mat-form-field>
+              </div>
+              <div class="col-6">
+                <mat-form-field class="full-width" appearance="fill">
+                  <mat-label>Descrição</mat-label>
+                  <input matInput aria-label="Campo que que contém a descrição da categoria " placeholder="Digite a descrição" [formControl]="f.descricao" required
+                    name="descricao">
+                  <mat-error *ngIf="f.descricao.errors?.required">A descrição é obrigatória</mat-error>
+                  <mat-error *ngIf="f.descricao.errors?.maxlength">A descrição deve conter no máximo 50 letras
+                  </mat-error>
+                  <mat-error *ngIf="f.descricao.errors?.minlength">A descrição deve conter no mínimo 2 letras
+                  </mat-error>
+                </mat-form-field>
+            </div>
+          </div>
+          <div class="form-row pt-3">
+            <div class="row">
+              <div class="col">
+                <button type="button" class="btn btn-block cadastrar me-2" (click)="salvarAlteracao()" [disabled]="!form.valid">{{this.estadoSalvar.includes('cadastrar')?'Cadastrar':'Atualizar'}}</button>
+                <button type="button" class="btn btn-block limpar" (click)="limparCampos()">Limpar</button>
+
+              </div>
+            </div>
+          </div>
+      </div>
+  </form>
+</div>
+<ngx-spinner name="cadastrada" bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box" [fullScreen]="true"><p style="color: white" > Cadastrando... </p></ngx-spinner>
+<ngx-spinner name="atualizada" bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box" [fullScreen]="true"><p style="color: white" > Atualizando... </p></ngx-spinner>
+<ngx-spinner name="carregando" bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "square-jelly-box" [fullScreen] = "true"><p style="color: white" > Carregando... </p></ngx-spinner>

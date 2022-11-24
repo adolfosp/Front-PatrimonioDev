@@ -1,0 +1,100 @@
+<div class="card border-0 rounded shadow-sm ml-3 m-3 p-3" id="formulario">
+  <form [formGroup]="form">
+    <h1 class="col-4 col-lg-3"><span class="texto-destaque">Movimentação</span></h1>
+    <div class="p-3">
+      <div class="row">
+        <div class="col-12">
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Código movimentação</mat-label>
+            <input matInput readonly [formControl]="f.codigoMovimentacao" name="codigoMovimentacao" />
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6 col-sm-12">
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Usuário</mat-label>
+            <input type="hidden" class="form-control" name="codigoUsuario" formControlName="codigoUsuario" readonly>
+            <input matInput readonly [formControl]="f.nomeUsuario" name="nomeUsuario" />
+          </mat-form-field>
+        </div>
+        <div class="col-lg-6 col-sm-12">
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Patrimônio</mat-label>
+            <input type="hidden" class="form-control" formControlName="codigoPatrimonio" name="codigoPatrimonio"
+              readonly />
+            <input matInput readonly [formControl]="f.patrimonio" name="patrimonio" />
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6 col-sm-12">
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Data Apropriação</mat-label>
+            <input [formControl]="f.dataApropriacao" matInput [matDatepicker]="pickerApropriacao"
+              name="dataApropriacao">
+            <mat-datepicker-toggle matSuffix [for]="pickerApropriacao"></mat-datepicker-toggle>
+            <mat-datepicker #pickerApropriacao></mat-datepicker>
+            <mat-error *ngIf="f.dataApropriacao.errors?.required">A data de apropriação é obrigatório</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-lg-6 col-sm-12">
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Data Devolução</mat-label>
+            <input [formControl]="f.dataDevolucao" matInput [matDatepicker]="pickerDevolucao" name="dataDevolucao">
+            <mat-datepicker-toggle matSuffix [for]="pickerDevolucao"></mat-datepicker-toggle>
+            <mat-datepicker #pickerDevolucao></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6 col-sm-12 mt-2 mb-2">
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>O Patrimônio está:</mat-label>
+            <mat-select [formControl]="f.movimentacaoDoEquipamento" [(ngModel)]="valorSituacaoMovimento" name="movimentacaoDoEquipamento" required>
+              <mat-option *ngFor="let name of chaveSituacaoMovimento" [value]="name"> {{situacaoMovimentoEnum[name]}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="f.movimentacaoDoEquipamento.errors?.required">A situação do equipamento é obrigatório</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Observação</mat-label>
+            <textarea matInput [formControl]="f.observacao" name="observacao" rows="5" cols="50"></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row pt-3">
+        <div class="row">
+          <div class="col">
+            <button type="button" class="btn btn-block cadastrar me-2" [disabled]="!form.valid"
+              (click)="salvarAlteracao()">
+              {{this.estadoSalvar.includes('realizar')?'Realizar Movimentação':'Atualizar'}}
+            </button>
+            <button type="button" class="btn btn-block limpar" (click)="limparCampos()">
+              Limpar
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<ngx-spinner name="realizada" bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box"
+  [fullScreen]="true">
+  <p style="color: white"> Realizando movimentação... </p>
+</ngx-spinner>
+<ngx-spinner name="atualizado" bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box"
+  [fullScreen]="true">
+  <p style="color: white"> Atualizando... </p>
+</ngx-spinner>
+<ngx-spinner name="carregando" bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box"
+  [fullScreen]="true">
+  <p style="color: white"> Carregando... </p>
+</ngx-spinner>

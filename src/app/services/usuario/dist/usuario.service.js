@@ -1,0 +1,44 @@
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+exports.__esModule = true;
+exports.UsuarioService = void 0;
+var core_1 = require("@angular/core");
+var operators_1 = require("rxjs/operators");
+var environment_1 = require("../../../environments/environment");
+var UsuarioService = /** @class */ (function () {
+    function UsuarioService(api) {
+        this.api = api;
+        this.baseUrl = environment_1.environment.apiUrl + "usuarios";
+    }
+    UsuarioService.prototype.cadastrarUsuario = function (usuario) {
+        return this.api.post(this.baseUrl, { usuario: usuario }).pipe(operators_1.take(1));
+    };
+    UsuarioService.prototype.obterTodosUsuarios = function () {
+        return this.api.get(this.baseUrl).pipe(operators_1.take(1));
+    };
+    UsuarioService.prototype.obterApenasUmUsuario = function (codigoUsuario) {
+        return this.api.get(this.baseUrl + "/" + codigoUsuario).pipe(operators_1.take(1));
+    };
+    UsuarioService.prototype.obterUsuarioPorEmailESenha = function (email, senha, autenticacaoAuth) {
+        return this.api.post(this.baseUrl + "/" + email + "/" + senha, autenticacaoAuth).pipe(operators_1.take(1));
+    };
+    UsuarioService.prototype.desativarUsuario = function (codigoUsuario) {
+        debugger;
+        return this.api["delete"](this.baseUrl + "/" + codigoUsuario).pipe(operators_1.take(1));
+    };
+    UsuarioService.prototype.atualizarUsuario = function (usuario) {
+        return this.api.put(this.baseUrl + "/" + usuario.codigoUsuario, { usuario: usuario }).pipe(operators_1.take(1));
+    };
+    UsuarioService = __decorate([
+        core_1.Injectable({
+            providedIn: 'root'
+        })
+    ], UsuarioService);
+    return UsuarioService;
+}());
+exports.UsuarioService = UsuarioService;

@@ -1,0 +1,84 @@
+<div class="card border-0 rounded shadow-sm ml-3 m-3 p-3" id="formulario">
+  <form [formGroup]="form">
+    <h1 class="col-4 col-lg-2"><span class="texto-destaque">Empresa</span></h1>
+    <div class="p-3">
+      <div class="row">
+        <div class="col-12">
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Código da empresa </mat-label>
+            <input matInput placeholder="********" [formControl]="f.codigoEmpresa" readonly>
+          </mat-form-field>
+        </div>
+        <div class="col-12">
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Nome Fantasia </mat-label>
+            <input matInput placeholder="Digite o nome fantasia da sua empresa" [formControl]="f.nomeFantasia" required
+              name="nomeFantasia">
+            <mat-error *ngIf="f.nomeFantasia.errors?.required">Nome fantasia é obrigatório</mat-error>
+            <mat-error *ngIf="f.nomeFantasia.errors?.maxlength">Nome fantasia pode ter no máximo 70 letras</mat-error>
+            <mat-error *ngIf="f.nomeFantasia.errors?.minlength">Nome fantasia pode ter no mínimo 10 letras</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-12 mt-2">
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Razão Social</mat-label>
+            <input matInput placeholder="Digite a razão social da sua empresa" name="razaoSocial"
+              [formControl]="f.razaoSocial" required >
+            <mat-error *ngIf="f.razaoSocial.errors?.required">Razão Social é obrigatório</mat-error>
+            <mat-error *ngIf="f.razaoSocial.errors?.maxlength">Razão Social pode ter no máximo 70
+              letras</mat-error>
+            <mat-error *ngIf="f.razaoSocial.errors?.minlength">Razão Social pode ter no mínimo 10
+              letras</mat-error>
+          </mat-form-field>
+
+        </div>
+        <div class="row">
+          <div class="col-lg-6 col-sm-12">
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Empresa padrão para impressão</mat-label>
+              <mat-select [formControl]="f.empresaPadraoImpressao" name="empresaPadraoImpressao" required>
+                <mat-option selected [value]="false">Não</mat-option>
+                <mat-option [value]="true">Sim</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-6 col-sm-12">
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>CNPJ</mat-label>
+              <input matInput mask="00.000.000/0000-00" placeholder="00.000.000/0000-00" [formControl]="f.cnpj" required
+                name="cnpj">
+              <mat-error *ngIf="f.cnpj.errors?.required">CNPJ é obrigatório</mat-error>
+              <mat-error *ngIf="f.cnpj.errors?.maxlength">CNPJ pode ter no máximo 14 números</mat-error>
+              <mat-error *ngIf="f.cnpj.errors?.minlength">CNPJ pode ter no mínimo 14 números</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="form-row pt-3">
+        <div class="row">
+          <div class="col">
+            <button type="button" class="btn btn-block cadastrar me-2" (click)="salvarAlteracao()"
+              [disabled]="!form.valid">{{this.estadoSalvar.includes('cadastrar')?'Cadastrar':'Atualizar'}}</button>
+              <button type="button" class="btn btn-block limpar" (click)="limparCampos()">Limpar</button>
+
+            </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<ngx-spinner name="cadastrada" bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box"
+  [fullScreen]="true">
+  <p style="color: white"> Cadastrando... </p>
+</ngx-spinner>
+<ngx-spinner name="atualizada" bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box"
+  [fullScreen]="true">
+  <p style="color: white"> Atualizando... </p>
+</ngx-spinner>
+<ngx-spinner name="carregando" bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box"
+  [fullScreen]="true">
+  <p style="color: white"> Carregando... </p>
+</ngx-spinner>

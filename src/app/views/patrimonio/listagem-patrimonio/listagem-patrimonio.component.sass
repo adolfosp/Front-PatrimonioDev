@@ -1,0 +1,46 @@
+@import "../../../../assets/style-listagem.sass"
+
+.tamanho-fa
+  font-size: 20px
+
+
+.legenda-situacao-equipamento
+  padding: 10px
+  font-weight: 500
+  color: white
+  border-radius: 5px
+
+
+button.fechar-modal
+  border: none
+  background-color: transparent
+
+
+.em-uso
+  @extend .legenda-situacao-equipamento
+  background-color: #009AE0
+
+
+.manutencao
+  @extend .legenda-situacao-equipamento
+  background-color: grey
+
+
+.disponivel
+  @extend .legenda-situacao-equipamento
+  background-color: green
+
+
+.danificado
+  @extend .legenda-situacao-equipamento
+  background-color: red
+
+
+.dropdown-item
+  @extend .sem-borda
+
+
+.sem-borda
+  border: none !important
+
+

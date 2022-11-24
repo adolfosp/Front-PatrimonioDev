@@ -1,0 +1,8 @@
+<a id="download" download="{{codigoPatrimonio}}-{{serviceTag}}.png">
+  <button type="button" class="btn btn-lg" id="botao-qrcode" (click)="downloadQrCode()">Gerar Etiqueta</button>
+</a>
+<div id="qr-code-imagem">
+<qrcode [qrdata]="url"
+  [elementType]="'img'" [scale]="4" [allowEmptyString]="true"  [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+</div>
+<canvas #canvas></canvas>

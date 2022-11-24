@@ -1,0 +1,195 @@
+<div class="card border-0 rounded shadow-sm ml-3 m-3 p-3" id="formulario">
+  <form [formGroup]="form">
+    <div class="row">
+      <div class="col-sm-12 col-md-8 col-lg-8">
+        <h1><span class="texto-destaque">Patrimônio</span></h1>
+      </div>
+      <div *ngIf="+form.controls['codigoPatrimonio'].value != 0" class="col-sm-12 col-md-4 col-lg-4">
+        <app-canvas codigoPatrimonio="{{codigoPatrimonio}}" url="" serviceTag="{{serviceTag}}"
+          nomeFantasia="{{nomeFantasiaEmpresaPadrao | uppercase | slice:0:18 }}"></app-canvas>
+      </div>
+    </div>
+    <div class="p-3">
+      <div class="row">
+        <div class="col-12">
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Código patrimônio</mat-label>
+            <input matInput readonly [formControl]="f.codigoPatrimonio" name="codigoPatrimonio" />
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6 col-sm-12">
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Funcionário</mat-label>
+            <mat-select [formControl]="f.codigoFuncionario" name="codigoFuncionario" required>
+              <mat-option value="" disabled>--Selecione um funcionário--</mat-option>
+              <mat-option *ngFor="let funcionario of funcionarios" [value]="funcionario.codigoFuncionario">
+                {{funcionario.codigoFuncionario}} - {{ funcionario.nomeFuncionario }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="f.codigoFuncionario.errors?.required">O funcionário é obrigatório</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-6 col-sm-12">
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Equipamento</mat-label>
+            <mat-select [formControl]="f.codigoTipoEquipamento" name="codigoTipoEquipamento" required>
+              <mat-option value="" disabled>--Selecione um equipamento--</mat-option>
+              <mat-option *ngFor="let equipamento of equipamentos" [value]="equipamento.codigoTipoEquipamento">
+                {{equipamento.codigoTipoEquipamento}} - {{ equipamento.tipoEquipamento }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="f.codigoTipoEquipamento.errors?.required">O equipamento é obrigatório</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6 col-sm-12 mt-2">
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Usuário</mat-label>
+            <input type="hidden" class="form-control" name="codigoUsuario" formControlName="codigoUsuario" readonly>
+            <input matInput readonly [formControl]="f.nomeUsuario" name="nomeUsuario" />
+          </mat-form-field>
+        </div>
+        <div class="col-lg-6 col-sm-12 mt-2">
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Memória RAM</mat-label>
+            <input matInput [formControl]="f.memoriaRAM" placeholder="EX: 13GB 1333MHz" name="memoriaRAM" />
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6 col-sm-12">
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Modelo</mat-label>
+            <input matInput [formControl]="f.modelo" placeholder="Modelo do equipamento" name="modelo" />
+          </mat-form-field>
+        </div>
+
+        <div class="col-lg-6 col-sm-12">
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Service tag</mat-label>
+            <input matInput [formControl]="f.serviceTag" placeholder="Tag para identificação" name="serviceTag" />
+            <mat-error *ngIf="f.serviceTag.errors?.required">A serviceTag é obrigatória</mat-error>
+            <mat-error *ngIf="f.serviceTag.errors?.maxlength">A service tag pode ter no máximo 20 letras</mat-error>
+            <mat-error *ngIf="f.serviceTag.errors?.minlength">A service tag pode ter no mínimo 4 letras</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6 col-sm-12">
+
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Armazenamento</mat-label>
+            <input matInput [formControl]="f.armazenamento" placeholder="Ex: 500GB" name="armazenamento" />
+          </mat-form-field>
+
+        </div>
+        <div class="col-lg-6 col-sm-12">
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Processador</mat-label>
+            <input matInput [formControl]="f.processador" placeholder="Ex: I7 6º GERAÇÃO" name="processador" />
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6 col-sm-12">
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Placa de vídeo</mat-label>
+            <input matInput [formControl]="f.placaDeVideo" placeholder="Placa de vídeo" name="placaDeVideo" />
+          </mat-form-field>
+        </div>
+        <div class="col-lg-6 col-sm-12">
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>MAC</mat-label>
+            <input matInput [formControl]="f.mac" name="mac" />
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6 col-sm-12">
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Situação Equipamento</mat-label>
+            <mat-select [formControl]="f.situacaoEquipamento" [(ngModel)]="valorAtualSituacaoEquipamento" name="situacaoEquipamento" required>
+              <mat-option *ngFor="let name of chaveSituacaoEquipamento" [value]="name">{{situacaoEquipamentoEnum[name]}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <h3 class="col-8 col-lg-4 mb-4 p-2"><span class="texto-destaque">Informações Adicionais</span></h3>
+
+      <form [formGroup]="formAdicional">
+        <div class="row">
+          <input type="hidden" formControlName="codigoInformacaoAdicional" class="form-control">
+          <div class="col-lg-6 col-sm-12">
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Valor Pago</mat-label>
+              <input matInput currencyMask [options]="{ prefix: 'R$ ', align: 'left', thousands: '.', decimal: ',' }" [formControl]="fa.valorPago" placeholder="R$ 0,00" name="valorPago" />
+              <mat-error *ngIf="fa.valorPago.errors?.required">O valor pago é obrigatório</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-6 col-sm-12">
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Data Compra</mat-label>
+              <input [formControl]="fa.dataCompra" matInput [matDatepicker]="picker" name="dataCompra">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-6 col-sm-12">
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Data Expiração Garantia</mat-label>
+              <input [formControl]="fa.dataExpiracaoGarantia" matInput [matDatepicker]="pickerExpiracao" name="dataExpiracaoGarantia">
+              <mat-datepicker-toggle matSuffix [for]="pickerExpiracao"></mat-datepicker-toggle>
+              <mat-datepicker #pickerExpiracao ></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-6 col-sm-12">
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Antivirus</mat-label>
+              <input matInput [formControl]="fa.antivirus"  placeholder="Ex: Avast" name="antivirus" />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-6 col-sm-12">
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Versão Windows</mat-label>
+              <input matInput [formControl]="fa.versaoWindows"  placeholder="Ex: Windows Server" name="versaoWindows" />
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
+      <div class="row pt-3">
+        <div class="row">
+          <div class="col">
+            <button type="button" class="btn btn-block cadastrar me-2" [disabled]="!form.valid || !formAdicional.valid"
+              (click)="salvarAlteracao()">{{this.estadoSalvar == 'cadastrarPatrimonio'?'Cadastrar':'Atualizar'}}</button>
+            <button type="button" class="btn btn-block limpar" (click)="limparCampos()">Limpar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<ngx-spinner name="cadastrado" bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box"
+  [fullScreen]="true">
+  <p style="color: white"> Cadastrando... </p>
+</ngx-spinner>
+<ngx-spinner name="atualizado" bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box"
+  [fullScreen]="true">
+  <p style="color: white"> Atualizando... </p>
+</ngx-spinner>
+<ngx-spinner name="carregando" bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box"
+  [fullScreen]="true">
+  <p style="color: white"> Carregando... </p>
+</ngx-spinner>

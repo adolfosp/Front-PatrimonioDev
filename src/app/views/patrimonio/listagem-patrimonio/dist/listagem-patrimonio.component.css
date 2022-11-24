@@ -1,0 +1,126 @@
+@font-face {
+  font-family: "brandon";
+  src: url("./fonts/brandon.otf") format("opentype");
+}
+@font-face {
+  font-family: "Roboto-Black";
+  src: url("./fonts/Roboto-Black.otf") format("opentype");
+}
+@font-face {
+  font-family: "Poppins-Regular";
+  src: url("./fonts/Poppins-Regular.otf") format("opentype");
+}
+@font-face {
+  font-family: "Roboto-Regular";
+  src: url("./fonts/Roboto-Regular.ttf") format("opentype");
+}
+@font-face {
+  font-family: "Poppins-SemiBold";
+  src: url("./fonts/Poppins-SemiBold.otf") format("opentype");
+}
+.texto-destaque {
+  font-family: "Roboto-Black";
+  border-bottom: #009AE0 solid;
+  border-width: 3px;
+  word-wrap: normal;
+  padding-bottom: 3px;
+  color: black;
+  border-radius: 2px;
+  line-height: 2;
+}
+
+.tamanho-fonte {
+  font-size: 16px !important;
+}
+
+.botao-alterar {
+  background-color: #FFC107;
+}
+
+.botao-excluir {
+  background-color: #F86C6B;
+}
+
+.botao-expandir {
+  background-color: #009AE0;
+}
+
+.base-alterar-excluir-expandir {
+  border-radius: 5px;
+  color: white !important;
+  font-family: "Roboto-Regular";
+  cursor: pointer;
+}
+
+.limpar {
+  background-color: #808080;
+  color: white;
+}
+.limpar:hover {
+  background-color: #7A7A7A;
+  color: white;
+}
+
+.cadastrar {
+  border-radius: 4px;
+  background-color: #009AE0;
+  color: white;
+  border: none;
+}
+.cadastrar:hover {
+  background-color: #0088C7;
+  color: white;
+}
+
+.card {
+  min-width: 60vw;
+}
+
+.full-width {
+  width: 100%;
+}
+
+#icone-excel {
+  color: white;
+  font-weight: 200;
+}
+
+p, td {
+  word-break: break-all !important;
+}
+
+.tamanho-fa {
+  font-size: 20px;
+}
+
+.legenda-situacao-equipamento, .danificado, .disponivel, .manutencao, .em-uso {
+  padding: 10px;
+  font-weight: 500;
+  color: white;
+  border-radius: 5px;
+}
+
+button.fechar-modal {
+  border: none;
+  background-color: transparent;
+}
+
+.em-uso {
+  background-color: #009AE0;
+}
+
+.manutencao {
+  background-color: grey;
+}
+
+.disponivel {
+  background-color: green;
+}
+
+.danificado {
+  background-color: red;
+}
+
+.sem-borda, .dropdown-item {
+  border: none !important;
+}

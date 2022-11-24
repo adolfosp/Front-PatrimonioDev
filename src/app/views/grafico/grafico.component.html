@@ -1,0 +1,58 @@
+<mat-accordion>
+  <mat-expansion-panel [expanded]="true" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Quantitativos </mat-panel-title>
+      <mat-panel-description>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <section class="page-contain">
+      <div class="row">
+        <div class="col-md-6 col-lg-4">
+          <a class="data-card">
+            <h3>{{quantidadeTotalDePatrimoniosDisponiveis}}</h3>
+            <h4>Patrimônios disponíveis</h4>
+          </a>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <a class="data-card">
+            <h3>{{quantidadeTotalDePatrimonios}}</h3>
+            <h4>Patrimônios</h4>
+          </a>
+        </div>
+        <div class="col-md-6 col-lg-4">
+
+          <a class="data-card">
+            <h3>{{quantidadeMovimentacoes}}</h3>
+            <h4>Movimentações</h4>
+          </a>
+        </div>
+        <div class="col-md-6 col-lg-4">
+
+          <a class="data-card">
+            <h3>{{mediaEquipamento}}</h3>
+            <h4>Média de equipamentos</h4>
+          </a>
+        </div>
+        <div class="col-md-6 col-lg-4">
+
+          <a class="data-card">
+            <h3>{{quantidadeDeEquipamentos}}</h3>
+            <h4>Equipamentos</h4>
+          </a>
+        </div>
+      </div>
+    </section>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="true" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Gráfico </mat-panel-title>
+      <mat-panel-description>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <div echarts [options]="options" class="demo-chart">
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>

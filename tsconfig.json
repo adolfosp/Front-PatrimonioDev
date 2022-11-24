@@ -1,0 +1,43 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "./dist/out-tsc",
+    "forceConsistentCasingInFileNames": true,
+    "strict": false,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2020",
+    "module": "es2020",
+    "lib": [
+      "es2020",
+      "dom"
+    ],
+    "paths": {
+      "@nvs-services/*": ["src/app/services/*"],
+      "@nvs-enum/*": ["src/app/models/enum/*"],
+      "@nvs-models/*": ["src/app/models/*"],
+      "@nvs-guards/*": ["src/app/guards/*"],
+      "@nvs-helpers/*": ["src/app/helpers/*"],
+      "@nvs-assets/*": ["src/assets/*"],
+      "@nvs-pipes/*": ["src/app/pipes/*"]
+
+    },
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictDomEventTypes": false,
+    "strictTemplates": true
+  }
+}

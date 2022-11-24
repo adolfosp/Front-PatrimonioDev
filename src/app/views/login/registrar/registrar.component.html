@@ -1,0 +1,78 @@
+ <div class="card-registrar">
+   <form [formGroup]="form">
+     <h1><span class="texto-destaque">Cadastre-se</span></h1>
+     <p class="text-muted">Crie sua conta para acessar a plataforma</p>
+     <div class="row">
+
+       <div class="col-md-12 col-lg-6">
+         <mat-form-field class="full-width mb-2" appearance="fill">
+           <mat-label>Nome</mat-label>
+           <input matInput name="nome" [formControl]="f.nome" name="nome" required />
+           <mat-error *ngIf="f.nome.errors?.required">O nome é obrigatório</mat-error>
+           <mat-error *ngIf="f.nome.errors?.maxlength">O nome pode ter no
+             máximo 100 letras
+           </mat-error>
+           <mat-error *ngIf="f.nome.errors?.minlength">O nome pode ter no
+             mínimo 10 letras
+           </mat-error>
+         </mat-form-field>
+       </div>
+
+       <div class="col-md-12 col-lg-6">
+         <mat-form-field class="full-width mb-2" appearance="fill">
+           <mat-label>E-mail</mat-label>
+           <input matInput name="email" [formControl]="f.email" name="email" required />
+           <mat-error *ngIf="f.email.errors?.required">O e-mail é obrigatório</mat-error>
+           <mat-error *ngIf="f.email.errors?.email">O e-mail não é válido
+           </mat-error>
+           <mat-error *ngIf="f.email.errors?.minlength">O e-mail deve ter no
+             mínimo 10 caracteres
+           </mat-error>
+         </mat-form-field>
+       </div>
+     </div>
+
+     <mat-form-field class="full-width mb-2" appearance="fill">
+       <mat-label>Senha</mat-label>
+       <input matInput type="password" name="senha" [formControl]="f.senha" name="senha" required />
+       <mat-error *ngIf="f.senha.errors?.required">A senha é obrigatória</mat-error>
+       <mat-error *ngIf="f.senha.errors?.maxlength">A senha deve ter no
+         máximo 25 caracteres
+       </mat-error>
+       <mat-error *ngIf="f.senha.errors?.minlength">A senha deve ter no
+         mínimo 5 caracteres
+       </mat-error>
+     </mat-form-field>
+     <mat-form-field class="full-width mb-2" appearance="fill">
+       <mat-label>Digite novamente a senha</mat-label>
+       <input matInput type="password" name="confirmeSenha" [formControl]="f.confirmeSenha" name="confirmeSenha"
+         required />
+       <mat-error *ngIf="f.confirmeSenha.errors?.required">A senha é
+         obrigatória</mat-error>
+       <mat-error *ngIf="f.confirmeSenha.errors?.maxlength">A senha deve
+         ter no máximo 25 caracteres
+       </mat-error>
+       <mat-error *ngIf="f.confirmeSenha.errors?.minlength">A senha deve
+         ter no mínimo 5 caracteres
+       </mat-error>
+       <mat-error *ngIf="f.confirmeSenha.errors?.mustMatch">Senha
+         incorreta</mat-error>
+     </mat-form-field>
+     <div class="row justify-content-center">
+       <div class="col-4">
+         <button type="button" class="btn btn-block cadastrar" (click)="salvarAlteracao()"
+           [disabled]="!form.valid">Cadastrar</button>
+       </div>
+       <div class="col-4">
+         <button type="button" routerLink="/login" class="btn btn-block
+        limpar">Voltar</button>
+       </div>
+     </div>
+   </form>
+ </div>
+ <section>
+
+ </section>
+ <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box" [fullScreen]="true">
+   <p style="color: white"> Cadastrando... </p>
+ </ngx-spinner>

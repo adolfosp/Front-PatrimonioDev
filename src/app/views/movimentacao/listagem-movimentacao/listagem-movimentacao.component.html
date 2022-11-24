@@ -1,0 +1,75 @@
+<div class="card border-0 rounded shadow-sm p-3 m-5">
+  <div class="row">
+    <div class="col-lg-12 col-sm-12 col-md-12">
+      <mat-form-field class="full-width" appearance="fill">
+        <mat-label>Buscar por registros</mat-label>
+        <input matInput (input)="onChange($event)" placeholder="">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+      <div class="col-lg-4 col-sm-12 col-md-12 col-12">
+        <button disabled class="btn btn-success mb-1 me-2 tamanho-fonte ">
+          <i class="fas fa-file-excel my-1" id="icone-excel"></i>
+          Excel
+        </button>
+        <button class="btn btn-outline-primary mb-1 ml-1 mr-1" routerLink="/dashboard/movimentacao">
+          <b class=" ml-1 mr-1 tamanho-fonte">Novo <i class="fa fa-plus-circle my-1"></i></b>
+        </button>
+      </div>
+    </div>
+  </div>
+  <ngx-table [data]="data" [configuration]="configuracao" [columns]="colunas" [noResultsTemplate]="mensagemSemCadastro"
+    [summaryTemplate]="summaryTemplateRef" [detailsTemplate]="detailsTemplate" #table>
+    <ng-template let-row let-index="index">
+      <td>
+        <div class="font-small">{{ row.codigoMovimentacao }}</div>
+      </td>
+      <td *ngIf="!isMobile">
+        <div class="font-small">{{ row.dataApropriacao | date: 'dd/MM/yyyy'}}</div>
+      </td>
+      <td *ngIf="!isMobile">
+        <div class="font-small">{{ row.dataDevolucao | date: 'dd/MM/yyyy'}}</div>
+      </td>
+      <td>
+        <div class="font-small">{{ row.nomeUsuario}}</div>
+      </td>
+      <td>
+        <div class="font-small">{{ row.nomeFuncionario}}</div>
+      </td>
+      <td *ngIf="isMobile">
+        <button class="btn botao-expandir" id="expandButton-{{ index }}" (click)="onRowClickEvent($event, index)">
+          <i class="fa fa-arrow-left" *ngIf="!toggledRows.has(index)"></i>
+          <i class="fa fa-arrow-down" *ngIf="toggledRows.has(index)"></i>
+          Expandir
+        </button>
+      </td>
+      <td *ngIf="!isMobile">
+        <button title="Botão para editar registro" class="btn botao-alterar btn-lg" (click)="detalheMovimentacao(row.codigoMovimentacao)">
+          <i class="fa fa-edit"></i>
+        </button>
+      </td>
+
+    </ng-template>
+  </ngx-table>
+</div>
+<ng-template #mensagemSemCadastro>
+  <td [attr.colspan]="colunas.length" class="no-results text-center">
+    <h4>Não há nenhuma movimentação realizada</h4>
+  </td>
+</ng-template>
+
+<ng-template #summaryTemplateRef let-total="total">
+  <th>Total de registros: {{ total }}</th>
+</ng-template>
+
+<ng-template #detailsTemplate let-row>
+  <p>Data Aprop. : {{ row.dataApropriacao }}</p>
+  <p>Data Dev. : {{ row.dataDevolucao }}</p>
+  <button title="Botão para editar registro" class="btn botao-alterar btn-lg mr-3" (click)="detalheMovimentacao(row.codigoMovimentacao)">
+    <i class="fa fa-edit"></i>
+  </button>
+</ng-template>
+<ngx-spinner name="buscando" bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box"
+  [fullScreen]="true">
+  <p style="color: white"> Buscando... </p>
+</ngx-spinner>
+

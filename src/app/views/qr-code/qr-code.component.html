@@ -1,0 +1,72 @@
+<div class="scanner-shell" [hidden]="!hasDevices">
+
+  <header>
+    <select (change)="onDeviceSelectChange($event.target.value)">
+      <option value="" [selected]="!currentDevice">Nenhuma câmera selecionada</option>
+      <option *ngFor="let device of availableDevices" [value]="device.deviceId"
+        [selected]="currentDevice && device.deviceId === currentDevice.deviceId">{{ device.label }}</option>
+    </select>
+  </header>
+
+  <zxing-scanner #scanner [formats]="allowedFormats" [(device)]="currentDevice"
+    (camerasFound)="obterDispositivos($event)" (scanSuccess)="handleQrCodeResult($event)"></zxing-scanner>
+  <section class="results" *ngIf="qrResultString">
+    <small>Resultado:</small>
+    <strong>{{ qrResultString }}</strong>
+    <div class="d-flex justify-content-center">
+      <button class="btn btn-lg btn-success mt-2" (click)="abrirUrl()">Navegar</button>
+    </div>
+  </section>
+
+</div>
+
+<ng-container *ngIf="hasPermission === undefined">
+  <blockquote class="texto-centro">
+    Se o seu dispositivo não tem câmeras, não será solicitado permissão
+  </blockquote>
+</ng-container>
+
+<ng-container *ngIf="hasPermission === false">
+  <h2 class="permissao-negada" data-toggle="tooltip" data-placement="top" title="Tooltip on top">Identificamos que não
+    nos foi dado permissão para o uso da câmera do seu dispositivo. Dessa maneira não conseguiremos ler nenhum QRCode.
+  </h2>
+</ng-container>
+
+<ng-container *ngIf="hasDevices === undefined">
+  <h2 class="permissao-negada">Não foi possível verificar os dispositivos.</h2>
+
+  <blockquote class="texto-centro">
+    Isso pode ser causado por algum erro de segurança.
+  </blockquote>
+</ng-container>
+
+<ng-container *ngIf="hasDevices === false">
+
+  <h2 class="permissao-negada">Não foi encontrado nenhum dispositivo de câmera.</h2>
+
+  <blockquote class="texto-centro">
+    Acredito que seu dispositivo não tenha dispositivos de mídia conectados.
+  </blockquote>
+
+</ng-container>
+
+<footer>
+  <table class="table-scanner-state">
+    <thead>
+      <tr>
+        <th>Status</th>
+        <th>Propriedade</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ stateToEmoji(hasDevices) }}</td>
+        <td>Dispositivos</td>
+      </tr>
+      <tr>
+        <td>{{ stateToEmoji(hasPermission) }}</td>
+        <td>Permissões</td>
+      </tr>
+    </tbody>
+  </table>
+</footer>
