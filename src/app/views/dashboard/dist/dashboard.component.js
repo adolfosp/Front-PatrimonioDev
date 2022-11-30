@@ -20,6 +20,8 @@ var DashboardComponent = /** @class */ (function () {
     }
     DashboardComponent.prototype.ngOnInit = function () {
         this.carregarArquivoJs("assets/js/app.js");
+        this.nomeUsuario = this.token.obterNomeUsuarioToken();
+        this.descricaoPerfil = this.token.obterDescricaoPerfil();
     };
     DashboardComponent.prototype.carregarArquivoJs = function (url) {
         var node = document.createElement('script');

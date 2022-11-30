@@ -1,7 +1,8 @@
 import { DefaultConfig } from 'ngx-easy-table';
 
 export default function(){
-  var configuracao  = { ...DefaultConfig }
+  // eslint-disable-next-line prefer-const
+  let configuracao  = { ...DefaultConfig }
 
   configuracao.columnReorder = false;
   configuracao.fixedColumnWidth = false;
@@ -10,7 +11,7 @@ export default function(){
   configuracao.rows = 5;
 
   return configuracao
-};
+}
 
 
 

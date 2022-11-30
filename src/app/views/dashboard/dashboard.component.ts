@@ -10,7 +10,8 @@ import { TokenService } from '@nvs-services/token/token.service';
 })
 export class DashboardComponent implements OnInit {
   public estaLogadoAuth: boolean;
-
+  public nomeUsuario: string;
+  public descricaoPerfil: string;
 
   constructor(private token: TokenService,
     private router: Router,
@@ -23,10 +24,12 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.carregarArquivoJs("assets/js/app.js");
+    this.nomeUsuario = this.token.obterNomeUsuarioToken();
+    this.descricaoPerfil = this.token.obterDescricaoPerfil();
   }
 
   public carregarArquivoJs(url) {
-    let node = document.createElement('script');
+    const node = document.createElement('script');
     node.src = url;
     node.type = 'text/javascript';
     document.getElementsByTagName('head')[0].appendChild(node);

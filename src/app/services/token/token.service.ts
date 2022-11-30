@@ -45,6 +45,12 @@ export class TokenService {
     return decode(this.encriptar.decrypt(token))['nomeUsuario']
   }
 
+  public obterDescricaoPerfil(): string {
+    const token: string = this.localStorageService.obterChave(LocalStorageChave.Valor);
+    //@ts-ignore
+    return decode(this.encriptar.decrypt(token))['descricaoPerfil']
+  }
+
   public obterCodigoUsuarioToken(): number {
     const token: string = this.localStorageService.obterChave(LocalStorageChave.Valor);
     //@ts-ignore
@@ -52,7 +58,7 @@ export class TokenService {
   }
 
   public ehUsuarioAdministrador(): boolean {
-    let permissaoAdministrador = Permissao.Administrador;
+    const permissaoAdministrador = Permissao.Administrador;
     return +this.obterPermissaoToken() == permissaoAdministrador
   }
 

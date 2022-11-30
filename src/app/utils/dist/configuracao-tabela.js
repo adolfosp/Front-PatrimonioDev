@@ -13,6 +13,7 @@ var __assign = (this && this.__assign) || function () {
 exports.__esModule = true;
 var ngx_easy_table_1 = require("ngx-easy-table");
 function default_1() {
+    // eslint-disable-next-line prefer-const
     var configuracao = __assign({}, ngx_easy_table_1.DefaultConfig);
     configuracao.columnReorder = false;
     configuracao.fixedColumnWidth = false;
@@ -22,4 +23,3 @@ function default_1() {
     return configuracao;
 }
 exports["default"] = default_1;
-;

@@ -15,7 +15,6 @@ export class FuncionarioService {
   constructor(private api: ApiService) { }
 
   public cadastrarFuncionario(funcionario: Funcionario): Observable<Funcionario> {
-    debugger;
     return this.api.post<Funcionario>(this.baseUrl, {funcionario}).pipe(take(1));
   }
 
@@ -30,7 +29,7 @@ export class FuncionarioService {
   }
 
   public obterApenasUmFuncionario(codigoFuncionario: number): Observable<Funcionario> {
-    return this.api.get<Funcionario>(`${this.baseUrl}/${codigoFuncionario}`).pipe(take(1));;
+    return this.api.get<Funcionario>(`${this.baseUrl}/${codigoFuncionario}`).pipe(take(1));
   }
 
   public atualizarFuncionario(funcionario: Funcionario): Observable<Funcionario>{

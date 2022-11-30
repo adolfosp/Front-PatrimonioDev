@@ -16,7 +16,6 @@ var FuncionarioService = /** @class */ (function () {
         this.baseUrl = environment_1.environment.apiUrl + "funcionarios";
     }
     FuncionarioService.prototype.cadastrarFuncionario = function (funcionario) {
-        debugger;
         return this.api.post(this.baseUrl, { funcionario: funcionario }).pipe(operators_1.take(1));
     };
     FuncionarioService.prototype.obterTodosFuncionarios = function () {
@@ -28,7 +27,6 @@ var FuncionarioService = /** @class */ (function () {
     };
     FuncionarioService.prototype.obterApenasUmFuncionario = function (codigoFuncionario) {
         return this.api.get(this.baseUrl + "/" + codigoFuncionario).pipe(operators_1.take(1));
-        ;
     };
     FuncionarioService.prototype.atualizarFuncionario = function (funcionario) {
         return this.api

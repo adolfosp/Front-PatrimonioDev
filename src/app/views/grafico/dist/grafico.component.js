@@ -131,12 +131,12 @@ var GraficoComponent = /** @class */ (function () {
                 var quantidadeEquipamentoPorCategoria = _this.estatisticaCategoria.map(function (valorAtual) { return valorAtual.quantidadeEquipamento; });
                 _this.calcularQuantidadeDeEquipamentos(quantidadeEquipamentoPorCategoria);
                 _this.quantidadeDeEquipamentos = _this.quantidadeDeEquipamentos || 0;
-                _this.mediaEquipamento = _this.mediaEquipamento || 0;
                 for (var i = 0; i < quantidadeEquipamentoPorCategoria.length; i++) {
                     _this.quantidadeDeEquipamentos += +quantidadeEquipamentoPorCategoria[i];
                 }
                 _this.mediaEquipamento = +(listaDeResposta[1][0].quantidadeTotalDeEquipamento /
                     listaDeResposta[1][0].quantidadeTotalFuncionario).toFixed(2);
+                _this.mediaEquipamento = _this.mediaEquipamento || 0;
                 _this.quantidadeTotalDePatrimonios =
                     +listaDeResposta[2][0].quantidadeTotalPatrimonio;
                 _this.quantidadeTotalDePatrimoniosDisponiveis =
@@ -144,6 +144,7 @@ var GraficoComponent = /** @class */ (function () {
                 _this.quantidadeMovimentacoes =
                     +listaDeResposta[3].quantidadeMovimentacao;
             },
+            // eslint-disable-next-line rxjs/no-implicit-any-catch
             error: function (error) {
                 var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
                 _this.toaster[template.tipoMensagem]("Houve um erro ao carregar as informa\u00E7\u00F5es do Dashboard. Mensagem: " + template.mensagemErro, template.titulo);

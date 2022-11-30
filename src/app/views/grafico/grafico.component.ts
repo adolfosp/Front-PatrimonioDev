@@ -154,7 +154,6 @@ export class GraficoComponent implements OnInit {
           this.calcularQuantidadeDeEquipamentos(quantidadeEquipamentoPorCategoria);
 
           this.quantidadeDeEquipamentos = this.quantidadeDeEquipamentos || 0;
-          this.mediaEquipamento = this.mediaEquipamento || 0;
 
           for (let i = 0; i < quantidadeEquipamentoPorCategoria.length; i++) {
             this.quantidadeDeEquipamentos += +quantidadeEquipamentoPorCategoria[i];
@@ -165,6 +164,8 @@ export class GraficoComponent implements OnInit {
             listaDeResposta[1][0].quantidadeTotalFuncionario
           ).toFixed(2);
 
+          this.mediaEquipamento = this.mediaEquipamento || 0;
+
           this.quantidadeTotalDePatrimonios =
             +listaDeResposta[2][0].quantidadeTotalPatrimonio;
           this.quantidadeTotalDePatrimoniosDisponiveis =
@@ -172,8 +173,9 @@ export class GraficoComponent implements OnInit {
           this.quantidadeMovimentacoes =
             +listaDeResposta[3].quantidadeMovimentacao;
         },
-        error: (error) => {
-          let template = MensagemRequisicao.retornarMensagemTratada(
+        // eslint-disable-next-line rxjs/no-implicit-any-catch
+        error: (error: any) => {
+          const template = MensagemRequisicao.retornarMensagemTratada(
             error.message,
             error.error.mensagem
           );
