@@ -53,10 +53,10 @@ var ListagemPermissaoComponent = /** @class */ (function () {
         this.spinner.show("buscando");
         this.permissaoService.obterPermissoes().subscribe({
             next: function (permissoes) {
-                debugger;
                 _this.data = permissoes;
                 _this.dataFiltradaExcel = permissoes;
             },
+            // eslint-disable-next-line rxjs/no-implicit-any-catch
             error: function (error) {
                 var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
                 _this.toaster[template.tipoMensagem]("Houve um erro ao carregar as permiss\u00F5es. Mensagem " + template.mensagemErro, template.titulo);
@@ -75,7 +75,9 @@ var ListagemPermissaoComponent = /** @class */ (function () {
         this.permissaoService.desativarPermissao(this.permissaoId).subscribe(function () {
             _this.toaster.success('Permissão desativada com sucesso!', 'Desativar');
             _this.obterPermissoes();
-        }, function (error) {
+        }, 
+        // eslint-disable-next-line rxjs/no-implicit-any-catch
+        function (error) {
             var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
             _this.toaster[template.tipoMensagem]("Houve um erro ao desativar a permiss\u00E3o. Mensagem " + template.mensagemErro, template.titulo);
         }).add(function () { return _this.spinner.hide("desativando"); });

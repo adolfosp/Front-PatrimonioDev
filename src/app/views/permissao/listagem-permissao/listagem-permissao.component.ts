@@ -30,7 +30,7 @@ export class ListagemPermissaoComponent implements OnInit {
 
   public data: UsuarioPermissao[] = [];
   public dataFiltradaExcel: UsuarioPermissao[] = [];
-  public permissaoId: number = 0;
+  public permissaoId = 0;
   public ehAdministrador = false;
 
   modalRef?: BsModalRef;
@@ -74,13 +74,13 @@ export class ListagemPermissaoComponent implements OnInit {
 
     this.permissaoService.obterPermissoes().subscribe({
       next: (permissoes: UsuarioPermissao[]) => {
-        debugger;
         this.data = permissoes;
         this.dataFiltradaExcel = permissoes;
 
       },
+      // eslint-disable-next-line rxjs/no-implicit-any-catch
       error: (error: any) => {
-        let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+        const template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
         this.toaster[template.tipoMensagem](`Houve um erro ao carregar as permissões. Mensagem ${template.mensagemErro}`, template.titulo);
 
       },
@@ -95,14 +95,14 @@ export class ListagemPermissaoComponent implements OnInit {
     this.modalRef?.hide();
     this.spinner.show("desativando");
 
-    debugger;
     this.permissaoService.desativarPermissao(this.permissaoId).subscribe(
       () =>{
         this.toaster.success('Permissão desativada com sucesso!', 'Desativar');
         this.obterPermissoes();
       },
+            // eslint-disable-next-line rxjs/no-implicit-any-catch
       (error: any) =>{
-        let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+        const template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
         this.toaster[template.tipoMensagem](`Houve um erro ao desativar a permissão. Mensagem ${template.mensagemErro}`, template.titulo);
       }
     ).add(()=> this.spinner.hide("desativando"));
@@ -117,7 +117,7 @@ export class ListagemPermissaoComponent implements OnInit {
   }
 
   public onChange(event: Event): void {
-    let valorDigitado = (event.target as HTMLInputElement).value;
+    const valorDigitado = (event.target as HTMLInputElement).value;
     this.filtrarPermissoes(valorDigitado);
 
     this.table.apiEvent({

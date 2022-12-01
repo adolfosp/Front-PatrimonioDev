@@ -17,8 +17,8 @@ export class PermissaoComponent implements OnInit {
   form!: FormGroup;
   usuarioPermissao = {} as UsuarioPermissao;
   codigoPerfil: number;
-  estadoSalvar: string = 'cadastrarPermissao';
-  private limpandoCampo: boolean = false;
+  estadoSalvar = 'cadastrarPermissao';
+  private limpandoCampo = false;
 
   get f(): any {
     return this.form.controls;
@@ -48,7 +48,7 @@ export class PermissaoComponent implements OnInit {
     { nomeContexto: 'Fabricante', codigo: 6, permissoes: [{ name: 'Alterar', value: 1, checked: false }, { name: 'Adicionar', value: 2, checked: false }, { name: 'Listar', value: 3, checked: false }, { name: 'Remover', value: 4, checked: false }, { name: 'Desativar', value: 5, checked: false }] },
     { nomeContexto: 'Funcionário', codigo: 7, permissoes: [{ name: 'Alterar', value: 1, checked: false }, { name: 'Adicionar', value: 2, checked: false }, { name: 'Listar', value: 3, checked: false }, { name: 'Remover', value: 4, checked: false }, { name: 'Desativar', value: 5, checked: false }] },
     { nomeContexto: 'Movimentação', codigo: 8, permissoes: [{ name: 'Alterar', value: 1, checked: false }, { name: 'Adicionar', value: 2, checked: false }, { name: 'Listar', value: 3, checked: false }, { name: 'Remover', value: 4, checked: false }, { name: 'Desativar', value: 5, checked: false }] },
-    { nomeContexto: 'CategoriaEquipamento', codigo: 9, permissoes: [{ name: 'Alterar', value: 1, checked: false }, { name: 'Adicionar', value: 2, checked: false }, { name: 'Listar', value: 3, checked: false }, { name: 'Remover', value: 4, checked: false }, { name: 'Desativar', value: 5, checked: false }] },
+    { nomeContexto: 'Categoria Equipamento', codigo: 9, permissoes: [{ name: 'Alterar', value: 1, checked: false }, { name: 'Adicionar', value: 2, checked: false }, { name: 'Listar', value: 3, checked: false }, { name: 'Remover', value: 4, checked: false }, { name: 'Desativar', value: 5, checked: false }] },
     { nomeContexto: 'Usuário', codigo: 10, permissoes: [{ name: 'Alterar', value: 1, checked: false }, { name: 'Adicionar', value: 2, checked: false }, { name: 'Listar', value: 3, checked: false }, { name: 'Remover', value: 4, checked: false }, { name: 'Desativar', value: 5, checked: false }] },
 
   ];
@@ -82,8 +82,9 @@ export class PermissaoComponent implements OnInit {
             this.form.patchValue(this.usuarioPermissao);
             this.atribuirPermissoesAoControleForm(permissao);
           },
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any, rxjs/no-implicit-any-catch
           error: (error: any) => {
-            let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+            const template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
             this.toaster[template.tipoMensagem](`Houve um erro ao carregar a permissão. Mensagem ${template.mensagemErro}`, template.titulo);
           }
         }
@@ -94,12 +95,14 @@ export class PermissaoComponent implements OnInit {
   private atribuirPermissoesAoControleForm(permissao: UsuarioPermissao[]): void {
 
     const acoesPorContexto: FormArray = this.form.get('acoesPorContexto') as FormArray;
-
     for (let i = 0; i < permissao.length; i++) {
 
-      for (let k = 0; k < permissao[i].codigosPermissao.length; k++) {
+      //TODO: IMPLEMENTAR A PERMISSAO DE PERDA E PERFIL
+      if(i>= 10) continue;
+
+      for (let k = 0; k < permissao[i].codigosPermissao?.length; k++) {
         this.permissoesPorContexto[permissao[i].codigoContexto - 1].permissoes[permissao[i].codigosPermissao[k] - 1].checked = true;
-        const permissaoFormatada = `${permissao[i].codigoContexto}-${this.permissoesPorContexto[permissao[i].codigoContexto].permissoes[permissao[i].codigosPermissao[k] - 1].value}`;
+        const permissaoFormatada = `${permissao[i].codigoContexto}-${this.permissoesPorContexto[permissao[i].codigoContexto - 1].permissoes[permissao[i].codigosPermissao[k] - 1].value}`;
         acoesPorContexto.push(new FormControl(permissaoFormatada));
       }
 
@@ -120,7 +123,7 @@ export class PermissaoComponent implements OnInit {
     if (e.checked) {
       acoesPorContexto.push(new FormControl(e.source.value));
     } else {
-      let i: number = 0;
+      let i = 0;
       acoesPorContexto.controls.forEach((item: FormControl) => {
         if (item.value == e.source.value) {
           acoesPorContexto.removeAt(i);
@@ -133,8 +136,8 @@ export class PermissaoComponent implements OnInit {
 
   public salvarAlteracao(): void {
 
-    let atualizando = this.estadoSalvar == 'atualizarPatrimonio';
-    let nomeAcaoRealizada = atualizando ? 'atualizada' : 'cadastrada';
+    const atualizando = this.estadoSalvar == 'atualizarPatrimonio';
+    const nomeAcaoRealizada = atualizando ? 'atualizada' : 'cadastrada';
 
     this.spinner.show(nomeAcaoRealizada);
 
@@ -143,7 +146,7 @@ export class PermissaoComponent implements OnInit {
     this.permissaoService[this.estadoSalvar](this.usuarioPermissao).subscribe(
       () => this.toaster.success(`Permissão ${nomeAcaoRealizada} com sucesso`, 'Sucesso!'),
       (error: any) => {
-        let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+        const template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
         this.toaster[template.tipoMensagem](`${MensagemRequisicao.retornarMensagemDeErroAoRealizarOperacao(nomeAcaoRealizada, "permissão", ['o', 'da'])} Mensagem: ${template.mensagemErro}`, template.titulo);
       },
       () => {

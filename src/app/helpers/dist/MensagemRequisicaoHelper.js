@@ -7,7 +7,6 @@ var MensagemRequisicao = /** @class */ (function () {
     function MensagemRequisicao() {
     }
     MensagemRequisicao.retornarMensagemTratada = function (errorMessage, mensagemServidor) {
-        debugger;
         var errorMessageLowerCase = errorMessage.toLowerCase();
         mensagemServidor = this.validarMensagemServidor(mensagemServidor);
         var mensagemServidorLowerCase = mensagemServidor === null || mensagemServidor === void 0 ? void 0 : mensagemServidor.toLowerCase();

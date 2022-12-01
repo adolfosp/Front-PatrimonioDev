@@ -42,7 +42,7 @@ var PermissaoComponent = /** @class */ (function () {
             { nomeContexto: 'Fabricante', codigo: 6, permissoes: [{ name: 'Alterar', value: 1, checked: false }, { name: 'Adicionar', value: 2, checked: false }, { name: 'Listar', value: 3, checked: false }, { name: 'Remover', value: 4, checked: false }, { name: 'Desativar', value: 5, checked: false }] },
             { nomeContexto: 'Funcionário', codigo: 7, permissoes: [{ name: 'Alterar', value: 1, checked: false }, { name: 'Adicionar', value: 2, checked: false }, { name: 'Listar', value: 3, checked: false }, { name: 'Remover', value: 4, checked: false }, { name: 'Desativar', value: 5, checked: false }] },
             { nomeContexto: 'Movimentação', codigo: 8, permissoes: [{ name: 'Alterar', value: 1, checked: false }, { name: 'Adicionar', value: 2, checked: false }, { name: 'Listar', value: 3, checked: false }, { name: 'Remover', value: 4, checked: false }, { name: 'Desativar', value: 5, checked: false }] },
-            { nomeContexto: 'CategoriaEquipamento', codigo: 9, permissoes: [{ name: 'Alterar', value: 1, checked: false }, { name: 'Adicionar', value: 2, checked: false }, { name: 'Listar', value: 3, checked: false }, { name: 'Remover', value: 4, checked: false }, { name: 'Desativar', value: 5, checked: false }] },
+            { nomeContexto: 'Categoria Equipamento', codigo: 9, permissoes: [{ name: 'Alterar', value: 1, checked: false }, { name: 'Adicionar', value: 2, checked: false }, { name: 'Listar', value: 3, checked: false }, { name: 'Remover', value: 4, checked: false }, { name: 'Desativar', value: 5, checked: false }] },
             { nomeContexto: 'Usuário', codigo: 10, permissoes: [{ name: 'Alterar', value: 1, checked: false }, { name: 'Adicionar', value: 2, checked: false }, { name: 'Listar', value: 3, checked: false }, { name: 'Remover', value: 4, checked: false }, { name: 'Desativar', value: 5, checked: false }] },
         ];
     }
@@ -81,6 +81,7 @@ var PermissaoComponent = /** @class */ (function () {
                     _this.form.patchValue(_this.usuarioPermissao);
                     _this.atribuirPermissoesAoControleForm(permissao);
                 },
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any, rxjs/no-implicit-any-catch
                 error: function (error) {
                     var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
                     _this.toaster[template.tipoMensagem]("Houve um erro ao carregar a permiss\u00E3o. Mensagem " + template.mensagemErro, template.titulo);
@@ -89,11 +90,15 @@ var PermissaoComponent = /** @class */ (function () {
         }
     };
     PermissaoComponent.prototype.atribuirPermissoesAoControleForm = function (permissao) {
+        var _a;
         var acoesPorContexto = this.form.get('acoesPorContexto');
         for (var i = 0; i < permissao.length; i++) {
-            for (var k = 0; k < permissao[i].codigosPermissao.length; k++) {
+            //TODO: IMPLEMENTAR A PERMISSAO DE PERDA E PERFIL
+            if (i >= 10)
+                continue;
+            for (var k = 0; k < ((_a = permissao[i].codigosPermissao) === null || _a === void 0 ? void 0 : _a.length); k++) {
                 this.permissoesPorContexto[permissao[i].codigoContexto - 1].permissoes[permissao[i].codigosPermissao[k] - 1].checked = true;
-                var permissaoFormatada = permissao[i].codigoContexto + "-" + this.permissoesPorContexto[permissao[i].codigoContexto].permissoes[permissao[i].codigosPermissao[k] - 1].value;
+                var permissaoFormatada = permissao[i].codigoContexto + "-" + this.permissoesPorContexto[permissao[i].codigoContexto - 1].permissoes[permissao[i].codigosPermissao[k] - 1].value;
                 acoesPorContexto.push(new forms_1.FormControl(permissaoFormatada));
             }
         }

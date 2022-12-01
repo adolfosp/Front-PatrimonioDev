@@ -3,16 +3,15 @@ import { TemplateMensagemRequisicao } from "@nvs-models/TemplateMensagemRequisic
 
 export abstract class MensagemRequisicao {
 //TODO: VALIDAR PARA CORTAR MENSAGEM MUITO GRANDE QUE RETORNA DO SERVIDOR
-  private static mensagemPadrao: string  = "Não foi possível conectar-se ao servidor.";
+  private static mensagemPadrao  = "Não foi possível conectar-se ao servidor.";
 
   public static retornarMensagemTratada(errorMessage: string, mensagemServidor?: string): TemplateMensagemRequisicao {
-    debugger;
 
-    let errorMessageLowerCase = errorMessage.toLowerCase();
+    const errorMessageLowerCase = errorMessage.toLowerCase();
 
     mensagemServidor = this.validarMensagemServidor(mensagemServidor);
 
-    let mensagemServidorLowerCase = mensagemServidor?.toLowerCase();
+    const mensagemServidorLowerCase = mensagemServidor?.toLowerCase();
 
     switch (true) {
 
