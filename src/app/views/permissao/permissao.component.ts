@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MensagemRequisicao } from '@nvs-helpers/MensagemRequisicaoHelper';
 import { UsuarioPermissao } from '@nvs-models/UsuarioPermissao';
 import { PermissaoService } from '@nvs-services/permissao/permissao.service';
+import { CLASSE_BOTAO_LIMPAR } from '@nvs-utils/classes-sass.constant';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 
@@ -14,11 +15,14 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class PermissaoComponent implements OnInit {
 
-  form!: FormGroup;
-  usuarioPermissao = {} as UsuarioPermissao;
-  codigoPerfil: number;
-  estadoSalvar = 'cadastrarPermissao';
+  private usuarioPermissao = {} as UsuarioPermissao;
+  private codigoPerfil: number;
   private limpandoCampo = false;
+
+  public form!: FormGroup;
+  public estadoSalvar = 'cadastrarPermissao';
+  public readonly classeBotaoLimpar = CLASSE_BOTAO_LIMPAR;
+
 
   get f(): any {
     return this.form.controls;
@@ -82,9 +86,8 @@ export class PermissaoComponent implements OnInit {
             this.form.patchValue(this.usuarioPermissao);
             this.atribuirPermissoesAoControleForm(permissao);
           },
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any, rxjs/no-implicit-any-catch
-          error: (error: any) => {
-            const template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+          error: (error: unknown) => {
+            const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
             this.toaster[template.tipoMensagem](`Houve um erro ao carregar a permissão. Mensagem ${template.mensagemErro}`, template.titulo);
           }
         }
@@ -145,8 +148,8 @@ export class PermissaoComponent implements OnInit {
 
     this.permissaoService[this.estadoSalvar](this.usuarioPermissao).subscribe(
       () => this.toaster.success(`Permissão ${nomeAcaoRealizada} com sucesso`, 'Sucesso!'),
-      (error: any) => {
-        const template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+      (error: unknown) => {
+        const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
         this.toaster[template.tipoMensagem](`${MensagemRequisicao.retornarMensagemDeErroAoRealizarOperacao(nomeAcaoRealizada, "permissão", ['o', 'da'])} Mensagem: ${template.mensagemErro}`, template.titulo);
       },
       () => {

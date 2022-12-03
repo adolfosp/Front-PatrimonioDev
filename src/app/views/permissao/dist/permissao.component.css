@@ -1,9 +1,0 @@
-@import url("../../../assets/style-base.sass");
-.card__contexto {
-  display: inline;
-  width: 20% !important;
-  padding-bottom: 35px;
-}
-.card__contexto__permissao {
-  margin-left: 15px;
-}

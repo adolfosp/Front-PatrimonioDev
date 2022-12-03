@@ -8,6 +8,7 @@ import { Fabricante } from '@nvs-models/Fabricante';
 import { CategoriaService } from '@nvs-services/categoria/categoria.service';
 import { EquipamentoService } from '@nvs-services/equipamento/equipamento.service';
 import { FabricanteService } from '@nvs-services/fabricante/fabricante.service';
+import { CLASSE_BOTAO_LIMPAR } from '@nvs-utils/classes-sass.constant';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 
@@ -18,13 +19,16 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class EquipamentoComponent implements OnInit {
 
-  form!: FormGroup;
   private equipamento = {} as Equipamento;
-  public estadoSalvar = 'cadastrarEquipamento';
   private codigoEquipamento: number;
+  private limpandoCampo = false;
+
+  public form!: FormGroup;
+  public estadoSalvar = 'cadastrarEquipamento';
   public fabricantes: Fabricante[] = [];
   public categorias: Categoria[] = [];
-  private limpandoCampo: boolean = false;
+  public readonly classeBotaoLimpar = CLASSE_BOTAO_LIMPAR;
+
   public select: any
   get f(): any {
     return this.form.controls;
@@ -49,7 +53,6 @@ export class EquipamentoComponent implements OnInit {
 
   getValues(){
     this.select;
-    debugger;
   }
 
   public limparCampos(): void{
@@ -63,11 +66,10 @@ export class EquipamentoComponent implements OnInit {
       (result: Fabricante[]) => {
         this.fabricantes = result;
       },
-      (error: any) => {
-        let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+      (error: unknown) => {
+        const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
         this.toaster[template.tipoMensagem](`Houve um problema ao carregar os fabricante. Mensagem: ${template.mensagemErro}`, template.titulo);
       },
-      () =>{}
     );
   }
 
@@ -77,11 +79,11 @@ export class EquipamentoComponent implements OnInit {
       (result: Categoria[]) => {
         this.categorias = result;
       },
-      (error: any) => {
-        let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+      (error: unknown) => {
+        const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
         this.toaster[template.tipoMensagem](`Houve um problema ao carregar as categorias. Mensagem: ${template.mensagemErro}`, template.titulo);
       },
-      () =>{}
+
     );
   }
 
@@ -105,8 +107,8 @@ export class EquipamentoComponent implements OnInit {
   }
 
   public salvarAlteracao(): void {
-    let atualizando = this.estadoSalvar == 'atualizarEquipamento';
-    let nomeAcaoRealizada = atualizando? 'atualizado': 'cadastrado';
+    const atualizando = this.estadoSalvar == 'atualizarEquipamento';
+    const nomeAcaoRealizada = atualizando? 'atualizado': 'cadastrado';
 
     this.spinner.show(nomeAcaoRealizada);
 
@@ -114,8 +116,8 @@ export class EquipamentoComponent implements OnInit {
 
     this.equipamentoService[this.estadoSalvar](this.equipamento).subscribe(
       () => this.toaster.success(`Equipamento ${nomeAcaoRealizada} com sucesso`, 'Sucesso!'),
-      (error: any) => {
-        let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+      (error: unknown) => {
+        const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
         this.toaster[template.tipoMensagem](`${MensagemRequisicao.retornarMensagemDeErroAoRealizarOperacao(nomeAcaoRealizada,"equipamento", ['o','do'])} Mensagem: ${template.mensagemErro}`, 'Erro!');
       },
       () =>
@@ -141,8 +143,8 @@ export class EquipamentoComponent implements OnInit {
              this.equipamento = {...equipamento};
              this.form.patchValue(this.equipamento);
            },
-           error: (error: any) => {
-            let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+           error: (error: unknown) => {
+            const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
             this.toaster[template.tipoMensagem](`Houve um problema ao carregar o equipamento. Mensagem: ${template.mensagemErro}`, 'Erro!');
            }
          }

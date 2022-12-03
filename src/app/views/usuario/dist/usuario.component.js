@@ -22,6 +22,7 @@ var core_1 = require("@angular/core");
 var forms_1 = require("@angular/forms");
 var MensagemRequisicaoHelper_1 = require("@nvs-helpers/MensagemRequisicaoHelper");
 var ValidacaoSenhaHelper_1 = require("@nvs-helpers/ValidacaoSenhaHelper");
+var classes_sass_constant_1 = require("@nvs-utils/classes-sass.constant");
 var UsuarioComponent = /** @class */ (function () {
     function UsuarioComponent(fb, toaster, spinner, setorService, empresaService, permissaoService, router, usuarioService, activateRouter) {
         this.fb = fb;
@@ -39,6 +40,7 @@ var UsuarioComponent = /** @class */ (function () {
         this.empresas = [];
         this.permissoes = [];
         this.limpandoCampo = false;
+        this.classeBotaoLimpar = classes_sass_constant_1.CLASSE_BOTAO_LIMPAR;
     }
     Object.defineProperty(UsuarioComponent.prototype, "f", {
         get: function () {

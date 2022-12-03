@@ -16,6 +16,7 @@ import { ListagemUsuarioComponent } from './listagem-usuario/listagem-usuario.co
 import { PerfilComponent } from './perfil/perfil.component';
 import { UsuarioRoutingModule } from './usuario-routing.module';
 import { UsuarioComponent } from './usuario.component';
+import { SharedComponentModule } from '../shared/shared-component.module';
 
 @NgModule({
   imports: [
@@ -28,6 +29,7 @@ import { UsuarioComponent } from './usuario.component';
     MatInputModule,
     MatIconModule,
     MatSelectModule,
+    SharedComponentModule
   ],
   providers: [UsuarioService, BsModalService, TokenService, SetorService, EmpresaService,PermissaoService ],
   declarations: [UsuarioComponent, ListagemUsuarioComponent, PerfilComponent ]

@@ -7,23 +7,24 @@ import { SetorService } from '@nvs-services/setor/setor.service';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { TableModule } from 'ngx-easy-table';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { SharedComponentModule } from '../shared/shared-component.module';
 import { ListagemSetorComponent } from './listagem-setor/listagem-setor.component';
 import { SetorRoutingModule } from './setor-routing.module';
 import { SetorComponent } from './setor.component';
 
 @NgModule({
-  imports: [
-    SetorRoutingModule,
-    NgxSpinnerModule,
-    ReactiveFormsModule,
-    CommonModule,
-    FormsModule,
-    TableModule,
-    MatInputModule,
-    MatIconModule,
-  ],
-  providers: [SetorService, BsModalService],
-  declarations: [SetorComponent , ListagemSetorComponent]
-
+    providers: [SetorService, BsModalService],
+    declarations: [SetorComponent, ListagemSetorComponent],
+    imports: [
+        SetorRoutingModule,
+        NgxSpinnerModule,
+        ReactiveFormsModule,
+        CommonModule,
+        FormsModule,
+        TableModule,
+        MatInputModule,
+        MatIconModule,
+        SharedComponentModule
+    ]
 })
 export class SetorModule { }

@@ -32,7 +32,8 @@ import { P404Component } from './views/error/404.component';
 import { GraficoComponent } from './views/grafico/grafico.component';
 import { RegistrarComponent } from './views/login/registrar/registrar.component';
 import { QrCodeComponent } from './views/qr-code/qr-code.component';
-import { HttpCodeMensagemComponent } from './views/shareds/http-code-mensagem/http-code-mensagem.component';
+// eslint-disable-next-line sort-imports
+import { HttpCodeMensagemComponent } from './views/shared/http-code-mensagem/http-code-mensagem.component';
 
 @NgModule({
   declarations: [
@@ -80,7 +81,6 @@ import { HttpCodeMensagemComponent } from './views/shareds/http-code-mensagem/ht
     MatButtonModule,
     MatSlideToggleModule,
     MatExpansionModule
-
   ],
   providers: [
     ApiService,

@@ -12,6 +12,7 @@ import { EquipamentoService } from '../../services/equipamento/equipamento.servi
 import { EquipamentoRoutingModule } from './equipamento-routing.module';
 import { EquipamentoComponent } from './equipamento.component';
 import { ListagemEquipamentoComponent } from './listagem-equipamento/listagem-equipamento.component';
+import { SharedComponentModule } from '../shared/shared-component.module';
 
 
 @NgModule({
@@ -25,6 +26,7 @@ import { ListagemEquipamentoComponent } from './listagem-equipamento/listagem-eq
     MatInputModule,
     MatIconModule,
     MatSelectModule,
+    SharedComponentModule
   ],
   providers: [EquipamentoService, FabricanteService, BsModalService],
   declarations: [ EquipamentoComponent, ListagemEquipamentoComponent]

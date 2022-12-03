@@ -10,6 +10,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { FabricanteRoutingModule } from './fabricante-routing.module';
 import { FabricanteComponent } from './fabricante.component';
 import { ListagemFabricanteComponent } from './listagem-fabricante/listagem-fabricante.component';
+import { SharedComponentModule } from '../shared/shared-component.module';
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import { ListagemFabricanteComponent } from './listagem-fabricante/listagem-fabr
     CommonModule,
     TableModule,
     MatInputModule,
-    MatIconModule
+    MatIconModule,
+    SharedComponentModule
   ],
   providers: [FabricanteService, BsModalService],
   declarations: [ FabricanteComponent, ListagemFabricanteComponent]

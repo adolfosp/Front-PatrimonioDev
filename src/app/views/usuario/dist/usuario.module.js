@@ -25,6 +25,7 @@ var listagem_usuario_component_1 = require("./listagem-usuario/listagem-usuario.
 var perfil_component_1 = require("./perfil/perfil.component");
 var usuario_routing_module_1 = require("./usuario-routing.module");
 var usuario_component_1 = require("./usuario.component");
+var shared_component_module_1 = require("../shared/shared-component.module");
 var UsuarioModule = /** @class */ (function () {
     function UsuarioModule() {
     }
@@ -40,6 +41,7 @@ var UsuarioModule = /** @class */ (function () {
                 input_1.MatInputModule,
                 icon_1.MatIconModule,
                 select_1.MatSelectModule,
+                shared_component_module_1.SharedComponentModule
             ],
             providers: [usuario_service_1.UsuarioService, modal_1.BsModalService, token_service_1.TokenService, setor_service_1.SetorService, empresa_service_1.EmpresaService, permissao_service_1.PermissaoService],
             declarations: [usuario_component_1.UsuarioComponent, listagem_usuario_component_1.ListagemUsuarioComponent, perfil_component_1.PerfilComponent]

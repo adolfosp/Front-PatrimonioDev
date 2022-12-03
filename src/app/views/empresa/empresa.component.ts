@@ -6,6 +6,7 @@ import { Empresa } from '@nvs-models/Empresa';
 import { EmpresaService } from '@nvs-services/empresa/empresa.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
+import { CLASSE_BOTAO_LIMPAR } from 'src/app/utils/classes-sass.constant';
 
 @Component({
   selector: 'app-empresa',
@@ -14,11 +15,13 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class EmpresaComponent implements OnInit {
 
-  form!: FormGroup;
   private empresa = {} as Empresa;
-  public estadoSalvar = 'cadastrarEmpresa';
   private codigoEmpresa: number;
-  private limpandoCampo: boolean = false;
+  private limpandoCampo = false;
+
+  public form!: FormGroup;
+  public estadoSalvar = 'cadastrarEmpresa';
+  public readonly classeBotaoLimpar = CLASSE_BOTAO_LIMPAR;
 
   get f(): any {
     return this.form.controls;
@@ -53,18 +56,16 @@ export class EmpresaComponent implements OnInit {
 
   public salvarAlteracao(): void {
 
-    let atualizando = this.estadoSalvar == 'atualizarEmpresa';
-    let nomeAcaoRealizada = atualizando? 'atualizada': 'cadastrada';
+    const atualizando = this.estadoSalvar == 'atualizarEmpresa';
+    const nomeAcaoRealizada = atualizando? 'atualizada': 'cadastrada';
 
     this.spinner.show(nomeAcaoRealizada);
 
     this.empresa = (this.estadoSalvar === 'cadastrarEmpresa') ? {...this.form.value} : {codigoEmpresa: this.empresa.codigoEmpresa, ...this.form.value};
-    debugger;
     this.empresaService[this.estadoSalvar](this.empresa).subscribe(
       () => this.toaster.success(`Empresa ${nomeAcaoRealizada} com sucesso`, 'Sucesso!'),
-      (error: any) => {
-        debugger;
-        let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+      (error: unknown) => {
+        const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
         this.toaster[template.tipoMensagem](`${MensagemRequisicao.retornarMensagemDeErroAoRealizarOperacao(nomeAcaoRealizada,"empresa", ['o','da'])} Mensagem: ${template.mensagemErro}`, template.titulo);
       },
       () =>
@@ -88,11 +89,10 @@ export class EmpresaComponent implements OnInit {
            next: (empresa: Empresa) => {
              this.empresa = {...empresa};
              this.form.patchValue(this.empresa);
-             debugger;
 
            },
-           error: (error: any) => {
-            let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+           error: (error: unknown) => {
+            const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
             this.toaster[template.tipoMensagem](`Houve um problema ao carregar a empresa. Mensagem: ${template.mensagemErro}`, template.titulo);
            }
          }

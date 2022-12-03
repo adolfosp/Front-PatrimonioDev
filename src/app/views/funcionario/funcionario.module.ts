@@ -13,6 +13,7 @@ import { SetorService } from '../../services/setor/setor.service';
 import { FuncionarioRoutingModule } from './funcionario-routing.module';
 import { FuncionarioComponent } from './funcionario.component';
 import { ListagemFuncionarioComponent } from './listagem-funcionario/listagem-funcionario.component';
+import { SharedComponentModule } from '../shared/shared-component.module';
 
 @NgModule({
   imports: [
@@ -26,6 +27,7 @@ import { ListagemFuncionarioComponent } from './listagem-funcionario/listagem-fu
     MatInputModule,
     MatIconModule,
     MatSelectModule,
+    SharedComponentModule
 
   ],
   providers: [FuncionarioService, BsModalService, SetorService ],

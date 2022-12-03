@@ -6,21 +6,24 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 exports.__esModule = true;
-exports.P404Component = void 0;
+exports.SharedModule = void 0;
+var common_1 = require("@angular/common");
 var core_1 = require("@angular/core");
-var P404Component = /** @class */ (function () {
-    function P404Component() {
-        this.mensagemErro = 'Oops! Não conseguimos encontrar essa página.';
-        this.caminhoImagemDark = 'assets/img/404-dark.gif';
-        this.caminhoImagemLight = 'assets/img/404.gif';
+// eslint-disable-next-line sort-imports
+var button_component_1 = require("./button/button.component");
+var SharedModule = /** @class */ (function () {
+    function SharedModule() {
     }
-    P404Component.prototype.ngOnInit = function () {
-    };
-    P404Component = __decorate([
-        core_1.Component({
-            templateUrl: '404.component.html'
+    SharedModule = __decorate([
+        core_1.NgModule({
+            providers: [],
+            declarations: [button_component_1.ButtonComponent],
+            imports: [
+                common_1.CommonModule
+            ],
+            exports: [button_component_1.ButtonComponent]
         })
-    ], P404Component);
-    return P404Component;
+    ], SharedModule);
+    return SharedModule;
 }());
-exports.P404Component = P404Component;
+exports.SharedModule = SharedModule;

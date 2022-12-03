@@ -13,6 +13,7 @@ import { SharedModule } from 'src/app/shared.module';
 import { ListagemMovimentacaoComponent } from './listagem-movimentacao/listagem-movimentacao.component';
 import { MovimentacaoRoutingModule } from './movimentacao-routing.module';
 import { MovimentacaoComponent } from './movimentacao.component';
+import { SharedComponentModule } from '../shared/shared-component.module';
 
 @NgModule({
   imports: [
@@ -28,6 +29,7 @@ import { MovimentacaoComponent } from './movimentacao.component';
     MatDatepickerModule,
     MatNativeDateModule,
     MatSelectModule,
+    SharedComponentModule
 
   ],
   providers: [MovimentacaoService],

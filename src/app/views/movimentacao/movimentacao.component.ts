@@ -7,6 +7,7 @@ import { Movimentacao } from '@nvs-models/Movimentacao';
 import { CriptografiaService } from '@nvs-services/criptografia/criptografia.service';
 import { MovimentacaoService } from '@nvs-services/movimentacao/movimentacao.service';
 import { TokenService } from '@nvs-services/token/token.service';
+import { CLASSE_BOTAO_LIMPAR } from '@nvs-utils/classes-sass.constant';
 import * as moment from 'moment';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -19,13 +20,16 @@ import { ToastrService } from 'ngx-toastr';
 export class MovimentacaoComponent implements OnInit {
 
 
-  public form!: FormGroup;
-  private movimentacao = {} as Movimentacao;
-  private codigoMovimentacao: number = 0;
-  public estadoSalvar: string = 'realizarMovimentacao';
-  private limpandoCampo: boolean = false;
-  private codigoPatrimonio: number;
   private nomePatrimonio: string;
+  private movimentacao = {} as Movimentacao;
+  private codigoMovimentacao = 0;
+  private limpandoCampo = false;
+  private codigoPatrimonio: number;
+
+  public form!: FormGroup;
+  public estadoSalvar = 'realizarMovimentacao';
+  public readonly classeBotaoLimpar = CLASSE_BOTAO_LIMPAR;
+
 
   public chaveSituacaoMovimento: any;
   public situacaoMovimentoEnum = MovimentacaoEquipamento;
@@ -77,8 +81,8 @@ export class MovimentacaoComponent implements OnInit {
 
   public salvarAlteracao(): void {
 
-    let atualizando = this.estadoSalvar == 'atualizarMovimentacao';
-    let nomeAcaoRealizada = atualizando ? 'atualizado' : 'realizada';
+    const atualizando = this.estadoSalvar == 'atualizarMovimentacao';
+    const nomeAcaoRealizada = atualizando ? 'atualizado' : 'realizada';
 
     this.spinner.show(nomeAcaoRealizada);
 
@@ -89,8 +93,8 @@ export class MovimentacaoComponent implements OnInit {
 
     this.movimentacaoService[this.estadoSalvar](this.movimentacao).subscribe(
       () => this.toaster.success(`Movimentação ${nomeAcaoRealizada} com sucesso`, 'Sucesso!'),
-      (error: any) => {
-        let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+      (error: unknown) => {
+        const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
         this.toaster[template.tipoMensagem](`${MensagemRequisicao.retornarMensagemDeErroAoRealizarOperacao(nomeAcaoRealizada, "usuário", ['o', 'do'])} Mensagem: ${template.mensagemErro}`, 'Erro!');
       },
       () => {
@@ -103,8 +107,8 @@ export class MovimentacaoComponent implements OnInit {
 
   private formatarDatas(): void {
 
-    let dataApropriacao = this.form.controls['dataApropriacao'].value
-    let dataDevolucao = this.form.controls['dataDevolucao'].value
+    const dataApropriacao = this.form.controls['dataApropriacao'].value
+    const dataDevolucao = this.form.controls['dataDevolucao'].value
 
     this.movimentacao.dataApropriacao = new Date(moment(dataApropriacao).subtract(3, 'hours').toISOString());
 
@@ -133,14 +137,13 @@ export class MovimentacaoComponent implements OnInit {
             this.valorSituacaoMovimento = this.movimentacao.movimentacaoDoEquipamento.toString();
             this.form.controls['patrimonio'].setValue(`${movimentacao.tipoEquipamento} - ${movimentacao.nomeFuncionario}`)
           },
-          error: (error: any) => {
-            let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+          error: (error: unknown) => {
+            const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
             this.toaster[template.tipoMensagem](`Houve um erro ao tentar carregar a movimentação. Mensagem: ${template.mensagemErro}`, template.titulo);
           }
         }
       ).add(() => this.spinner.hide('carregando'));
     }
   }
-
 
 }

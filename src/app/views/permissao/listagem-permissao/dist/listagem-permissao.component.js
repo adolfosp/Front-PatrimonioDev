@@ -71,7 +71,6 @@ var ListagemPermissaoComponent = /** @class */ (function () {
         var _a;
         (_a = this.modalRef) === null || _a === void 0 ? void 0 : _a.hide();
         this.spinner.show("desativando");
-        debugger;
         this.permissaoService.desativarPermissao(this.permissaoId).subscribe(function () {
             _this.toaster.success('Permissão desativada com sucesso!', 'Desativar');
             _this.obterPermissoes();

@@ -11,6 +11,7 @@ import { EmpresaService } from '@nvs-services/empresa/empresa.service';
 import { PermissaoService } from '@nvs-services/permissao/permissao.service';
 import { SetorService } from '@nvs-services/setor/setor.service';
 import { UsuarioService } from '@nvs-services/usuario/usuario.service';
+import { CLASSE_BOTAO_LIMPAR } from '@nvs-utils/classes-sass.constant';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 
@@ -21,14 +22,16 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class UsuarioComponent implements OnInit {
 
-  form!: FormGroup;
-  usuario = {} as Usuario;
-  codigoUsuario: number;
-  estadoSalvar: string = 'cadastrarUsuario';
-  setores: Setor[] = [];
-  empresas: Empresa[] = [];
-  permissoes: UsuarioPermissao[] = [];
-  limpandoCampo: boolean = false;
+  private codigoUsuario: number;
+  private usuario = {} as Usuario;
+
+  public form!: FormGroup;
+  public estadoSalvar = 'cadastrarUsuario';
+  public setores: Setor[] = [];
+  public empresas: Empresa[] = [];
+  public permissoes: UsuarioPermissao[] = [];
+  public limpandoCampo = false;
+  public readonly classeBotaoLimpar = CLASSE_BOTAO_LIMPAR;
 
   get f(): any {
     return this.form.controls;

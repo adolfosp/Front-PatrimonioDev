@@ -21,6 +21,7 @@ exports.SetorComponent = void 0;
 var core_1 = require("@angular/core");
 var forms_1 = require("@angular/forms");
 var MensagemRequisicaoHelper_1 = require("@nvs-helpers/MensagemRequisicaoHelper");
+var classes_sass_constant_1 = require("src/app/utils/classes-sass.constant");
 var SetorComponent = /** @class */ (function () {
     function SetorComponent(fb, setorService, toaster, spinner, activateRouter, router) {
         this.fb = fb;
@@ -29,9 +30,10 @@ var SetorComponent = /** @class */ (function () {
         this.spinner = spinner;
         this.activateRouter = activateRouter;
         this.router = router;
+        this.limpandoCampo = false;
         this.setor = {};
         this.estadoSalvar = 'cadastrarSetor';
-        this.limpandoCampo = false;
+        this.classeBotaoLimpar = classes_sass_constant_1.CLASSE_BOTAO_LIMPAR;
     }
     Object.defineProperty(SetorComponent.prototype, "f", {
         get: function () {
@@ -64,7 +66,7 @@ var SetorComponent = /** @class */ (function () {
         this.spinner.show(nomeAcaoRealizada);
         this.setor = (this.estadoSalvar === 'cadastrarSetor') ? __assign({}, this.form.value) : __assign({ codigoSetor: this.setor.codigoSetor }, this.form.value);
         this.setorService[this.estadoSalvar](this.setor).subscribe(function () { return _this.toaster.success("Setor " + nomeAcaoRealizada + " com sucesso", 'Sucesso!'); }, function (error) {
-            var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+            var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
             _this.toaster[template.tipoMensagem](MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemDeErroAoRealizarOperacao(nomeAcaoRealizada, "setor", ['o', 'do']) + " Mensagem: " + template.mensagemErro, 'Erro!');
         }, function () {
             setTimeout(function () {
@@ -84,7 +86,7 @@ var SetorComponent = /** @class */ (function () {
                     _this.form.patchValue(_this.setor);
                 },
                 error: function (error) {
-                    var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+                    var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
                     _this.toaster[template.tipoMensagem]("Houve um erro ao carregar o setor. Mensagem: " + template.mensagemErro, template.titulo);
                 }
             }).add(function () { return _this.spinner.hide('carregando'); });

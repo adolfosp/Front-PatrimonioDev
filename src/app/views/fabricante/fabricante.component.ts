@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MensagemRequisicao } from '@nvs-helpers/MensagemRequisicaoHelper';
 import { Fabricante } from '@nvs-models/Fabricante';
 import { FabricanteService } from '@nvs-services/fabricante/fabricante.service';
+import { CLASSE_BOTAO_LIMPAR } from '@nvs-utils/classes-sass.constant';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 
@@ -14,11 +15,14 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class FabricanteComponent implements OnInit {
 
-  form!: FormGroup;
-  fabricante = {} as Fabricante;
-  codigoFabricante: number;
-  public estadoSalvar: string = 'cadastrarFabricante';
-  private limpandoCampo: boolean = false;
+  private limpandoCampo = false;
+  private fabricante = {} as Fabricante;
+  private codigoFabricante: number;
+
+  public form!: FormGroup;
+  public estadoSalvar = 'cadastrarFabricante';
+  public readonly classeBotaoLimpar = CLASSE_BOTAO_LIMPAR;
+
 
   get f(): any {
     return this.form.controls;
@@ -50,8 +54,8 @@ export class FabricanteComponent implements OnInit {
   }
 
   public salvarAlteracao(): void {
-    let atualizando = this.estadoSalvar == 'atualizarFabricante';
-    let nomeAcaoRealizada = atualizando ? 'atualizado' : 'cadastrado';
+    const atualizando = this.estadoSalvar == 'atualizarFabricante';
+    const nomeAcaoRealizada = atualizando ? 'atualizado' : 'cadastrado';
 
     this.spinner.show(nomeAcaoRealizada);
 
@@ -59,8 +63,8 @@ export class FabricanteComponent implements OnInit {
 
     this.fabricanteService[this.estadoSalvar](this.fabricante).subscribe(
       () => this.toaster.success(`Fabricante ${nomeAcaoRealizada} com sucesso`, 'Sucesso!'),
-      (error: any) => {
-        let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+      (error: unknown) => {
+        const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
         this.toaster[template.tipoMensagem](`${MensagemRequisicao.retornarMensagemDeErroAoRealizarOperacao(nomeAcaoRealizada, "fabricante", ['o', 'do'])} Mensagem: ${template.mensagemErro}`, template.titulo);
       },
       () => {
@@ -84,8 +88,8 @@ export class FabricanteComponent implements OnInit {
             this.fabricante = { ...fabricante };
             this.form.patchValue(this.fabricante);
           },
-          error: (error: any) => {
-            let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+          error: (error: unknown) => {
+            const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
             this.toaster[template.tipoMensagem](`Houve um erro ao tentar carregar o fabricante. Mensagem: ${template.mensagemErro}`, template.titulo);
           }
         }

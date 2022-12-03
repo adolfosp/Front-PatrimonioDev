@@ -16,6 +16,7 @@ var setor_service_1 = require("@nvs-services/setor/setor.service");
 var modal_1 = require("ngx-bootstrap/modal");
 var ngx_easy_table_1 = require("ngx-easy-table");
 var ngx_spinner_1 = require("ngx-spinner");
+var shared_component_module_1 = require("../shared/shared-component.module");
 var listagem_setor_component_1 = require("./listagem-setor/listagem-setor.component");
 var setor_routing_module_1 = require("./setor-routing.module");
 var setor_component_1 = require("./setor.component");
@@ -24,6 +25,8 @@ var SetorModule = /** @class */ (function () {
     }
     SetorModule = __decorate([
         core_1.NgModule({
+            providers: [setor_service_1.SetorService, modal_1.BsModalService],
+            declarations: [setor_component_1.SetorComponent, listagem_setor_component_1.ListagemSetorComponent],
             imports: [
                 setor_routing_module_1.SetorRoutingModule,
                 ngx_spinner_1.NgxSpinnerModule,
@@ -33,9 +36,8 @@ var SetorModule = /** @class */ (function () {
                 ngx_easy_table_1.TableModule,
                 input_1.MatInputModule,
                 icon_1.MatIconModule,
-            ],
-            providers: [setor_service_1.SetorService, modal_1.BsModalService],
-            declarations: [setor_component_1.SetorComponent, listagem_setor_component_1.ListagemSetorComponent]
+                shared_component_module_1.SharedComponentModule
+            ]
         })
     ], SetorModule);
     return SetorModule;

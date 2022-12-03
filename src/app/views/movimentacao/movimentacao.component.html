@@ -76,9 +76,10 @@
               (click)="salvarAlteracao()">
               {{this.estadoSalvar.includes('realizar')?'Realizar Movimentação':'Atualizar'}}
             </button>
-            <button type="button" class="btn btn-block limpar" (click)="limparCampos()">
+            <app-button (click)="limparCampos()" [classeBotao]="classeBotaoLimpar">
               Limpar
-            </button>
+            </app-button>
+
           </div>
 
         </div>

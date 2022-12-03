@@ -21,6 +21,7 @@ exports.FabricanteComponent = void 0;
 var core_1 = require("@angular/core");
 var forms_1 = require("@angular/forms");
 var MensagemRequisicaoHelper_1 = require("@nvs-helpers/MensagemRequisicaoHelper");
+var classes_sass_constant_1 = require("@nvs-utils/classes-sass.constant");
 var FabricanteComponent = /** @class */ (function () {
     function FabricanteComponent(fb, fabricanteService, toaster, spinner, router, activateRouter) {
         this.fb = fb;
@@ -29,9 +30,10 @@ var FabricanteComponent = /** @class */ (function () {
         this.spinner = spinner;
         this.router = router;
         this.activateRouter = activateRouter;
+        this.limpandoCampo = false;
         this.fabricante = {};
         this.estadoSalvar = 'cadastrarFabricante';
-        this.limpandoCampo = false;
+        this.classeBotaoLimpar = classes_sass_constant_1.CLASSE_BOTAO_LIMPAR;
     }
     Object.defineProperty(FabricanteComponent.prototype, "f", {
         get: function () {
@@ -61,7 +63,7 @@ var FabricanteComponent = /** @class */ (function () {
         this.spinner.show(nomeAcaoRealizada);
         this.fabricante = (this.estadoSalvar === 'cadastrarFabricante') ? __assign({}, this.form.value) : __assign({ codigoFabricante: this.fabricante.codigoFabricante }, this.form.value);
         this.fabricanteService[this.estadoSalvar](this.fabricante).subscribe(function () { return _this.toaster.success("Fabricante " + nomeAcaoRealizada + " com sucesso", 'Sucesso!'); }, function (error) {
-            var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+            var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
             _this.toaster[template.tipoMensagem](MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemDeErroAoRealizarOperacao(nomeAcaoRealizada, "fabricante", ['o', 'do']) + " Mensagem: " + template.mensagemErro, template.titulo);
         }, function () {
             setTimeout(function () {
@@ -81,7 +83,7 @@ var FabricanteComponent = /** @class */ (function () {
                     _this.form.patchValue(_this.fabricante);
                 },
                 error: function (error) {
-                    var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+                    var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
                     _this.toaster[template.tipoMensagem]("Houve um erro ao tentar carregar o fabricante. Mensagem: " + template.mensagemErro, template.titulo);
                 }
             }).add(function () { return _this.spinner.hide('carregando'); });

@@ -5,9 +5,10 @@ import { MensagemRequisicao } from '@nvs-helpers/MensagemRequisicaoHelper';
 import { Funcionario } from '@nvs-models/Funcionario';
 import { Setor } from '@nvs-models/Setor';
 import { FuncionarioService } from '@nvs-services/funcionario/funcionario.service';
+import { CLASSE_BOTAO_LIMPAR } from '@nvs-utils/classes-sass.constant';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
-import { SetorService } from '../../services/setor/setor.service';
+import { SetorService } from '@nvs-services/setor/setor.service';
 
 @Component({
   selector: 'app-funcionario',
@@ -16,12 +17,15 @@ import { SetorService } from '../../services/setor/setor.service';
 })
 export class FuncionarioComponent implements OnInit {
 
-  form!: FormGroup;
-  funcionario = {} as Funcionario;
-  codigoFuncionario: number;
-  public estadoSalvar: string = 'cadastrarFuncionario';
-  private limpandoCampo: boolean = false;
-  setores: Setor[];
+  private funcionario = {} as Funcionario;
+  private codigoFuncionario: number;
+  private limpandoCampo = false;
+
+  public estadoSalvar = 'cadastrarFuncionario';
+  public setores: Setor[];
+  public readonly classeBotaoLimpar = CLASSE_BOTAO_LIMPAR;
+  public form!: FormGroup;
+
 
   get f(): any {
     return this.form.controls;
@@ -53,8 +57,8 @@ export class FuncionarioComponent implements OnInit {
       next: (setores: Setor[]) => {
         this.setores = setores
       },
-      error: (error: any) => {
-        this.toaster.error(`Houve um erro ao carregar o setor. Mensagem ${error.message}`, 'Erro!');
+      error: (error: unknown) => {
+        this.toaster.error(`Houve um erro ao carregar o setor. Mensagem ${error["message"]}`, 'Erro!');
       },
     });
   }
@@ -79,8 +83,8 @@ export class FuncionarioComponent implements OnInit {
   }
 
   public salvarAlteracao(): void {
-    let atualizando = this.estadoSalvar == 'atualizarFuncionario';
-    let nomeAcaoRealizada = atualizando ? 'atualizado' : 'cadastrado';
+    const atualizando = this.estadoSalvar == 'atualizarFuncionario';
+    const nomeAcaoRealizada = atualizando ? 'atualizado' : 'cadastrado';
 
     this.spinner.show(nomeAcaoRealizada);
 
@@ -88,9 +92,8 @@ export class FuncionarioComponent implements OnInit {
 
     this.funcionarioService[this.estadoSalvar](this.funcionario).subscribe(
       () => this.toaster.success(`Funcionário ${nomeAcaoRealizada} com sucesso`, 'Sucesso!'),
-      (error: any) => {
-        debugger;
-        let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+      (error: unknown) => {
+        const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
         this.toaster[template.tipoMensagem](`${MensagemRequisicao.retornarMensagemDeErroAoRealizarOperacao(nomeAcaoRealizada, "funcionário", ['o', 'do'])} Mensagem: ${template.mensagemErro}`, template.titulo);
       },
       () => {
@@ -115,8 +118,8 @@ export class FuncionarioComponent implements OnInit {
             this.funcionario = { ...funcionario };
             this.form.patchValue(this.funcionario);
           },
-          error: (error: any) => {
-            let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+          error: (error: unknown) => {
+            const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
             this.toaster[template.tipoMensagem](`Houve um erro ao tentar carregar o funcionário. Mensagem: ${template.mensagemErro}`, template.titulo);
           }
         }

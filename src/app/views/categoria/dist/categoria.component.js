@@ -18,9 +18,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 exports.__esModule = true;
 exports.CategoriaComponent = void 0;
+/* eslint-disable rxjs/no-implicit-any-catch */
 var core_1 = require("@angular/core");
 var forms_1 = require("@angular/forms");
 var MensagemRequisicaoHelper_1 = require("@nvs-helpers/MensagemRequisicaoHelper");
+var classes_sass_constant_1 = require("src/app/utils/classes-sass.constant");
 var CategoriaComponent = /** @class */ (function () {
     function CategoriaComponent(fb, spinner, toaster, router, categoriaService, activateRouter) {
         this.fb = fb;
@@ -30,8 +32,9 @@ var CategoriaComponent = /** @class */ (function () {
         this.categoriaService = categoriaService;
         this.activateRouter = activateRouter;
         this.categoria = {};
-        this.estadoSalvar = "cadastrarCategoria";
         this.limpandoCampo = false;
+        this.estadoSalvar = "cadastrarCategoria";
+        this.classeBotaoLimpar = classes_sass_constant_1.CLASSE_BOTAO_LIMPAR;
     }
     Object.defineProperty(CategoriaComponent.prototype, "f", {
         get: function () {
@@ -62,7 +65,7 @@ var CategoriaComponent = /** @class */ (function () {
         this.spinner.show(nomeAcaoRealizada);
         this.categoria = (this.estadoSalvar === 'cadastrarCategoria') ? __assign({}, this.form.value) : __assign({ codigoCategoria: this.categoria.codigoCategoria }, this.form.value);
         this.categoriaService[this.estadoSalvar](this.categoria).subscribe(function () { return _this.toaster.success("Categoria " + nomeAcaoRealizada + " com sucesso", 'Sucesso!'); }, function (error) {
-            var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+            var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
             _this.toaster[template.tipoMensagem](MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemDeErroAoRealizarOperacao(nomeAcaoRealizada, "categoria", ['o', 'da']) + " Mensagem: " + template.mensagemErro, template.titulo);
         }, function () {
             setTimeout(function () {
@@ -84,7 +87,7 @@ var CategoriaComponent = /** @class */ (function () {
                 _this.form.patchValue(_this.categoria);
             },
             error: function (error) {
-                var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+                var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
                 _this.toaster[template.tipoMensagem]("Houve um problema ao carregar a categoria. Mensagem: " + template.mensagemErro, template.titulo);
             }
         }).add(function () { return _this.spinner.hide('carregando'); });

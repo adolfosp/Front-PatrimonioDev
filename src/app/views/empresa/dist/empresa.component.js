@@ -21,6 +21,7 @@ exports.EmpresaComponent = void 0;
 var core_1 = require("@angular/core");
 var forms_1 = require("@angular/forms");
 var MensagemRequisicaoHelper_1 = require("@nvs-helpers/MensagemRequisicaoHelper");
+var classes_sass_constant_1 = require("src/app/utils/classes-sass.constant");
 var EmpresaComponent = /** @class */ (function () {
     function EmpresaComponent(fb, spinner, toaster, router, empresaService, activateRouter) {
         this.fb = fb;
@@ -30,8 +31,9 @@ var EmpresaComponent = /** @class */ (function () {
         this.empresaService = empresaService;
         this.activateRouter = activateRouter;
         this.empresa = {};
-        this.estadoSalvar = 'cadastrarEmpresa';
         this.limpandoCampo = false;
+        this.estadoSalvar = 'cadastrarEmpresa';
+        this.classeBotaoLimpar = classes_sass_constant_1.CLASSE_BOTAO_LIMPAR;
     }
     Object.defineProperty(EmpresaComponent.prototype, "f", {
         get: function () {
@@ -63,10 +65,8 @@ var EmpresaComponent = /** @class */ (function () {
         var nomeAcaoRealizada = atualizando ? 'atualizada' : 'cadastrada';
         this.spinner.show(nomeAcaoRealizada);
         this.empresa = (this.estadoSalvar === 'cadastrarEmpresa') ? __assign({}, this.form.value) : __assign({ codigoEmpresa: this.empresa.codigoEmpresa }, this.form.value);
-        debugger;
         this.empresaService[this.estadoSalvar](this.empresa).subscribe(function () { return _this.toaster.success("Empresa " + nomeAcaoRealizada + " com sucesso", 'Sucesso!'); }, function (error) {
-            debugger;
-            var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+            var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
             _this.toaster[template.tipoMensagem](MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemDeErroAoRealizarOperacao(nomeAcaoRealizada, "empresa", ['o', 'da']) + " Mensagem: " + template.mensagemErro, template.titulo);
         }, function () {
             setTimeout(function () {
@@ -84,10 +84,9 @@ var EmpresaComponent = /** @class */ (function () {
                 next: function (empresa) {
                     _this.empresa = __assign({}, empresa);
                     _this.form.patchValue(_this.empresa);
-                    debugger;
                 },
                 error: function (error) {
-                    var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+                    var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
                     _this.toaster[template.tipoMensagem]("Houve um problema ao carregar a empresa. Mensagem: " + template.mensagemErro, template.titulo);
                 }
             }).add(function () { return _this.spinner.hide('carregando'); });

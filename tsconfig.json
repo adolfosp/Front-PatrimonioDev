@@ -29,8 +29,8 @@
       "@nvs-guards/*": ["src/app/guards/*"],
       "@nvs-helpers/*": ["src/app/helpers/*"],
       "@nvs-assets/*": ["src/assets/*"],
-      "@nvs-pipes/*": ["src/app/pipes/*"]
-
+      "@nvs-pipes/*": ["src/app/pipes/*"],
+      "@nvs-utils/*": ["src/app/utils/*"],
     },
   },
   "angularCompilerOptions": {

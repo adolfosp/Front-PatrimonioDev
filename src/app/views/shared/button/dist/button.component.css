@@ -1,0 +1,8 @@
+.limpar {
+  background-color: #808080;
+  color: white;
+}
+.limpar:hover {
+  background-color: #636363;
+  color: white;
+}

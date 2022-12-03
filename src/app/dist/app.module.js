@@ -39,7 +39,8 @@ var _404_component_1 = require("./views/error/404.component");
 var grafico_component_1 = require("./views/grafico/grafico.component");
 var registrar_component_1 = require("./views/login/registrar/registrar.component");
 var qr_code_component_1 = require("./views/qr-code/qr-code.component");
-var http_code_mensagem_component_1 = require("./views/shareds/http-code-mensagem/http-code-mensagem.component");
+// eslint-disable-next-line sort-imports
+var http_code_mensagem_component_1 = require("./views/shared/http-code-mensagem/http-code-mensagem.component");
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }

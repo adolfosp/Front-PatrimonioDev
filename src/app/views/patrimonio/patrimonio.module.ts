@@ -19,6 +19,7 @@ import { NgxMaskModule } from 'ngx-mask';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { EtiquetaCanvasComponent } from '../etiqueta-canvas/etiqueta-canvas.component';
 import { PerdaComponent } from '../perda/perda.component';
+import { SharedComponentModule } from '../shared/shared-component.module';
 import { ListagemPatrimonioComponent } from './listagem-patrimonio/listagem-patrimonio.component';
 import { PatrimonioRoutingModule } from './patrimonio-routing.module';
 import { PatrimonioComponent } from './patrimonio.component';
@@ -39,7 +40,8 @@ import { PatrimonioComponent } from './patrimonio.component';
     MatDatepickerModule,
     MatNativeDateModule,
     NgxMaskModule,
-    NgxCurrencyModule
+    NgxCurrencyModule,
+    SharedComponentModule
 
   ],
   providers: [PatrimonioService, EquipamentoService, FuncionarioService,BsModalService ],

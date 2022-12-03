@@ -174,7 +174,9 @@
           <div class="col">
             <button type="button" class="btn btn-block cadastrar me-2" [disabled]="!form.valid || !formAdicional.valid"
               (click)="salvarAlteracao()">{{this.estadoSalvar == 'cadastrarPatrimonio'?'Cadastrar':'Atualizar'}}</button>
-            <button type="button" class="btn btn-block limpar" (click)="limparCampos()">Limpar</button>
+            <app-button (click)="limparCampos()" [classeBotao]="classeBotaoLimpar">
+              Limpar
+            </app-button>
           </div>
         </div>
       </div>

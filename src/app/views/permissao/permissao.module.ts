@@ -13,6 +13,7 @@ import { SharedModule } from '../../shared.module';
 import { ListagemPermissaoComponent } from './listagem-permissao/listagem-permissao.component';
 import { PermissaoRoutingModule } from './permissao-routing.module';
 import { PermissaoComponent } from './permissao.component';
+import { SharedComponentModule } from '../shared/shared-component.module';
 
 @NgModule({
   imports: [
@@ -26,9 +27,8 @@ import { PermissaoComponent } from './permissao.component';
     MatInputModule,
     MatIconModule,
     MatSelectModule,
-    MatCheckboxModule
-
-
+    MatCheckboxModule,
+    SharedComponentModule
   ],
   providers: [PermissaoService, BsModalService],
   declarations: [PermissaoComponent , ListagemPermissaoComponent]

@@ -8,6 +8,7 @@ import { CategoriaService } from '@nvs-services/categoria/categoria.service';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { TableModule } from 'ngx-easy-table';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { SharedComponentModule } from '../shared/shared-component.module';
 import { CategoriaRoutingModule } from './categoria-routing.module';
 import { CategoriaComponent } from './categoria.component';
 import { ListagemCategoriaComponent } from './listagem-categoria/listagem-categoria.component';
@@ -23,6 +24,7 @@ import { ListagemCategoriaComponent } from './listagem-categoria/listagem-catego
     MatInputModule,
     MatIconModule,
     MatSelectModule,
+    SharedComponentModule
   ],
   providers: [CategoriaService, BsModalService],
   declarations: [ CategoriaComponent, ListagemCategoriaComponent ]

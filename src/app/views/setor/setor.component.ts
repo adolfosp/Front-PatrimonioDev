@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MensagemRequisicao } from '@nvs-helpers/MensagemRequisicaoHelper';
 import { Setor } from '@nvs-models/Setor';
 import { SetorService } from '@nvs-services/setor/setor.service';
+import { CLASSE_BOTAO_LIMPAR } from 'src/app/utils/classes-sass.constant';
 
 @Component({
   selector: 'app-setor',
@@ -16,15 +17,18 @@ import { SetorService } from '@nvs-services/setor/setor.service';
 })
 export class SetorComponent implements OnInit {
 
-  form!: FormGroup;
-  setor = {} as Setor;
-  codigoSetor: number;
-  estadoSalvar: string = 'cadastrarSetor';
-  private limpandoCampo: boolean = false;
+  private limpandoCampo = false;
+  private codigoSetor: number;
+
+  public form!: FormGroup;
+  public setor = {} as Setor;
+  public estadoSalvar = 'cadastrarSetor';
+  public readonly classeBotaoLimpar = CLASSE_BOTAO_LIMPAR;
 
   get f(): any {
     return this.form.controls;
   }
+
   constructor(
     private fb: FormBuilder,
     private setorService: SetorService,
@@ -33,12 +37,11 @@ export class SetorComponent implements OnInit {
     private activateRouter: ActivatedRoute,
     private router: Router) {
 
-     }
+  }
 
   ngOnInit(): void {
     this.validacao();
     this.carregarSetor();
-
   }
 
   private validacao(): void {
@@ -59,8 +62,8 @@ export class SetorComponent implements OnInit {
 
   public salvarAlteracao(): void {
 
-    let atualizando = this.estadoSalvar == 'atualizarSetor';
-    let nomeAcaoRealizada = atualizando? 'atualizado': 'cadastrado';
+    const atualizando = this.estadoSalvar == 'atualizarSetor';
+    const nomeAcaoRealizada = atualizando? 'atualizado': 'cadastrado';
 
     this.spinner.show(nomeAcaoRealizada);
 
@@ -68,8 +71,8 @@ export class SetorComponent implements OnInit {
 
     this.setorService[this.estadoSalvar](this.setor).subscribe(
       () => this.toaster.success(`Setor ${nomeAcaoRealizada} com sucesso`, 'Sucesso!'),
-      (error: any) => {
-        let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+      (error: unknown) => {
+        const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
         this.toaster[template.tipoMensagem](`${MensagemRequisicao.retornarMensagemDeErroAoRealizarOperacao(nomeAcaoRealizada,"setor", ['o','do'])} Mensagem: ${template.mensagemErro}`, 'Erro!');
       },
       () =>
@@ -94,8 +97,8 @@ export class SetorComponent implements OnInit {
              this.setor = {...setor};
              this.form.patchValue(this.setor);
            },
-           error: (error: any) => {
-            let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+           error: (error: unknown) => {
+            const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
             this.toaster[template.tipoMensagem](`Houve um erro ao carregar o setor. Mensagem: ${template.mensagemErro}`, template.titulo);
            }
          }

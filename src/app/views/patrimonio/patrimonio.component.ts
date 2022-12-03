@@ -11,6 +11,7 @@ import { EquipamentoService } from '@nvs-services/equipamento/equipamento.servic
 import { FuncionarioService } from '@nvs-services/funcionario/funcionario.service';
 import { PatrimonioService } from '@nvs-services/patrimonio/patrimonio.service';
 import { TokenService } from '@nvs-services/token/token.service';
+import { CLASSE_BOTAO_LIMPAR } from '@nvs-utils/classes-sass.constant';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 
@@ -21,18 +22,18 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class PatrimonioComponent implements OnInit {
 
-  form = {} as FormGroup;
-  formAdicional = {} as FormGroup;
-
+  public form = {} as FormGroup;
+  public formAdicional = {} as FormGroup;
+  public limpandoCampo = false;
   public funcionarios: Funcionario[] = [];
   public equipamentos: Equipamento[] = [];
   public patrimonio: Patrimonio = {} as Patrimonio;
   public informacaoAdicional: InformacaoAdicional = {} as InformacaoAdicional;
   public chaveSituacaoEquipamento: any
   public situacaoEquipamentoEnum = SituacaoEquipamento;
-  private limpandoCampo: boolean = false;
-  public estadoSalvar: string = 'cadastrarPatrimonio'
+  public estadoSalvar = 'cadastrarPatrimonio'
   public valorAtualSituacaoEquipamento = "2";
+  public readonly classeBotaoLimpar = CLASSE_BOTAO_LIMPAR;
 
   public codigoPatrimonio: any;
   public serviceTag: any;
@@ -72,8 +73,8 @@ export class PatrimonioComponent implements OnInit {
       this.informacaoAdicional = (this.estadoSalvar === 'cadastrarPatrimonio') ? {...this.formAdicional.value} : {codigoInformacaoAdicional: this.informacaoAdicional.codigoInformacaoAdicional, ...this.formAdicional.value};
       this.patrimonioService[this.estadoSalvar](this.patrimonio, this.informacaoAdicional).subscribe(
         () => this.toaster.success(`Patrimônio ${nomeAcaoRealizada} com sucesso`, 'Sucesso!'),
-        (error: any) => {
-          let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+        (error: unknown) => {
+          let template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
           this.toaster[template.tipoMensagem](`${MensagemRequisicao.retornarMensagemDeErroAoRealizarOperacao(nomeAcaoRealizada,"patrimônio", ['o','do'])} Mensagem: ${template.mensagemErro}`, 'Erro!');
         },
         () => {
@@ -124,30 +125,27 @@ export class PatrimonioComponent implements OnInit {
 
 
   private obterEquipamentos(): void {
-    this.equipamento.obterTodosEquipamentos().subscribe(
-      (result: Equipamento[]) =>{
+    this.equipamento.obterTodosEquipamentos().subscribe({
+      next: (result: Equipamento[]) =>{
         this.equipamentos = result;
       },
-      (error: any) =>{
-        let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+      error: (error: unknown) =>{
+        let template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
         this.toaster[template.tipoMensagem](`Houve um problema ao carregar os equipamentos. Mensagem: ${template.mensagemErro}`, template.titulo);
-      },
-      () =>{}
-
-    );
+      }});
   }
 
   private obterFuncionarios(): void{
 
-    this.funcionario.obterTodosFuncionarios().subscribe(
-      (result: Funcionario[]) =>{
+    this.funcionario.obterTodosFuncionarios().subscribe({
+      next: (result: Funcionario[]) =>{
         this.funcionarios = result;
       },
-      (error: any) =>{
-        let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+      error: (error: unknown) =>{
+        let template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
         this.toaster[template.tipoMensagem](`Houve um problema ao carregar os funcionários. Mensagem: ${template.mensagemErro}`, 'Erro!');
       }
-    );
+    });
   }
 
   private validarCamposPatrimonio(): void {

@@ -29,7 +29,10 @@
               (click)="salvarAlteracao()">
               {{this.estadoSalvar.includes('cadastrar')?'Cadastrar':'Atualizar'}}
             </button>
-            <button type="button" class="btn btn-block limpar" (click)="limparCampos()">Limpar</button>
+            <app-button (click)="limparCampos()" [classeBotao]="classeBotaoLimpar">
+              Limpar
+            </app-button>
+
           </div>
         </div>
       </div>
