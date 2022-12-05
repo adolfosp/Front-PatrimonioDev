@@ -10,22 +10,20 @@ import { environment } from '../../../environments/environment';
 })
 export class UsuarioPerfilService {
 
-  baseUrl: string = `${environment.apiUrl}perfils`
+  private baseUrl = `${environment.apiUrl}perfils`
 
   constructor(private api: ApiService) { }
 
   public obterPerfilUsuario(codigoUsuario: number): Observable<UsuarioPerfil>{
-    debugger;
     return this.api.get<UsuarioPerfil>(`${this.baseUrl}/${codigoUsuario}`).pipe(take(1));
   }
 
   public atualizarPerfilUsuario(perfil: UsuarioPerfil): Observable<number>{
-    return this.api.put<number>(`${this.baseUrl}`, {perfil});
+    return this.api.put<number>(`${this.baseUrl}`, {perfilDto: perfil});
   }
 
-  public inserirImagem(codigoUsuario: number, file: File[]): Observable<UsuarioPerfil>{
-    debugger;
-    const arquivoUpload = file[0] as File;
+  public inserirImagem(codigoUsuario: number, file: File): Observable<UsuarioPerfil>{
+    const arquivoUpload = file;
     const formData = new FormData();
     formData.append('file', arquivoUpload);
 

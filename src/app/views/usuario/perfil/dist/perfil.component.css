@@ -45,7 +45,7 @@
   word-wrap: normal;
   padding-bottom: 3px;
   color: black;
-  border-radius: 3px;
+  border-radius: 2px;
   line-height: 2;
 }
 
@@ -72,21 +72,45 @@
   cursor: pointer;
 }
 
-#card-footer-imagem {
-  background-color: #009AE0 !important;
+.limpar {
+  background-color: #808080;
   color: white;
-  height: 17vh;
+}
+.limpar:hover {
+  background-color: #7A7A7A;
+  color: white;
 }
 
-.cor-card-footer {
-  background-color: white;
+.cadastrar {
+  border-radius: 4px;
+  background-color: #009AE0;
+  color: white;
+  border: none;
+}
+.cadastrar:disabled {
+  background-color: #0099e0b6;
+}
+.cadastrar:hover {
+  background-color: #0088C7;
+  color: white;
 }
 
-#imagem-usuario {
+.card {
+  min-width: 60vw;
+}
+
+.full-width {
+  width: 100%;
+}
+
+#nome-usuario {
+  font-family: "Roboto-Black";
+}
+
+.input-img-upload {
+  display: none;
+}
+
+#link-image {
   cursor: pointer;
-}
-#imagem-usuario #row-card-sombra {
-  -webkit-box-shadow: -12px -7px 53px -29px rgba(0, 0, 0, 0.75);
-  -moz-box-shadow: -12px -7px 53px -29px rgba(0, 0, 0, 0.75);
-  box-shadow: -12px -7px 53px -29px rgba(0, 0, 0, 0.75);
 }

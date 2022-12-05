@@ -10,17 +10,10 @@ exports.ButtonComponent = void 0;
 var core_1 = require("@angular/core");
 var ButtonComponent = /** @class */ (function () {
     function ButtonComponent() {
-        this.Click = new core_1.EventEmitter();
     }
-    ButtonComponent.prototype.clickBotao = function () {
-        this.Click.emit();
-    };
     __decorate([
         core_1.Input()
     ], ButtonComponent.prototype, "classeBotao");
-    __decorate([
-        core_1.Output()
-    ], ButtonComponent.prototype, "Click");
     ButtonComponent = __decorate([
         core_1.Component({
             selector: 'app-button',

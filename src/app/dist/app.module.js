@@ -39,8 +39,8 @@ var _404_component_1 = require("./views/error/404.component");
 var grafico_component_1 = require("./views/grafico/grafico.component");
 var registrar_component_1 = require("./views/login/registrar/registrar.component");
 var qr_code_component_1 = require("./views/qr-code/qr-code.component");
-// eslint-disable-next-line sort-imports
 var http_code_mensagem_component_1 = require("./views/shared/http-code-mensagem/http-code-mensagem.component");
+var custom_preload_strategy_1 = require("./configs/custom-preload-strategy");
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
@@ -88,11 +88,12 @@ var AppModule = /** @class */ (function () {
                 icon_1.MatIconModule,
                 button_1.MatButtonModule,
                 slide_toggle_1.MatSlideToggleModule,
-                expansion_1.MatExpansionModule
+                expansion_1.MatExpansionModule,
             ],
             providers: [
                 api_service_1.ApiService,
                 angular_jwt_1.JwtHelperService,
+                custom_preload_strategy_1.CustomPreloader,
                 { provide: angular_jwt_1.JWT_OPTIONS, useValue: angular_jwt_1.JWT_OPTIONS },
                 {
                     provide: 'SocialAuthServiceConfig',

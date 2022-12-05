@@ -1,191 +1,185 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css" rel="stylesheet" />
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+  <body>
+    <nav>
+      <div class="sidebar-top">
+        <span class="shrink-btn">
+          <i class="bx bx-chevron-left"></i>
+        </span>
+        <h3 class="hide">Patrimônio PS</h3>
+      </div>
 
-</head>
+      <div class="sidebar-links">
+        <ul>
+          <div class="active-tab"></div>
+          <li class="tooltip-element" data-tooltip="0">
+            <a href="#" routerLink="/dashboard" class="active" data-active="0">
+              <div class="icon">
+                <i class="bx bxs-dashboard"></i>
+                <i class="bx bxs-dashboard"></i>
+              </div>
+              <span class="link hide">Dashboard</span>
+            </a>
+          </li>
 
-<body>
-  <nav>
-    <div class="sidebar-top">
-      <span class="shrink-btn">
-        <i class='bx bx-chevron-left'></i>
-      </span>
-      <h3 class="hide">Patrimônio PS</h3>
-    </div>
+          <li class="tooltip-element" data-tooltip="1">
+            <a href="#" routerLink="/dashboard/empresa/listagem" class="active" data-active="1">
+              <div class="icon">
+                <i class="bx bx-building"></i>
+                <i class="bx bxs-building"></i>
+              </div>
+              <span class="link hide">Empresa</span>
+            </a>
+          </li>
+          <li class="tooltip-element" data-tooltip="2">
+            <a href="#" routerLink="/dashboard/funcionario/listagem" data-active="2">
+              <div class="icon">
+                <i class="bx bx-id-card"></i>
+                <i class="bx bxs-id-card"></i>
+              </div>
+              <span class="link hide">Funcionário</span>
+            </a>
+          </li>
+          <li class="tooltip-element" data-tooltip="3">
+            <a href="#" routerLink="/dashboard/usuario/listagem" data-active="3">
+              <div class="icon">
+                <i class="bx bx-user"></i>
+                <i class="bx bxs-user"></i>
+              </div>
+              <span class="link hide">Usuário</span>
+            </a>
+          </li>
+          <li class="tooltip-element" data-tooltip="4">
+            <a href="#" routerLink="/dashboard/setor/listagem" data-active="4">
+              <div class="icon">
+                <i class="bx bx-category"></i>
+                <i class="bx bxs-category"></i>
+              </div>
+              <span class="link hide">Setor</span>
+            </a>
+          </li>
+          <li class="tooltip-element" data-tooltip="5">
+            <a href="#" routerLink="/dashboard/permissao/listagem" data-active="5">
+              <div class="icon">
+                <i class="bx bx-group"></i>
+                <i class="bx bxs-group"></i>
+              </div>
+              <span class="link hide">Permissão</span>
+            </a>
+          </li>
 
-    <div class="sidebar-links">
-
-      <ul>
-        <div class="active-tab"></div>
-        <li class="tooltip-element" data-tooltip="0">
-          <a href="#" routerLink="/dashboard" class="active" data-active="0">
-            <div class="icon">
-              <i class='bx bxs-dashboard'></i>
-              <i class='bx bxs-dashboard'></i>
-            </div>
-            <span class="link hide">Dashboard</span>
-          </a>
-        </li>
-
-        <li class="tooltip-element" data-tooltip="1">
-          <a href="#" routerLink="/dashboard/empresa/listagem" class="active" data-active="1">
-            <div class="icon">
-              <i class='bx bx-building'></i>
-              <i class='bx bxs-building'></i>
-            </div>
-            <span class="link hide">Empresa</span>
-          </a>
-        </li>
-        <li class="tooltip-element" data-tooltip="2">
-          <a href="#" routerLink="/dashboard/funcionario/listagem" data-active="2">
-            <div class="icon">
-              <i class='bx bx-id-card'></i>
-              <i class='bx bxs-id-card'></i>
-            </div>
-            <span class="link hide">Funcionário</span>
-          </a>
-        </li>
-        <li class="tooltip-element" data-tooltip="3">
-          <a href="#" routerLink="/dashboard/usuario/listagem" data-active="3">
-            <div class="icon">
-              <i class='bx bx-user'></i>
-              <i class='bx bxs-user'></i>
-            </div>
-            <span class="link hide">Usuário</span>
-          </a>
-        </li>
-        <li class="tooltip-element" data-tooltip="4">
-          <a href="#" routerLink="/dashboard/setor/listagem" data-active="4">
-            <div class="icon">
-              <i class='bx bx-category'></i>
-              <i class='bx bxs-category'></i>
-            </div>
-            <span class="link hide">Setor</span>
-          </a>
-        </li>
-        <li class="tooltip-element" data-tooltip="5">
-          <a href="#" routerLink="/dashboard/permissao/listagem" data-active="5">
-            <div class="icon">
-              <i class='bx bx-group'></i>
-              <i class='bx bxs-group'></i>
-            </div>
-            <span class="link hide">Permissão</span>
-          </a>
-        </li>
-
-        <div class="tooltip">
-          <span class="show">Dashboard</span>
-          <span>Empresa</span>
-          <span>Funcionário</span>
-          <span>Usuário</span>
-          <span>Setor</span>
-          <span>Permissão</span>
-        </div>
-      </ul>
-
-      <h4 class="hide">Patrimônio</h4>
-
-      <ul>
-        <li class="tooltip-element" data-tooltip="0">
-          <a href="#" routerLink="/dashboard/fabricante/listagem" data-active="6">
-            <div class="icon">
-              <i class='bx bxs-factory'></i>
-              <i class='bx bxs-factory'></i>
-            </div>
-            <span class="link hide">Fabricante</span>
-          </a>
-        </li>
-        <li class="tooltip-element" data-tooltip="1">
-          <a href="#" routerLink="/dashboard/qr-code" data-active="7">
-            <div class="icon">
-              <i class='bx bx-qr-scan'></i>
-              <i class='bx bx-qr-scan'></i>
-            </div>
-            <span class="link hide">QRCode</span>
-          </a>
-        </li>
-        <li class="tooltip-element" data-tooltip="2">
-          <a href="#" routerLink="/dashboard/equipamento/listagem" data-active="8">
-            <div class="icon">
-              <i class='bx bx-desktop'></i>
-              <i class='bx bx-desktop'></i>
-            </div>
-            <span class="link hide">Equipamento</span>
-          </a>
-        </li>
-        <li class="tooltip-element" data-tooltip="3">
-          <a href="#" routerLink="/dashboard/categoria/listagem" data-active="9">
-            <div class="icon">
-              <i class='bx bxs-component'></i>
-              <i class='bx bxs-component'></i>
-            </div>
-            <span class="link hide">Categoria</span>
-          </a>
-        </li>
-        <li class="tooltip-element" data-tooltip="4">
-          <a href="#" routerLink="/dashboard/relatorio/" data-active="10">
-            <div class="icon">
-              <i class='bx bx-file'></i>
-              <i class='bx bxs-file'></i>
-            </div>
-            <span class="link hide">Rel. Perda</span>
-          </a>
-        </li>
-        <li class="tooltip-element" data-tooltip="5">
-          <a href="#" routerLink="/dashboard/patrimonio/listagem" data-active="11">
-            <div class="icon">
-              <i class='bx bx-grid'></i>
-              <i class='bx bxs-grid'></i>
-            </div>
-            <span class="link hide">Patrimônio</span>
-          </a>
-        </li>
-        <div class="tooltip">
-          <span>Fabricante</span>
-          <span>QRCode</span>
-          <span>Equipamento</span>
-          <span>Categoria</span>
-          <span>Rel. Perda</span>
-          <span>Patrimônio</span>
-
-        </div>
-      </ul>
-    </div>
-
-    <div class="sidebar-footer">
-      <a href="#" class="account tooltip-element" data-tooltip="0">
-        <i class='bx bx-user'></i>
-      </a>
-      <div class="admin-user tooltip-element" data-tooltip="1">
-        <div class="admin-profile hide">
-          <img src="assets/img/ps.png" alt="">
-          <div class="admin-info">
-            <h3>{{nomeUsuario}}</h3>
-            <h5>{{descricaoPerfil}}</h5>
+          <div class="tooltip">
+            <span class="show">Dashboard</span>
+            <span>Empresa</span>
+            <span>Funcionário</span>
+            <span>Usuário</span>
+            <span>Setor</span>
+            <span>Permissão</span>
           </div>
-        </div>
-        <a href="#" (click)="logOut()" class="log-out">
-          <i class='bx bx-log-out'></i>
+        </ul>
+
+        <h4 class="hide">Patrimônio</h4>
+
+        <ul>
+          <li class="tooltip-element" data-tooltip="0">
+            <a href="#" routerLink="/dashboard/fabricante/listagem" data-active="6">
+              <div class="icon">
+                <i class="bx bxs-factory"></i>
+                <i class="bx bxs-factory"></i>
+              </div>
+              <span class="link hide">Fabricante</span>
+            </a>
+          </li>
+          <li class="tooltip-element" data-tooltip="1">
+            <a href="#" routerLink="/dashboard/qr-code" data-active="7">
+              <div class="icon">
+                <i class="bx bx-qr-scan"></i>
+                <i class="bx bx-qr-scan"></i>
+              </div>
+              <span class="link hide">QRCode</span>
+            </a>
+          </li>
+          <li class="tooltip-element" data-tooltip="2">
+            <a href="#" routerLink="/dashboard/equipamento/listagem" data-active="8">
+              <div class="icon">
+                <i class="bx bx-desktop"></i>
+                <i class="bx bx-desktop"></i>
+              </div>
+              <span class="link hide">Equipamento</span>
+            </a>
+          </li>
+          <li class="tooltip-element" data-tooltip="3">
+            <a href="#" routerLink="/dashboard/categoria/listagem" data-active="9">
+              <div class="icon">
+                <i class="bx bxs-component"></i>
+                <i class="bx bxs-component"></i>
+              </div>
+              <span class="link hide">Categoria</span>
+            </a>
+          </li>
+          <li class="tooltip-element" data-tooltip="4">
+            <a href="#" routerLink="/dashboard/relatorio/" data-active="10">
+              <div class="icon">
+                <i class="bx bx-file"></i>
+                <i class="bx bxs-file"></i>
+              </div>
+              <span class="link hide">Rel. Perda</span>
+            </a>
+          </li>
+          <li class="tooltip-element" data-tooltip="5">
+            <a href="#" routerLink="/dashboard/patrimonio/listagem" data-active="11">
+              <div class="icon">
+                <i class="bx bx-grid"></i>
+                <i class="bx bxs-grid"></i>
+              </div>
+              <span class="link hide">Patrimônio</span>
+            </a>
+          </li>
+          <div class="tooltip">
+            <span>Fabricante</span>
+            <span>QRCode</span>
+            <span>Equipamento</span>
+            <span>Categoria</span>
+            <span>Rel. Perda</span>
+            <span>Patrimônio</span>
+          </div>
+        </ul>
+      </div>
+
+      <div class="sidebar-footer">
+        <a href="#" class="account tooltip-element" data-tooltip="0">
+          <i class="bx bx-user"></i>
         </a>
+        <div class="admin-user tooltip-element" data-tooltip="1">
+          <div class="admin-profile hide">
+            <img src="assets/img/ps.png" alt="" />
+            <div class="admin-info">
+              <a href="#" id="nome-usuario" routerLink="/dashboard/usuario/perfil">
+                {{ nomeUsuario }}
+              </a>
+              <h5>{{ descricaoPerfil }}</h5>
+            </div>
+          </div>
+          <a href="#" (click)="logOut()" class="log-out">
+            <i class="bx bx-log-out"></i>
+          </a>
+        </div>
+        <div class="tooltip">
+          <span class="show">{{ nomeUsuario }}</span>
+          <span>Logout</span>
+        </div>
       </div>
-      <div class="tooltip">
-        <span class="show">Adolfo</span>
-        <span>Logout</span>
-      </div>
-    </div>
-  </nav>
+    </nav>
 
-
-  <main>
-
-    <router-outlet></router-outlet>
-  </main>
-
-</body>
-
+    <main>
+      <router-outlet></router-outlet>
+    </main>
+  </body>
 </html>

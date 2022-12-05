@@ -65,7 +65,7 @@
         <div class="col-sm-12 col-md-6">
           <mat-form-field class="full-width" appearance="fill">
             <mat-label>Nome</mat-label>
-            <input matInput name="nome" [formControl]="f.nome" name="nome" required />
+            <input matInput name="nome" [formControl]="f.nome" required />
             <mat-error *ngIf="f.nome.errors?.required">O nome é obrigatório</mat-error>
             <mat-error *ngIf="f.nome.errors?.maxlength">O nome pode ter no máximo 60 caracteres
             </mat-error>
@@ -76,7 +76,7 @@
         <div class="col-sm-12 col-md-6">
           <mat-form-field class="full-width" appearance="fill">
             <mat-label>E-mail</mat-label>
-            <input matInput type="email" name="email" [formControl]="f.email" name="email" required />
+            <input matInput type="email" name="email" [formControl]="f.email" required />
             <mat-error *ngIf="f.email.errors?.required">O e-mail é obrigatório</mat-error>
             <mat-error *ngIf="f.email.errors?.email">O e-mail está inválido
             </mat-error>
@@ -90,7 +90,7 @@
         <div class="col-sm-12 col-md-6">
           <mat-form-field class="full-width" appearance="fill">
             <mat-label>Senha</mat-label>
-            <input matInput type="password" name="senha" [formControl]="f.senha" name="senha" required />
+            <input matInput type="password" name="senha" [formControl]="f.senha" required />
             <mat-error *ngIf="f.senha.errors?.required">A senha é obrigatória</mat-error>
             <mat-error *ngIf="f.senha.errors?.maxlength">A senha pode ter no máximo 25 caracteres
             </mat-error>
@@ -102,7 +102,7 @@
 
           <mat-form-field class="full-width" appearance="fill">
             <mat-label>Repita a senha</mat-label>
-            <input matInput type="password" name="confirmeSenha" [formControl]="f.confirmeSenha" name="confirmeSenha" required />
+            <input matInput type="password" name="confirmeSenha" [formControl]="f.confirmeSenha"  required />
             <mat-error *ngIf="f.confirmeSenha.errors?.required">A senha é obrigatória</mat-error>
             <mat-error *ngIf="f.confirmeSenha.errors?.maxlength">A senha pode ter no máximo 25 caracteres
             </mat-error>

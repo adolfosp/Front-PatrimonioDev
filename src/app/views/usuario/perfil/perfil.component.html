@@ -1,81 +1,96 @@
 <div class="card border-0 rounded shadow-sm m-3 p-3">
   <form [formGroup]="form">
     <div class="row p-3">
-      <div class="col-lg-3 pt-1" id="imagem-usuario">
-        <div class="card mb-3 border-0" id="row-card-sombra" >
-          <div class="form-group">
-            <input type="file" #file (change)="onFileChange($event)" class="form-control is-invalid" style="display: none;">
-          </div>
-          <div class="d-flex align-self-center pt-3" data-toggle="tooltip" data-placement="top" title="Clique aqui para alterar a imagem do seu perfil" >
-            <a>
-              <img
-              [src]="this.imagemUrl"
-               width="120" height="120"
-               class="rounded-circle" (click)="file.click()">
-            </a>
-          </div>
-          <div class="card-body">
-          </div>
-          <div class="card-footer" id="card-footer-imagem">
-            <div class="h4 text-center mb-3"><p class="text-uppercase">{{nomeUsuario}}</p></div>
-          </div>
-        </div>
+      <div class="col-lg-2 me-5 text-center" data-toggle="tooltip" data-placement="top" title="Clique aqui para alterar a imagem do seu perfil">
+          <input type="file" #file (change)="onFileChange($event)" class="input-img-upload">
+          <a id="link-image">
+            <img
+            [src]="this.imagemUrl"
+             width="120" height="120"
+             alt="Imagem do perfil do usuário"
+             class="rounded-circle" (click)="file.click()">
+             <p class="text-uppercase text-center mt-2" id="nome-usuario">{{this.form.get("nomeUsuario").value}}</p>
+          </a>
       </div>
       <div class="col-lg-9">
-        <div class="form-row">
-          <div class="form-group col-lg-12 col-md-4 col-sm-12">
-            <h3 class="pb-2 col-4 col-lg-2"><span class="texto-destaque">Perfil</span></h3>
-          </div>
+        <div class="col-lg-12 col-md-4 col-sm-12">
+          <h1><span class="texto-destaque">Informações</span></h1>
+        </div>
+        <div class="row">
           <hr/>
-          <div class="form-group col-12">
-            <label>Nome</label>
-            <input type="text" maxlength="25" minlength="5" placeholder="Digite seu nome no sistema" [ngClass]="cssValidator(f.nomeUsuario)" [ngModelOptions]="{standalone: true}" [(ngModel)]="nomeUsuario" class="form-control"/>
-            <div *ngIf="f.nomeUsuario.errors?.required" class="invalid-feedback">Nome é obrigatório</div>
-            <div *ngIf="f.nomeUsuario.errors?.minlength" class="invalid-feedback">Nome deve ter no mínimo 4 caracteres</div>
-            <div *ngIf="f.nomeUsuario.errors?.maxlength" class="invalid-feedback">Nome deve ter no máximo 50 caracteres</div>
+          <div class="col-12">
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Nome</mat-label>
+              <input matInput type="text" name="nome" [formControl]="f.nomeUsuario" required />
+              <mat-error *ngIf="f.nomeUsuario.errors?.required">O nome é obrigatório</mat-error>
+              <mat-error *ngIf="f.nomeUsuario.errors?.maxlength">O nome deve ter no máximo 50 caracteres
+              </mat-error>
+              <mat-error *ngIf="f.nomeUsuario.errors?.minlength">O nome deve ter no mínimo 4 caracteres
+              </mat-error>
+            </mat-form-field>
           </div>
-          <div class="form-group col-6">
-            <label>Setor</label>
-            <input readonly type="text" formControlName="nomeSetor" class="form-control"/>
+          <div class="col-6">
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Setor</mat-label>
+              <input matInput readonly type="text" name="nomeSetor" [formControl]="f.nomeSetor" />
+            </mat-form-field>
+
           </div>
-          <div class="form-group col-6">
-            <label>Empresa</label>
-            <input readonly type="text" formControlName="razaoSocial" class="form-control"/>
+          <div class="col-6">
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Empresa</mat-label>
+              <input matInput readonly type="text" name="razaoSocial" [formControl]="f.razaoSocial" />
+            </mat-form-field>
+
           </div>
         </div>
-        <div class="form-row">
-          <div class="form-group col-sm-6">
-            <label>E-mail</label>
-            <input readonly type="text" formControlName="email" class="form-control" />
+        <div class="row">
+          <div class="col-sm-6">
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>E-mail</mat-label>
+              <input matInput readonly type="text" name="email" [formControl]="f.email" />
+            </mat-form-field>
           </div>
-          <div class="form-group col-6">
-            <label>Permissão</label>
-            <input readonly type="text" formControlName="descricaoPermissao" class="form-control"/>
+          <div class="col-6">
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Permissão</mat-label>
+              <input matInput readonly type="text" name="descricaoPermissao" [formControl]="f.descricaoPermissao" />
+            </mat-form-field>
           </div>
         </div>
         <div>
-          <h3 class="pt-3 pb-2 col-2"><span class="texto-destaque">Senha</span></h3>
+          <h1 class="col-2"><span class="texto-destaque">Senha</span></h1>
         </div>
-        <div class="form-row">
-          <div class="form-group col-sm">
-            <label>Senha</label>
-            <input type="password" formControlName="senha" [ngClass]="cssValidator(f.senha)" class="form-control" />
-            <div *ngIf="f.senha.errors?.required" class="invalid-feedback">Senha é obrigatória</div>
-            <div *ngIf="f.senha.errors?.minlength" class="invalid-feedback">Senha deve ter no mínimo 5 caracteres</div>
-            <div *ngIf="f.senha.errors?.maxlength" class="invalid-feedback">Senha deve ter no máximo 25 caracteres</div>
+        <div class="row">
+          <div class="col-sm">
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Senha</mat-label>
+              <input matInput type="password" name="senha" [formControl]="f.senha" required />
+              <mat-error *ngIf="f.senha.errors?.required">A senha é obrigatória</mat-error>
+              <mat-error *ngIf="f.senha.errors?.maxlength">A senha deve ter no máximo 25 caracteres
+              </mat-error>
+              <mat-error *ngIf="f.senha.errors?.minlength">A senha deve ter no mínimo 5 caracteres
+              </mat-error>
+            </mat-form-field>
           </div>
-          <div class="form-group col-sm">
-            <label>Confirmar Senha</label>
-            <input type="password" formControlName="confirmeSenha" [ngClass]="cssValidator(f.confirmeSenha)" class="form-control" />
-            <div *ngIf="f.confirmeSenha.errors?.required" class="invalid-feedback">Senha é obrigatória</div>
-            <div *ngIf="f.confirmeSenha.errors?.minlength" class="invalid-feedback">Senha deve ter no mínimo 5 caracteres</div>
-            <div *ngIf="f.confirmeSenha.errors?.maxlength" class="invalid-feedback">Senha deve ter no máximo 25 caracteres</div>
-            <div *ngIf="f.confirmeSenha.errors?.mustMatch" class="invalid-feedback">Senha incorreta</div>
+          <div class="col-sm">
+
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Confirmar Senha</mat-label>
+              <input matInput type="password" name="confirmeSenha" [formControl]="f.confirmeSenha" required />
+              <mat-error *ngIf="f.confirmeSenha.errors?.required">A senha é obrigatória</mat-error>
+              <mat-error *ngIf="f.confirmeSenha.errors?.maxlength">A senha deve ter no máximo 25 caracteres
+              </mat-error>
+              <mat-error *ngIf="f.confirmeSenha.errors?.minlength">A senha deve ter no mínimo 5 caracteres
+              </mat-error>
+              <mat-error *ngIf="f.confirmeSenha.errors?.mustMatch">As senhas não são iguais
+              </mat-error>
+            </mat-form-field>
           </div>
         </div>
       </div>
     </div>
-    <div class="card-footer cor-card-footer d-flex justify-content-end">
+    <div class="d-flex justify-content-end">
         <button [disabled]="!form.valid" (click)="salvarAlteracaoPerfil()" class="btn btn-success">
           <span class="mr-1"></span>
           Salvar Alteração
@@ -83,6 +98,6 @@
     </div>
   </form>
 </div>
-<ngx-spinner name="upload" bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-spin-fade" [fullScreen] = "true"><p style="color: white" > Fazendo upload da imagem... </p></ngx-spinner>
-<ngx-spinner name="carregando" bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-spin-fade" [fullScreen] = "true"><p style="color: white" > Carregando Perfil... </p></ngx-spinner>
-<ngx-spinner name="atualizando" bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-spin-fade" [fullScreen] = "true"><p style="color: white" > Atualizando Perfil... </p></ngx-spinner>
+<ngx-spinner name="upload" bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "square-jelly-box" [fullScreen] = "true"><p style="color: white" > Fazendo upload da imagem... </p></ngx-spinner>
+<ngx-spinner name="carregando" bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "square-jelly-box" [fullScreen] = "true"><p style="color: white" > Carregando Perfil... </p></ngx-spinner>
+<ngx-spinner name="atualizando" bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "square-jelly-box" [fullScreen] = "true"><p style="color: white" > Atualizando Perfil... </p></ngx-spinner>

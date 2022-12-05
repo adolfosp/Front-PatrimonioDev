@@ -36,7 +36,6 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.authService.authState.subscribe((user) => {
-      debugger;
       if(typeof user !== 'undefined' || user !== null){
         this.realizarRequisicaoObterUsuario(user.email, "1e9g63", true)
       }
@@ -72,12 +71,12 @@ export class LoginComponent implements OnInit {
   }
 
   public alterarLembrarMe():void {
-    let decisaoUsuario = this.lembrarMe == true ? 'sim': 'nao';
+    const decisaoUsuario = this.lembrarMe == true ? 'sim': 'nao';
     this.localStorageService.adicionarChave(LocalStorageChave.LembrarMe, decisaoUsuario);
   }
 
   private atribuirValorLembrarMe(): void {
-    let valor: string = this.localStorageService.obterChave(LocalStorageChave.LembrarMe);
+    const valor: string = this.localStorageService.obterChave(LocalStorageChave.LembrarMe);
     this.lembrarMe = valor == 'sim';
   }
 
@@ -95,9 +94,9 @@ export class LoginComponent implements OnInit {
       (result: any) => {
         this.usuarioAuth = result
       },
-      (error: any) => {
-        if (error.error !== "popup_closed_by_user")
-          this.toaster.error(`Houve um erro ao fazer login com a conta da Google. Mensagem : ${error.error}`)
+      (error: unknown) => {
+        if (error["error"] !== "popup_closed_by_user")
+          this.toaster.error(`Houve um erro ao fazer login com a conta da Google. Mensagem : ${error["error"]}`)
       },
       () => {
         //TODO: Realizar tudo por post
@@ -111,7 +110,7 @@ export class LoginComponent implements OnInit {
     this.removerToken();
     this.spinner.show();
 
-    let credenciais = { ...this.form.value }
+    const credenciais = { ...this.form.value }
     this.realizarRequisicaoObterUsuario(credenciais.email, credenciais.senha, false);
 
   }
@@ -123,7 +122,6 @@ export class LoginComponent implements OnInit {
 
     this.usuarioService.obterUsuarioPorEmailESenha(email, senha, autenticacaoAuth).subscribe(
       (result: any) => {
-        debugger;
         this.usuario = { ...result };
         this.localStorageService.adicionarChave(LocalStorageChave.Valor, this.encriptar.encrypt(result.token))
 
@@ -131,16 +129,14 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['dashboard']);
         }
       },
-      (error: any) => {
-        debugger;
-
+      (error: unknown) => {
         this.toaster.toastrConfig.timeOut = 5000;
-        if (error.status == 400 && this.ehAutenticacaoAuth) {
+        if (error["status"] == 400 && this.ehAutenticacaoAuth) {
           this.router.navigate(["register"], { queryParams: { email: this.usuarioAuth.email } })
           this.toaster.info(`Para continuar, é necessário preencher o formulário.`)
 
         } else {
-          let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+          const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
           this.toaster[template.tipoMensagem](`Houve um erro ao fazer login. Mensagem: ${template.mensagemErro}`, template.titulo);
         }
       }

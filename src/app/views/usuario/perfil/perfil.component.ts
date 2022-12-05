@@ -1,9 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import {
-  AbstractControlOptions, FormBuilder, FormControl,
-  FormGroup,
-  Validators
-} from "@angular/forms";
+import { AbstractControlOptions, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { MensagemRequisicao } from "@nvs-helpers/MensagemRequisicaoHelper";
 import { ValidacaoCampoSenha } from "@nvs-helpers/ValidacaoSenhaHelper";
 import { UsuarioPerfil } from "@nvs-models/UsuarioPerfil";
@@ -19,31 +15,27 @@ import { environment } from "../../../../environments/environment";
   styleUrls: ["./perfil.component.sass"],
 })
 export class PerfilComponent implements OnInit {
-  private codigoUsuario: number;
-  public nomeUsuario: string;
+  private _codigoUsuario: number;
+  private _usuarioPerfil = {} as UsuarioPerfil;
+  private _file: File;
   public form!: FormGroup;
-  private usuarioPerfil = {} as UsuarioPerfil;
-  public imagemUrl: string = "assets/img/sem-imagem.png";
-  file: File;
+  public imagemUrl = "assets/img/sem-imagem.png";
 
   constructor(
     private perfilService: UsuarioPerfilService,
     private token: TokenService,
     private toaster: ToastrService,
     private fb: FormBuilder,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
   ) {}
 
   public get f(): any {
     return this.form.controls;
   }
 
-  public cssValidator(campoForm: FormControl): any {
-    return { "is-invalid": campoForm.errors && campoForm.touched };
-  }
-
   ngOnInit(): void {
-    this.codigoUsuario = this.token.obterCodigoUsuarioToken();
+    this._codigoUsuario = this.token.obterCodigoUsuarioToken();
+
     this.validacao();
     this.carregarPerfilUsuario();
     this.tratarRetornoRequisicaoImagem();
@@ -56,10 +48,10 @@ export class PerfilComponent implements OnInit {
         const { nodeName } = error.target as HTMLInputElement;
 
         if (nodeName.includes("IMG")) {
-          this.atribuirCaminhoImagemPadraoPerfil()
+          this.atribuirCaminhoImagemPadraoPerfil();
         }
       },
-      true
+      true,
     );
   }
 
@@ -71,24 +63,16 @@ export class PerfilComponent implements OnInit {
     this.form = this.fb.group(
       {
         codigoUsuario: new FormControl(null),
-        nomeUsuario: new FormControl(""),
+        nomeUsuario: new FormControl("", [Validators.required, Validators.minLength(4), Validators.maxLength(50)]),
         nomeSetor: new FormControl(null),
         razaoSocial: new FormControl(null),
         descricaoPermissao: new FormControl(null),
         email: new FormControl(null),
-        senha: new FormControl("", [
-          Validators.required,
-          Validators.minLength(5),
-          Validators.maxLength(25),
-        ]),
+        senha: new FormControl("", [Validators.required, Validators.minLength(5), Validators.maxLength(25)]),
         imagemUrl: new FormControl(""),
-        confirmeSenha: new FormControl("", [
-          Validators.required,
-          Validators.minLength(5),
-          Validators.maxLength(25),
-        ]),
+        confirmeSenha: new FormControl("", [Validators.required, Validators.minLength(5), Validators.maxLength(25)]),
       },
-      formOptions
+      formOptions,
     );
   }
 
@@ -96,61 +80,50 @@ export class PerfilComponent implements OnInit {
     this.spinner.show("carregando");
 
     this.perfilService
-      .obterPerfilUsuario(this.codigoUsuario)
-      .subscribe(
-        (result: UsuarioPerfil) => {
+      .obterPerfilUsuario(this._codigoUsuario)
+      .subscribe({
+        next: (result: UsuarioPerfil) => {
           this.form.patchValue(result);
-          this.nomeUsuario = result.nomeUsuario;
-          this.codigoUsuario = result.codigoUsuario;
+          this._codigoUsuario = result.codigoUsuario;
           this.form.controls["confirmeSenha"].setValue(result.senha);
-          debugger;
+
           this.tratarUrlImagem(result.imagemUrl);
         },
-        (error: any) => {
-          let template = MensagemRequisicao.retornarMensagemTratada(
-            error.message,
-            error.error.mensagem
-          );
+        error: (error: unknown) => {
+          const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
           this.toaster[template.tipoMensagem](
             `Houve um erro ao carregar o perfil. Mensagem: ${template.mensagemErro}`,
-            "Erro"
+            "Erro",
           );
-        }
-      )
+        },
+      })
       .add(() => this.spinner.hide("carregando"));
   }
 
   private tratarUrlImagem(url: string): void {
-    debugger;
-    if (typeof url == "undefined" || url == null)
-      this.atribuirCaminhoImagemPadraoPerfil()
+    if (typeof url == "undefined" || url == null) this.atribuirCaminhoImagemPadraoPerfil();
     else this.imagemUrl = `${environment.apiUrlImage}/${url}`;
   }
 
   public salvarAlteracaoPerfil(): void {
     this.spinner.show("atualizando");
 
-    this.usuarioPerfil.senha = this.form.controls["senha"].value;
-    this.usuarioPerfil.nomeUsuario = this.nomeUsuario;
-    this.usuarioPerfil.codigoUsuario = this.form.controls["codigoUsuario"].value;
+    this._usuarioPerfil = new UsuarioPerfil(this.form.value);
 
     this.perfilService
-      .atualizarPerfilUsuario(this.usuarioPerfil)
-      .subscribe(
-        () => {
+      .atualizarPerfilUsuario(this._usuarioPerfil)
+      .subscribe({
+        next: () => {
           this.toaster.success(`Perfil atualizado com sucesso!`);
         },
-        (error: any) => {
-          let template = MensagemRequisicao.retornarMensagemTratada(
-            error.message,
-            error.error.mensagem
-          );
+        error: (error: unknown) => {
+          const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
           this.toaster[template.tipoMensagem](
             `Houve um erro ao atualizar o perfil. Mensagem: ${template.mensagemErro}`,
-            "Erro"
+            "Erro",
           );
-        }
-      )
+        },
+      })
       .add(() => this.spinner.hide("atualizando"));
   }
 
@@ -158,14 +131,13 @@ export class PerfilComponent implements OnInit {
     const reader = new FileReader();
 
     reader.onload = (event: any) => (this.imagemUrl = event.target.result);
-    this.file = env.target.files;
-    reader.readAsDataURL(this.file[0]);
+    this._file = env.target.files;
+    reader.readAsDataURL(this._file[0]);
 
     this.uploadImagem();
   }
 
   public handleMissingImage(event: Event) {
-    debugger;
     (event.target as HTMLImageElement).style.display = "none";
   }
 
@@ -173,23 +145,20 @@ export class PerfilComponent implements OnInit {
     this.spinner.show("upload");
 
     this.perfilService
-      .inserirImagem(this.codigoUsuario, this.file[0])
-      .subscribe(
-        () => {
+      .inserirImagem(this._codigoUsuario, this._file[0])
+      .subscribe({
+        next: () => {
           this.carregarPerfilUsuario();
           this.toaster.success("Imagem atualizada com sucesso", "Sucesso");
         },
-        (error: any) => {
-          let template = MensagemRequisicao.retornarMensagemTratada(
-            error.message,
-            error.error.mensagem
-          );
+        error: (error: unknown) => {
+          const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
           this.toaster[template.tipoMensagem](
             `Houve um erro ao subir a imagem: Mensagem: ${template.mensagemErro}`,
-            "Erro"
+            "Erro",
           );
-        }
-      )
+        },
+      })
       .add(() => this.spinner.hide("upload"));
   }
 

@@ -48,7 +48,6 @@ var LoginComponent = /** @class */ (function () {
     LoginComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.authService.authState.subscribe(function (user) {
-            debugger;
             if (typeof user !== 'undefined' || user !== null) {
                 _this.realizarRequisicaoObterUsuario(user.email, "1e9g63", true);
             }
@@ -84,8 +83,8 @@ var LoginComponent = /** @class */ (function () {
         this.signInWithFB().subscribe(function (result) {
             _this.usuarioAuth = result;
         }, function (error) {
-            if (error.error !== "popup_closed_by_user")
-                _this.toaster.error("Houve um erro ao fazer login com a conta da Google. Mensagem : " + error.error);
+            if (error["error"] !== "popup_closed_by_user")
+                _this.toaster.error("Houve um erro ao fazer login com a conta da Google. Mensagem : " + error["error"]);
         }, function () {
             //TODO: Realizar tudo por post
             _this.realizarRequisicaoObterUsuario(_this.usuarioAuth.email, "1e9g63", true);
@@ -102,21 +101,19 @@ var LoginComponent = /** @class */ (function () {
         this.ehAutenticacaoAuth = autenticacaoAuth;
         this.spinner.show();
         this.usuarioService.obterUsuarioPorEmailESenha(email, senha, autenticacaoAuth).subscribe(function (result) {
-            debugger;
             _this.usuario = __assign({}, result);
             _this.localStorageService.adicionarChave(local_storage_chave_enum_1.LocalStorageChave.Valor, _this.encriptar.encrypt(result.token));
             if (Object.keys(_this.usuario).length !== 0) {
                 _this.router.navigate(['dashboard']);
             }
         }, function (error) {
-            debugger;
             _this.toaster.toastrConfig.timeOut = 5000;
-            if (error.status == 400 && _this.ehAutenticacaoAuth) {
+            if (error["status"] == 400 && _this.ehAutenticacaoAuth) {
                 _this.router.navigate(["register"], { queryParams: { email: _this.usuarioAuth.email } });
                 _this.toaster.info("Para continuar, \u00E9 necess\u00E1rio preencher o formul\u00E1rio.");
             }
             else {
-                var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+                var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
                 _this.toaster[template.tipoMensagem]("Houve um erro ao fazer login. Mensagem: " + template.mensagemErro, template.titulo);
             }
         }).add(function () { return _this.spinner.hide(); });

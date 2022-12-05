@@ -7,7 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ToastrModule } from 'ngx-toastr';
 
-import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
+import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
 import { ApiService } from '@nvs-services/api/api.service';
 import { TableModule } from 'ngx-easy-table';
 import { AppRoutingModule } from './app-routing.module';
@@ -32,8 +32,8 @@ import { P404Component } from './views/error/404.component';
 import { GraficoComponent } from './views/grafico/grafico.component';
 import { RegistrarComponent } from './views/login/registrar/registrar.component';
 import { QrCodeComponent } from './views/qr-code/qr-code.component';
-// eslint-disable-next-line sort-imports
 import { HttpCodeMensagemComponent } from './views/shared/http-code-mensagem/http-code-mensagem.component';
+import { CustomPreloader } from './configs/custom-preload-strategy';
 
 @NgModule({
   declarations: [
@@ -80,11 +80,12 @@ import { HttpCodeMensagemComponent } from './views/shared/http-code-mensagem/htt
     MatIconModule,
     MatButtonModule,
     MatSlideToggleModule,
-    MatExpansionModule
+    MatExpansionModule,
   ],
   providers: [
     ApiService,
     JwtHelperService,
+    CustomPreloader,
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
     {
       provide: 'SocialAuthServiceConfig',

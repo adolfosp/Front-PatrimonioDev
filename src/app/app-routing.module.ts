@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from '@nvs-guards/auth.guard';
+import { CustomPreloader } from './configs/custom-preload-strategy';
 import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { GraficoComponent } from './views/grafico/grafico.component';
 import { LoginComponent } from './views/login/login.component';
@@ -56,7 +57,7 @@ const routes: Routes = [
       },
       {
         path: 'empresa',
-        loadChildren: () => import('../app/views/empresa/empresa.module').then(m => m.EmpresaModule)
+        loadChildren: () => import('../app/views/empresa/empresa.module').then(m => m.EmpresaModule),
       },
       {
         path: 'funcionario',
@@ -80,7 +81,8 @@ const routes: Routes = [
       },
       {
         path: 'equipamento',
-        loadChildren: () => import('../app/views/equipamento/equipamento.module').then(m => m.EquipamentoModule)
+        loadChildren: () => import('../app/views/equipamento/equipamento.module').then(m => m.EquipamentoModule),
+        data: {preload: true}
       },
       {
         path: 'categoria',
@@ -92,11 +94,13 @@ const routes: Routes = [
       },
       {
         path: 'movimentacao',
-        loadChildren: () => import('../app/views/movimentacao/movimentacao.module').then(m => m.MovimentacaoModule)
+        loadChildren: () => import('../app/views/movimentacao/movimentacao.module').then(m => m.MovimentacaoModule),
+        data: {preload: true}
       },
       {
         path: 'patrimonio',
-        loadChildren: () => import('../app/views/patrimonio/patrimonio.module').then(m => m.PatrimonioModule)
+        loadChildren: () => import('../app/views/patrimonio/patrimonio.module').then(m => m.PatrimonioModule),
+        data: {preload: true}
       },
 
     ],
@@ -107,7 +111,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {preloadingStrategy: CustomPreloader})],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

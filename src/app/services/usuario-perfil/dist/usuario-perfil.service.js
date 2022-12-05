@@ -16,15 +16,13 @@ var UsuarioPerfilService = /** @class */ (function () {
         this.baseUrl = environment_1.environment.apiUrl + "perfils";
     }
     UsuarioPerfilService.prototype.obterPerfilUsuario = function (codigoUsuario) {
-        debugger;
         return this.api.get(this.baseUrl + "/" + codigoUsuario).pipe(operators_1.take(1));
     };
     UsuarioPerfilService.prototype.atualizarPerfilUsuario = function (perfil) {
-        return this.api.put("" + this.baseUrl, { perfil: perfil });
+        return this.api.put("" + this.baseUrl, { perfilDto: perfil });
     };
     UsuarioPerfilService.prototype.inserirImagem = function (codigoUsuario, file) {
-        debugger;
-        var arquivoUpload = file[0];
+        var arquivoUpload = file;
         var formData = new FormData();
         formData.append('file', arquivoUpload);
         return this.api.postImage(this.baseUrl + "/upload-imagem/" + codigoUsuario, formData);

@@ -1,4 +1,5 @@
-export interface UsuarioPerfil {
+export class UsuarioPerfil {
+
     codigoUsuario: number;
     nomeUsuario: string;
     nomeSetor: string;
@@ -8,5 +9,9 @@ export interface UsuarioPerfil {
     senha: string;
     confirmeSenha: string;
     imagemUrl: string;
+
+    public constructor(init?: Partial<UsuarioPerfil>){
+      Object.assign(this, init)
+    }
+
  }
- 

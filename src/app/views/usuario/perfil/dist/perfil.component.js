@@ -11,6 +11,7 @@ var core_1 = require("@angular/core");
 var forms_1 = require("@angular/forms");
 var MensagemRequisicaoHelper_1 = require("@nvs-helpers/MensagemRequisicaoHelper");
 var ValidacaoSenhaHelper_1 = require("@nvs-helpers/ValidacaoSenhaHelper");
+var UsuarioPerfil_1 = require("@nvs-models/UsuarioPerfil");
 var environment_1 = require("../../../../environments/environment");
 var PerfilComponent = /** @class */ (function () {
     function PerfilComponent(perfilService, token, toaster, fb, spinner) {
@@ -19,7 +20,7 @@ var PerfilComponent = /** @class */ (function () {
         this.toaster = toaster;
         this.fb = fb;
         this.spinner = spinner;
-        this.usuarioPerfil = {};
+        this._usuarioPerfil = {};
         this.imagemUrl = "assets/img/sem-imagem.png";
     }
     Object.defineProperty(PerfilComponent.prototype, "f", {
@@ -29,11 +30,8 @@ var PerfilComponent = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    PerfilComponent.prototype.cssValidator = function (campoForm) {
-        return { "is-invalid": campoForm.errors && campoForm.touched };
-    };
     PerfilComponent.prototype.ngOnInit = function () {
-        this.codigoUsuario = this.token.obterCodigoUsuarioToken();
+        this._codigoUsuario = this.token.obterCodigoUsuarioToken();
         this.validacao();
         this.carregarPerfilUsuario();
         this.tratarRetornoRequisicaoImagem();
@@ -53,44 +51,36 @@ var PerfilComponent = /** @class */ (function () {
         };
         this.form = this.fb.group({
             codigoUsuario: new forms_1.FormControl(null),
-            nomeUsuario: new forms_1.FormControl(""),
+            nomeUsuario: new forms_1.FormControl("", [forms_1.Validators.required, forms_1.Validators.minLength(4), forms_1.Validators.maxLength(50)]),
             nomeSetor: new forms_1.FormControl(null),
             razaoSocial: new forms_1.FormControl(null),
             descricaoPermissao: new forms_1.FormControl(null),
             email: new forms_1.FormControl(null),
-            senha: new forms_1.FormControl("", [
-                forms_1.Validators.required,
-                forms_1.Validators.minLength(5),
-                forms_1.Validators.maxLength(25),
-            ]),
+            senha: new forms_1.FormControl("", [forms_1.Validators.required, forms_1.Validators.minLength(5), forms_1.Validators.maxLength(25)]),
             imagemUrl: new forms_1.FormControl(""),
-            confirmeSenha: new forms_1.FormControl("", [
-                forms_1.Validators.required,
-                forms_1.Validators.minLength(5),
-                forms_1.Validators.maxLength(25),
-            ])
+            confirmeSenha: new forms_1.FormControl("", [forms_1.Validators.required, forms_1.Validators.minLength(5), forms_1.Validators.maxLength(25)])
         }, formOptions);
     };
     PerfilComponent.prototype.carregarPerfilUsuario = function () {
         var _this = this;
         this.spinner.show("carregando");
         this.perfilService
-            .obterPerfilUsuario(this.codigoUsuario)
-            .subscribe(function (result) {
-            _this.form.patchValue(result);
-            _this.nomeUsuario = result.nomeUsuario;
-            _this.codigoUsuario = result.codigoUsuario;
-            _this.form.controls["confirmeSenha"].setValue(result.senha);
-            debugger;
-            _this.tratarUrlImagem(result.imagemUrl);
-        }, function (error) {
-            var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
-            _this.toaster[template.tipoMensagem]("Houve um erro ao carregar o perfil. Mensagem: " + template.mensagemErro, "Erro");
+            .obterPerfilUsuario(this._codigoUsuario)
+            .subscribe({
+            next: function (result) {
+                _this.form.patchValue(result);
+                _this._codigoUsuario = result.codigoUsuario;
+                _this.form.controls["confirmeSenha"].setValue(result.senha);
+                _this.tratarUrlImagem(result.imagemUrl);
+            },
+            error: function (error) {
+                var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
+                _this.toaster[template.tipoMensagem]("Houve um erro ao carregar o perfil. Mensagem: " + template.mensagemErro, "Erro");
+            }
         })
             .add(function () { return _this.spinner.hide("carregando"); });
     };
     PerfilComponent.prototype.tratarUrlImagem = function (url) {
-        debugger;
         if (typeof url == "undefined" || url == null)
             this.atribuirCaminhoImagemPadraoPerfil();
         else
@@ -99,16 +89,17 @@ var PerfilComponent = /** @class */ (function () {
     PerfilComponent.prototype.salvarAlteracaoPerfil = function () {
         var _this = this;
         this.spinner.show("atualizando");
-        this.usuarioPerfil.senha = this.form.controls["senha"].value;
-        this.usuarioPerfil.nomeUsuario = this.nomeUsuario;
-        this.usuarioPerfil.codigoUsuario = this.form.controls["codigoUsuario"].value;
+        this._usuarioPerfil = new UsuarioPerfil_1.UsuarioPerfil(this.form.value);
         this.perfilService
-            .atualizarPerfilUsuario(this.usuarioPerfil)
-            .subscribe(function () {
-            _this.toaster.success("Perfil atualizado com sucesso!");
-        }, function (error) {
-            var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
-            _this.toaster[template.tipoMensagem]("Houve um erro ao atualizar o perfil. Mensagem: " + template.mensagemErro, "Erro");
+            .atualizarPerfilUsuario(this._usuarioPerfil)
+            .subscribe({
+            next: function () {
+                _this.toaster.success("Perfil atualizado com sucesso!");
+            },
+            error: function (error) {
+                var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
+                _this.toaster[template.tipoMensagem]("Houve um erro ao atualizar o perfil. Mensagem: " + template.mensagemErro, "Erro");
+            }
         })
             .add(function () { return _this.spinner.hide("atualizando"); });
     };
@@ -116,25 +107,27 @@ var PerfilComponent = /** @class */ (function () {
         var _this = this;
         var reader = new FileReader();
         reader.onload = function (event) { return (_this.imagemUrl = event.target.result); };
-        this.file = env.target.files;
-        reader.readAsDataURL(this.file[0]);
+        this._file = env.target.files;
+        reader.readAsDataURL(this._file[0]);
         this.uploadImagem();
     };
     PerfilComponent.prototype.handleMissingImage = function (event) {
-        debugger;
         event.target.style.display = "none";
     };
     PerfilComponent.prototype.uploadImagem = function () {
         var _this = this;
         this.spinner.show("upload");
         this.perfilService
-            .inserirImagem(this.codigoUsuario, this.file[0])
-            .subscribe(function () {
-            _this.carregarPerfilUsuario();
-            _this.toaster.success("Imagem atualizada com sucesso", "Sucesso");
-        }, function (error) {
-            var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
-            _this.toaster[template.tipoMensagem]("Houve um erro ao subir a imagem: Mensagem: " + template.mensagemErro, "Erro");
+            .inserirImagem(this._codigoUsuario, this._file[0])
+            .subscribe({
+            next: function () {
+                _this.carregarPerfilUsuario();
+                _this.toaster.success("Imagem atualizada com sucesso", "Sucesso");
+            },
+            error: function (error) {
+                var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
+                _this.toaster[template.tipoMensagem]("Houve um erro ao subir a imagem: Mensagem: " + template.mensagemErro, "Erro");
+            }
         })
             .add(function () { return _this.spinner.hide("upload"); });
     };
