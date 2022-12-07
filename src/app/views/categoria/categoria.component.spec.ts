@@ -70,7 +70,6 @@ describe('CategoriaComponent', () => {
   it('should check descricao value before entering some value', () =>{
 
     //Arrange & Act
-    const elementoForm = fixture.debugElement.nativeElement.querySelector('#card_categoriaForm');
     const descricaoFormGroup = component.form.get('descricao');
 
     //Assert

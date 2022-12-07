@@ -29,7 +29,7 @@ export class CategoriaService {
   }
 
   public obterApenasUmaCategoria(codigoCategoria: number): Observable<Categoria> {
-    return this.api.get<Categoria>(`${this.baseUrl}/${codigoCategoria}`).pipe(take(1));;
+    return this.api.get<Categoria>(`${this.baseUrl}/${codigoCategoria}`).pipe(take(1));
   }
 
   public atualizarCategoria(categoria: Categoria): Observable<Categoria>{

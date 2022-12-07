@@ -67,8 +67,8 @@ export class ListagemCategoriaComponent implements OnInit {
         this.data = categorias;
         this.dataFiltradaExcel = categorias;
       },
-      error: (error: any) => {
-        let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+      error: (error: unknown) => {
+        const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
         this.toaster[template.tipoMensagem](`Houve um erro ao buscar pelas categorias. Mensagem ${template.mensagemErro}`, template.titulo);
 
       },
@@ -94,8 +94,8 @@ export class ListagemCategoriaComponent implements OnInit {
         this.toaster.success('Categoria removida com sucesso!', 'Excluindo');
         this.obterCategorias();
       },
-      (error: any) =>{
-        let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+      (error: unknown) =>{
+        const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
         this.toaster[template.tipoMensagem](`Houve um erro ao excluir a categoria. Mensagem ${template.mensagemErro}`, template.titulo);
       }
     ).add(()=>this.spinner.hide("excluindo"));
@@ -106,7 +106,7 @@ export class ListagemCategoriaComponent implements OnInit {
   }
 
   public onChange(event: Event): void {
-    let valorDigitado = (event.target as HTMLInputElement).value;
+    const valorDigitado = (event.target as HTMLInputElement).value;
     this.filtrarFabricantes(valorDigitado);
 
     this.table.apiEvent({
