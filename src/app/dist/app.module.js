@@ -91,6 +91,10 @@ var AppModule = /** @class */ (function () {
                 expansion_1.MatExpansionModule,
             ],
             providers: [
+                {
+                    provide: common_1.LocationStrategy,
+                    useClass: common_1.HashLocationStrategy
+                },
                 api_service_1.ApiService,
                 angular_jwt_1.JwtHelperService,
                 custom_preload_strategy_1.CustomPreloader,

@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -83,6 +83,10 @@ import { CustomPreloader } from './configs/custom-preload-strategy';
     MatExpansionModule,
   ],
   providers: [
+    {
+      provide: LocationStrategy,
+      useClass: HashLocationStrategy
+    },
     ApiService,
     JwtHelperService,
     CustomPreloader,
