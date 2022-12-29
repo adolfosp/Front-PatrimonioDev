@@ -10,6 +10,7 @@ exports.AppRoutingModule = void 0;
 var core_1 = require("@angular/core");
 var router_1 = require("@angular/router");
 var auth_guard_1 = require("@nvs-guards/auth.guard");
+var custom_preload_strategy_1 = require("./configs/custom-preload-strategy");
 var dashboard_component_1 = require("./views/dashboard/dashboard.component");
 var grafico_component_1 = require("./views/grafico/grafico.component");
 var login_component_1 = require("./views/login/login.component");
@@ -88,7 +89,8 @@ var routes = [
             },
             {
                 path: 'equipamento',
-                loadChildren: function () { return Promise.resolve().then(function () { return require('../app/views/equipamento/equipamento.module'); }).then(function (m) { return m.EquipamentoModule; }); }
+                loadChildren: function () { return Promise.resolve().then(function () { return require('../app/views/equipamento/equipamento.module'); }).then(function (m) { return m.EquipamentoModule; }); },
+                data: { preload: true }
             },
             {
                 path: 'categoria',
@@ -100,11 +102,13 @@ var routes = [
             },
             {
                 path: 'movimentacao',
-                loadChildren: function () { return Promise.resolve().then(function () { return require('../app/views/movimentacao/movimentacao.module'); }).then(function (m) { return m.MovimentacaoModule; }); }
+                loadChildren: function () { return Promise.resolve().then(function () { return require('../app/views/movimentacao/movimentacao.module'); }).then(function (m) { return m.MovimentacaoModule; }); },
+                data: { preload: true }
             },
             {
                 path: 'patrimonio',
-                loadChildren: function () { return Promise.resolve().then(function () { return require('../app/views/patrimonio/patrimonio.module'); }).then(function (m) { return m.PatrimonioModule; }); }
+                loadChildren: function () { return Promise.resolve().then(function () { return require('../app/views/patrimonio/patrimonio.module'); }).then(function (m) { return m.PatrimonioModule; }); },
+                data: { preload: true }
             },
         ],
         data: {
@@ -117,8 +121,7 @@ var AppRoutingModule = /** @class */ (function () {
     }
     AppRoutingModule = __decorate([
         core_1.NgModule({
-            // imports: [RouterModule.forRoot(routes, {preloadingStrategy: CustomPreloader})],
-            imports: [router_1.RouterModule.forRoot(routes)],
+            imports: [router_1.RouterModule.forRoot(routes, { preloadingStrategy: custom_preload_strategy_1.CustomPreloader })],
             exports: [router_1.RouterModule]
         })
     ], AppRoutingModule);
