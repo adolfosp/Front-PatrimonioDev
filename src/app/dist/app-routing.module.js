@@ -89,8 +89,7 @@ var routes = [
             },
             {
                 path: 'equipamento',
-                loadChildren: function () { return Promise.resolve().then(function () { return require('../app/views/equipamento/equipamento.module'); }).then(function (m) { return m.EquipamentoModule; }); },
-                data: { preload: true }
+                loadChildren: function () { return Promise.resolve().then(function () { return require('../app/views/equipamento/equipamento.module'); }).then(function (m) { return m.EquipamentoModule; }); }
             },
             {
                 path: 'categoria',
@@ -102,13 +101,11 @@ var routes = [
             },
             {
                 path: 'movimentacao',
-                loadChildren: function () { return Promise.resolve().then(function () { return require('../app/views/movimentacao/movimentacao.module'); }).then(function (m) { return m.MovimentacaoModule; }); },
-                data: { preload: true }
+                loadChildren: function () { return Promise.resolve().then(function () { return require('../app/views/movimentacao/movimentacao.module'); }).then(function (m) { return m.MovimentacaoModule; }); }
             },
             {
                 path: 'patrimonio',
-                loadChildren: function () { return Promise.resolve().then(function () { return require('../app/views/patrimonio/patrimonio.module'); }).then(function (m) { return m.PatrimonioModule; }); },
-                data: { preload: true }
+                loadChildren: function () { return Promise.resolve().then(function () { return require('../app/views/patrimonio/patrimonio.module'); }).then(function (m) { return m.PatrimonioModule; }); }
             },
         ],
         data: {

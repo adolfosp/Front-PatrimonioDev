@@ -82,7 +82,7 @@ const routes: Routes = [
       {
         path: 'equipamento',
         loadChildren: () => import('../app/views/equipamento/equipamento.module').then(m => m.EquipamentoModule),
-        data: {preload: true}
+        // data: {preload: true}
       },
       {
         path: 'categoria',
@@ -95,12 +95,12 @@ const routes: Routes = [
       {
         path: 'movimentacao',
         loadChildren: () => import('../app/views/movimentacao/movimentacao.module').then(m => m.MovimentacaoModule),
-        data: {preload: true}
+        // data: {preload: true}
       },
       {
         path: 'patrimonio',
         loadChildren: () => import('../app/views/patrimonio/patrimonio.module').then(m => m.PatrimonioModule),
-        data: {preload: true}
+        // data: {preload: true}
       },
 
     ],
