@@ -10,7 +10,6 @@ exports.AppRoutingModule = void 0;
 var core_1 = require("@angular/core");
 var router_1 = require("@angular/router");
 var auth_guard_1 = require("@nvs-guards/auth.guard");
-var custom_preload_strategy_1 = require("./configs/custom-preload-strategy");
 var dashboard_component_1 = require("./views/dashboard/dashboard.component");
 var grafico_component_1 = require("./views/grafico/grafico.component");
 var login_component_1 = require("./views/login/login.component");
@@ -118,7 +117,8 @@ var AppRoutingModule = /** @class */ (function () {
     }
     AppRoutingModule = __decorate([
         core_1.NgModule({
-            imports: [router_1.RouterModule.forRoot(routes, { preloadingStrategy: custom_preload_strategy_1.CustomPreloader })],
+            // imports: [RouterModule.forRoot(routes, {preloadingStrategy: CustomPreloader})],
+            imports: [router_1.RouterModule.forRoot(routes)],
             exports: [router_1.RouterModule]
         })
     ], AppRoutingModule);
