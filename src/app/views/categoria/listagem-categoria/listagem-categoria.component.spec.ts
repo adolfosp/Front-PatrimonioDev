@@ -1,27 +1,34 @@
+import { Location } from "@angular/common";
 import { HttpClientModule } from "@angular/common/http";
 import { ChangeDetectorRef } from "@angular/core";
-import { ComponentFixture, TestBed, fakeAsync, tick } from "@angular/core/testing";
+import { ComponentFixture, TestBed, fakeAsync, flush, tick } from "@angular/core/testing";
+import { By } from "@angular/platform-browser";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { Router } from "@angular/router";
+import { RouterTestingModule } from "@angular/router/testing";
 import { JwtHelperService, JwtModule } from "@auth0/angular-jwt";
+import { Categoria } from "@nvs-models/Categoria";
 import { CategoriaService } from "@nvs-services/categoria/categoria.service";
+import { TokenService } from "@nvs-services/token/token.service";
 import { BsModalService } from "ngx-bootstrap/modal";
 import { NgxSpinnerService } from "ngx-spinner";
 import { ToastrModule } from "ngx-toastr";
 import { Observable, of } from "rxjs";
-import { ListagemCategoriaComponent } from "./listagem-categoria.component";
-import { Categoria } from "../../../models/Categoria";
-import { By } from "@angular/platform-browser";
-import { RouterTestingModule } from "@angular/router/testing";
+import routes from '../../../app-routing.module';
 import { CategoriaModule } from "../categoria.module";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { Router, Routes } from "@angular/router";
-import { CategoriaComponent } from "../categoria.component";
-import { Location } from "@angular/common";
+import { ListagemCategoriaComponent } from "./listagem-categoria.component";
 
 let mockEstadosServiceData = null;
 
 class MockEstadosService {
   obterTodasCategorias(): Observable<any[]> {
     return mockEstadosServiceData;
+  }
+}
+
+class MockTokenService {
+  ehUsuarioAdministrador(): boolean {
+    return true;
   }
 }
 
@@ -36,6 +43,7 @@ const importsModules = [
 
 const providers = [
   { provide: CategoriaService, useClass: MockEstadosService },
+  { provide: TokenService, useClass: MockTokenService },
   NgxSpinnerService,
   BsModalService,
   JwtHelperService,
@@ -86,7 +94,6 @@ fdescribe("should open route correctly", () => {
   let location: Location;
   let router: Router;
   let fixture: ComponentFixture<ListagemCategoriaComponent>;
-  const routes: Routes = [{ title: "teste", path: "dashboard/categoriaa", component: CategoriaComponent }];
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -100,6 +107,7 @@ fdescribe("should open route correctly", () => {
     location = TestBed.inject(Location);
 
     router.initialNavigation();
+
   });
 
   it('when click button new should redirect to /dashboard/categoria', fakeAsync(() => {
@@ -113,5 +121,23 @@ fdescribe("should open route correctly", () => {
 
     //Assert
     expect(location.path()).toBe("/dashboard/categoria");
+  }));
+
+  it('should redirect to /dashboard/categoria/1 when to click button edit', fakeAsync(() => {
+    //Arrange
+    fixture = TestBed.createComponent(ListagemCategoriaComponent);
+    const dadosMockados: Categoria[] = [{ codigoCategoria: 1, descricao: "adolfo" }];
+    mockEstadosServiceData = of(dadosMockados);
+    fixture.detectChanges();
+    const button = fixture.debugElement.nativeElement.querySelector('.botao-alterar');
+
+    //Act
+    button.click();
+    tick();
+
+    //Assert
+    expect(location.path()).toBe("/dashboard/categoria/1");
+    flush();
+
   }));
 });

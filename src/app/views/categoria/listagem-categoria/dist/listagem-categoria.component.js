@@ -11,7 +11,7 @@ var core_1 = require("@angular/core");
 var MensagemRequisicaoHelper_1 = require("@nvs-helpers/MensagemRequisicaoHelper");
 var ngx_easy_table_1 = require("ngx-easy-table");
 var XLSX = require("xlsx");
-var configuracao_tabela_1 = require("../../../utils/configuracao-tabela");
+var configuracao_tabela_1 = require("@nvs-utils/configuracao-tabela");
 var ListagemCategoriaComponent = /** @class */ (function () {
     function ListagemCategoriaComponent(categoriaService, spinner, modalService, toaster, router, token, detectorAlteracao) {
         this.categoriaService = categoriaService;

@@ -9,7 +9,7 @@ import { API, APIDefinition, Columns, Config } from 'ngx-easy-table';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import * as XLSX from 'xlsx';
-import configuracaoTabela from '../../../utils/configuracao-tabela';
+import configuracaoTabela from '@nvs-utils/configuracao-tabela';
 
 @Component({
   selector: 'app-listagem-categoria',

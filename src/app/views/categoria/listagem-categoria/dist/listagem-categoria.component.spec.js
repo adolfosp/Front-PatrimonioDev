@@ -43,23 +43,24 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
     return r;
 };
 exports.__esModule = true;
+var common_1 = require("@angular/common");
 var http_1 = require("@angular/common/http");
 var core_1 = require("@angular/core");
 var testing_1 = require("@angular/core/testing");
+var platform_browser_1 = require("@angular/platform-browser");
+var animations_1 = require("@angular/platform-browser/animations");
+var router_1 = require("@angular/router");
+var testing_2 = require("@angular/router/testing");
 var angular_jwt_1 = require("@auth0/angular-jwt");
 var categoria_service_1 = require("@nvs-services/categoria/categoria.service");
+var token_service_1 = require("@nvs-services/token/token.service");
 var modal_1 = require("ngx-bootstrap/modal");
 var ngx_spinner_1 = require("ngx-spinner");
 var ngx_toastr_1 = require("ngx-toastr");
 var rxjs_1 = require("rxjs");
-var listagem_categoria_component_1 = require("./listagem-categoria.component");
-var platform_browser_1 = require("@angular/platform-browser");
-var testing_2 = require("@angular/router/testing");
+var app_routing_module_1 = require("../../../app-routing.module");
 var categoria_module_1 = require("../categoria.module");
-var animations_1 = require("@angular/platform-browser/animations");
-var router_1 = require("@angular/router");
-var categoria_component_1 = require("../categoria.component");
-var common_1 = require("@angular/common");
+var listagem_categoria_component_1 = require("./listagem-categoria.component");
 var mockEstadosServiceData = null;
 var MockEstadosService = /** @class */ (function () {
     function MockEstadosService() {
@@ -68,6 +69,14 @@ var MockEstadosService = /** @class */ (function () {
         return mockEstadosServiceData;
     };
     return MockEstadosService;
+}());
+var MockTokenService = /** @class */ (function () {
+    function MockTokenService() {
+    }
+    MockTokenService.prototype.ehUsuarioAdministrador = function () {
+        return true;
+    };
+    return MockTokenService;
 }());
 var importsModules = [
     categoria_module_1.CategoriaModule,
@@ -79,6 +88,7 @@ var importsModules = [
 ];
 var providers = [
     { provide: categoria_service_1.CategoriaService, useClass: MockEstadosService },
+    { provide: token_service_1.TokenService, useClass: MockTokenService },
     ngx_spinner_1.NgxSpinnerService,
     modal_1.BsModalService,
     angular_jwt_1.JwtHelperService,
@@ -122,10 +132,9 @@ fdescribe("should open route correctly", function () {
     var location;
     var router;
     var fixture;
-    var routes = [{ title: "teste", path: "dashboard/categoriaa", component: categoria_component_1.CategoriaComponent }];
     beforeEach(function () {
         testing_1.TestBed.configureTestingModule({
-            imports: __spreadArrays([testing_2.RouterTestingModule.withRoutes(routes)], importsModules),
+            imports: __spreadArrays([testing_2.RouterTestingModule.withRoutes(app_routing_module_1["default"])], importsModules),
             declarations: [listagem_categoria_component_1.ListagemCategoriaComponent],
             providers: __spreadArrays(providers)
         });
@@ -142,5 +151,19 @@ fdescribe("should open route correctly", function () {
         testing_1.tick();
         //Assert
         expect(location.path()).toBe("/dashboard/categoria");
+    }));
+    it('should redirect to /dashboard/categoria/1 when to click button edit', testing_1.fakeAsync(function () {
+        //Arrange
+        fixture = testing_1.TestBed.createComponent(listagem_categoria_component_1.ListagemCategoriaComponent);
+        var dadosMockados = [{ codigoCategoria: 1, descricao: "adolfo" }];
+        mockEstadosServiceData = rxjs_1.of(dadosMockados);
+        fixture.detectChanges();
+        var button = fixture.debugElement.nativeElement.querySelector('.botao-alterar');
+        //Act
+        button.click();
+        testing_1.tick();
+        //Assert
+        expect(location.path()).toBe("/dashboard/categoria/1");
+        testing_1.flush();
     }));
 });
