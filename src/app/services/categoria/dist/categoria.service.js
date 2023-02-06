@@ -27,7 +27,6 @@ var CategoriaService = /** @class */ (function () {
     };
     CategoriaService.prototype.obterApenasUmaCategoria = function (codigoCategoria) {
         return this.api.get(this.baseUrl + "/" + codigoCategoria).pipe(operators_1.take(1));
-        ;
     };
     CategoriaService.prototype.atualizarCategoria = function (categoria) {
         return this.api

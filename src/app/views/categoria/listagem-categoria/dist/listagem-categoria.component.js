@@ -11,7 +11,7 @@ var core_1 = require("@angular/core");
 var MensagemRequisicaoHelper_1 = require("@nvs-helpers/MensagemRequisicaoHelper");
 var ngx_easy_table_1 = require("ngx-easy-table");
 var XLSX = require("xlsx");
-var configuracao_tabela_1 = require("../../../utils/configuracao-tabela");
+var configuracao_tabela_1 = require("@nvs-utils/configuracao-tabela");
 var ListagemCategoriaComponent = /** @class */ (function () {
     function ListagemCategoriaComponent(categoriaService, spinner, modalService, toaster, router, token, detectorAlteracao) {
         this.categoriaService = categoriaService;
@@ -51,7 +51,7 @@ var ListagemCategoriaComponent = /** @class */ (function () {
                 _this.dataFiltradaExcel = categorias;
             },
             error: function (error) {
-                var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+                var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
                 _this.toaster[template.tipoMensagem]("Houve um erro ao buscar pelas categorias. Mensagem " + template.mensagemErro, template.titulo);
             },
             complete: function () {
@@ -73,7 +73,7 @@ var ListagemCategoriaComponent = /** @class */ (function () {
             _this.toaster.success('Categoria removida com sucesso!', 'Excluindo');
             _this.obterCategorias();
         }, function (error) {
-            var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+            var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
             _this.toaster[template.tipoMensagem]("Houve um erro ao excluir a categoria. Mensagem " + template.mensagemErro, template.titulo);
         }).add(function () { return _this.spinner.hide("excluindo"); });
     };

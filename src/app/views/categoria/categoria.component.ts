@@ -16,7 +16,6 @@ import { CLASSE_BOTAO_LIMPAR } from 'src/app/utils/classes-sass.constant';
 })
 export class CategoriaComponent implements OnInit {
 
-
   private categoria = {} as Categoria;
   private codigoCategoria: number | undefined;
   private limpandoCampo = false;
