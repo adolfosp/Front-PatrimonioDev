@@ -4,17 +4,19 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { MensagemRequisicao } from '@nvs-helpers/MensagemRequisicaoHelper';
 import { Categoria } from '@nvs-models/Categoria';
+import Componente from '@nvs-models/Componente';
 import { CategoriaService } from '@nvs-services/categoria/categoria.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { CLASSE_BOTAO_LIMPAR } from 'src/app/utils/classes-sass.constant';
+import { DadosRequisicao } from '../../models/DadosRequisicao';
 
 @Component({
   selector: 'app-categoria',
   templateUrl: './categoria.component.html',
   styleUrls: ['./categoria.component.sass', '../../../assets/style-base.sass'],
 })
-export class CategoriaComponent implements OnInit {
+export class CategoriaComponent extends Componente implements OnInit, Componente {
 
   private categoria = {} as Categoria;
   private codigoCategoria: number | undefined;
@@ -34,7 +36,9 @@ export class CategoriaComponent implements OnInit {
     private toaster: ToastrService,
     private router: Router,
     private categoriaService: CategoriaService,
-    private activateRouter: ActivatedRoute) { }
+    private activateRouter: ActivatedRoute) {
+    super();
+  }
 
   ngOnInit(): void {
     this.validacao();
@@ -64,10 +68,9 @@ export class CategoriaComponent implements OnInit {
     this.categoria = (this.estadoSalvar === 'cadastrarCategoria') ? { ...this.form.value } : { codigoCategoria: this.categoria.codigoCategoria, ...this.form.value };
 
     this.categoriaService[this.estadoSalvar](this.categoria).subscribe(
-      () => this.toaster.success(`Categoria ${nomeAcaoRealizada} com sucesso`, 'Sucesso!'),
+      (dados: DadosRequisicao) => this.toaster.success(`${dados.mensagem}`, 'Sucesso!'),
       (error: unknown) => {
-        const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
-        this.toaster[template.tipoMensagem](`${MensagemRequisicao.retornarMensagemDeErroAoRealizarOperacao(nomeAcaoRealizada, "categoria", ['o', 'da'])} Mensagem: ${template.mensagemErro}`, template.titulo);
+        this.mostrarAvisoErro(error, `${MensagemRequisicao.retornarMensagemDeErroAoRealizarOperacao(nomeAcaoRealizada, "categoria", ['o', 'da'])}}`)
       },
       () => {
         setTimeout(() => {
@@ -88,16 +91,19 @@ export class CategoriaComponent implements OnInit {
 
     this.categoriaService.obterApenasUmaCategoria(this.codigoCategoria).subscribe(
       {
-        next: (categoria: Categoria) => {
-          this.categoria = { ...categoria };
+        next: (dados: DadosRequisicao) => {
+          this.categoria = (dados.data) as Categoria;
           this.form.patchValue(this.categoria);
         },
         error: (error: unknown) => {
-          const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
-          this.toaster[template.tipoMensagem](`Houve um problema ao carregar a categoria. Mensagem: ${template.mensagemErro}`, template.titulo);
+          this.mostrarAvisoErro(error, "Houve um problema ao carregar a categoria")
         }
       }
     ).add(() => this.spinner.hide('carregando'));
   }
-}
 
+  mostrarAvisoErro(error: unknown, mensagemInicial: string): void {
+    const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
+    this.toaster[template.tipoMensagem](`${mensagemInicial}. Mensagem ${template.mensagemErro}`, template.titulo);
+  }
+}

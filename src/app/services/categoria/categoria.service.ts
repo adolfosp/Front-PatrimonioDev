@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Categoria } from '@nvs-models/Categoria';
+import { DadosRequisicao } from '@nvs-models/DadosRequisicao';
 import { ApiService } from '@nvs-services/api/api.service';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -14,27 +15,27 @@ export class CategoriaService {
 
   constructor(private api: ApiService) { }
 
-  public cadastrarCategoria(categoria: Categoria): Observable<Categoria> {
-    return this.api.post<Categoria>(this.baseUrl, {categoria}).pipe(take(1));
+  public cadastrarCategoria(categoria: Categoria): Observable<DadosRequisicao> {
+    return this.api.post<DadosRequisicao>(this.baseUrl, {categoria}).pipe(take(1));
   }
 
-  public obterTodasCategorias(): Observable<Categoria[]> {
-    return this.api.get<Categoria[]>(this.baseUrl).pipe(take(1));
+  public obterTodasCategorias(): Observable<DadosRequisicao> {
+    return this.api.get<DadosRequisicao>(this.baseUrl).pipe(take(1));
   }
 
-  public deletarCategoria(codigoCategoria: number): Observable<any>{
+  public deletarCategoria(codigoCategoria: number): Observable<DadosRequisicao>{
     return this.api
-    .delete(`${this.baseUrl}/${codigoCategoria}`)
+    .delete<DadosRequisicao>(`${this.baseUrl}/${codigoCategoria}`)
     .pipe(take(1));
   }
 
-  public obterApenasUmaCategoria(codigoCategoria: number): Observable<Categoria> {
-    return this.api.get<Categoria>(`${this.baseUrl}/${codigoCategoria}`).pipe(take(1));
+  public obterApenasUmaCategoria(codigoCategoria: number): Observable<DadosRequisicao> {
+    return this.api.get<DadosRequisicao>(`${this.baseUrl}/${codigoCategoria}`).pipe(take(1));
   }
 
-  public atualizarCategoria(categoria: Categoria): Observable<Categoria>{
+  public atualizarCategoria(categoria: Categoria): Observable<DadosRequisicao>{
     return this.api
-    .put<Categoria>(`${this.baseUrl}/${categoria.codigoCategoria}`, {categoria})
+    .put<DadosRequisicao>(`${this.baseUrl}/${categoria.codigoCategoria}`, {categoria})
     .pipe(take(1));
   }
 }

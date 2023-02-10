@@ -2,14 +2,17 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, On
 import { Router } from '@angular/router';
 import { MensagemRequisicao } from '@nvs-helpers/MensagemRequisicaoHelper';
 import { Categoria } from '@nvs-models/Categoria';
+import Componente from '@nvs-models/Componente';
+import { DadosRequisicao } from '@nvs-models/DadosRequisicao';
 import { CategoriaService } from '@nvs-services/categoria/categoria.service';
 import { TokenService } from '@nvs-services/token/token.service';
+import configuracaoTabela from '@nvs-utils/configuracao-tabela';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { API, APIDefinition, Columns, Config } from 'ngx-easy-table';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import * as XLSX from 'xlsx';
-import configuracaoTabela from '@nvs-utils/configuracao-tabela';
+
 
 @Component({
   selector: 'app-listagem-categoria',
@@ -18,7 +21,7 @@ import configuracaoTabela from '@nvs-utils/configuracao-tabela';
   changeDetection: ChangeDetectionStrategy.OnPush
 
 })
-export class ListagemCategoriaComponent implements OnInit {
+export class ListagemCategoriaComponent extends Componente implements OnInit {
   @ViewChild('table', { static: true }) table: APIDefinition;
 
   public configuracao: Config;
@@ -37,14 +40,17 @@ export class ListagemCategoriaComponent implements OnInit {
   modalRef?: BsModalRef;
 
   constructor(
-              private categoriaService: CategoriaService,
-              private spinner: NgxSpinnerService,
-              private modalService: BsModalService,
-              private toaster: ToastrService,
-              private router: Router,
-              private token: TokenService,
-              private detectorAlteracao: ChangeDetectorRef
-              ) { }
+    private categoriaService: CategoriaService,
+    private spinner: NgxSpinnerService,
+    private modalService: BsModalService,
+    private toaster: ToastrService,
+    private router: Router,
+    private token: TokenService,
+    private detectorAlteracao: ChangeDetectorRef
+  ) {
+    super();
+
+  }
 
   ngOnInit(): void {
 
@@ -63,16 +69,14 @@ export class ListagemCategoriaComponent implements OnInit {
   public obterCategorias(): void {
     this.spinner.show("buscando");
     this.categoriaService.obterTodasCategorias().subscribe({
-      next: (categorias: Categoria[]) => {
-        this.data = categorias;
-        this.dataFiltradaExcel = categorias;
+      next: (dados: DadosRequisicao) => {
+        this.data = dados.data as Categoria[];
+        this.dataFiltradaExcel = dados.data as Categoria[];
       },
       error: (error: unknown) => {
-        const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
-        this.toaster[template.tipoMensagem](`Houve um erro ao buscar pelas categorias. Mensagem ${template.mensagemErro}`, template.titulo);
-
+        this.mostrarAvisoErro(error, "Houve um erro ao buscar pelas categorias");
       },
-      complete: () =>{
+      complete: () => {
         this.detectorAlteracao.markForCheck();
       }
     }).add(() => this.spinner.hide("buscando"));
@@ -81,7 +85,7 @@ export class ListagemCategoriaComponent implements OnInit {
   public abrirModal(event: any, template: TemplateRef<any>, codigoCategoria: number): void {
     event.stopPropagation();
     this.codigoCategoria = codigoCategoria;
-    this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
+    this.modalRef = this.modalService.show(template, { class: 'modal-sm' });
   }
 
   public confirmar(): void {
@@ -89,16 +93,15 @@ export class ListagemCategoriaComponent implements OnInit {
     this.modalRef?.hide();
     this.spinner.show("excluindo");
 
-    this.categoriaService.deletarCategoria(this.codigoCategoria).subscribe(
-      () =>{
+    this.categoriaService.deletarCategoria(this.codigoCategoria).subscribe({
+      next: () => {
         this.toaster.success('Categoria removida com sucesso!', 'Excluindo');
         this.obterCategorias();
       },
-      (error: unknown) =>{
-        const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
-        this.toaster[template.tipoMensagem](`Houve um erro ao excluir a categoria. Mensagem ${template.mensagemErro}`, template.titulo);
+      error: (error: unknown) => {
+        this.mostrarAvisoErro(error, "Houve um erro ao excluir a categoria");
       }
-    ).add(()=>this.spinner.hide("excluindo"));
+    }).add(() => this.spinner.hide("excluindo"));
   }
 
   public recusar(): void {
@@ -115,11 +118,11 @@ export class ListagemCategoriaComponent implements OnInit {
     });
   }
 
-  private filtrarFabricantes(valor: any): void{
+  private filtrarFabricantes(valor: any): void {
     this.dataFiltradaExcel = this.data.filter(
       (categoria: Categoria) =>
-       categoria.codigoCategoria.toString().indexOf(valor) !== -1 ||
-       categoria.descricao.toLocaleLowerCase().indexOf(valor) !== -1
+        categoria.codigoCategoria.toString().indexOf(valor) !== -1 ||
+        categoria.descricao.toLocaleLowerCase().indexOf(valor) !== -1
     );
   }
 
@@ -129,16 +132,16 @@ export class ListagemCategoriaComponent implements OnInit {
 
   public exportarParaExcel(): void {
     try {
-     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataFiltradaExcel);
+      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataFiltradaExcel);
 
-     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-     XLSX.utils.book_append_sheet(wb, ws, 'categorias');
+      const wb: XLSX.WorkBook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'categorias');
 
-     XLSX.writeFile(wb, 'categorias.xlsx');
-   } catch (err) {
-     this.toaster.error(`Não foi possível exportar a planilha. Mensagem: ${err}`,"Erro")
-   }
- }
+      XLSX.writeFile(wb, 'categorias.xlsx');
+    } catch (err) {
+      this.toaster.error(`Não foi possível exportar a planilha. Mensagem: ${err}`, "Erro")
+    }
+  }
 
   private obterColunasDaTabela(): any {
     return [
@@ -176,6 +179,11 @@ export class ListagemCategoriaComponent implements OnInit {
     } else {
       this.toggledRows.add(index);
     }
+  }
+
+  public mostrarAvisoErro(error: unknown, mensagemInicial: string): void {
+    const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
+    this.toaster[template.tipoMensagem](`${mensagemInicial}. Mensagem ${template.mensagemErro}`, template.titulo);
   }
 
 }

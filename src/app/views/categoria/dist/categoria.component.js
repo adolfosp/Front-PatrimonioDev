@@ -1,4 +1,17 @@
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -22,19 +35,23 @@ exports.CategoriaComponent = void 0;
 var core_1 = require("@angular/core");
 var forms_1 = require("@angular/forms");
 var MensagemRequisicaoHelper_1 = require("@nvs-helpers/MensagemRequisicaoHelper");
+var Componente_1 = require("@nvs-models/Componente");
 var classes_sass_constant_1 = require("src/app/utils/classes-sass.constant");
-var CategoriaComponent = /** @class */ (function () {
+var CategoriaComponent = /** @class */ (function (_super) {
+    __extends(CategoriaComponent, _super);
     function CategoriaComponent(fb, spinner, toaster, router, categoriaService, activateRouter) {
-        this.fb = fb;
-        this.spinner = spinner;
-        this.toaster = toaster;
-        this.router = router;
-        this.categoriaService = categoriaService;
-        this.activateRouter = activateRouter;
-        this.categoria = {};
-        this.limpandoCampo = false;
-        this.estadoSalvar = "cadastrarCategoria";
-        this.classeBotaoLimpar = classes_sass_constant_1.CLASSE_BOTAO_LIMPAR;
+        var _this = _super.call(this) || this;
+        _this.fb = fb;
+        _this.spinner = spinner;
+        _this.toaster = toaster;
+        _this.router = router;
+        _this.categoriaService = categoriaService;
+        _this.activateRouter = activateRouter;
+        _this.categoria = {};
+        _this.limpandoCampo = false;
+        _this.estadoSalvar = "cadastrarCategoria";
+        _this.classeBotaoLimpar = classes_sass_constant_1.CLASSE_BOTAO_LIMPAR;
+        return _this;
     }
     Object.defineProperty(CategoriaComponent.prototype, "f", {
         get: function () {
@@ -64,9 +81,8 @@ var CategoriaComponent = /** @class */ (function () {
         var nomeAcaoRealizada = atualizando ? 'atualizada' : 'cadastrada';
         this.spinner.show(nomeAcaoRealizada);
         this.categoria = (this.estadoSalvar === 'cadastrarCategoria') ? __assign({}, this.form.value) : __assign({ codigoCategoria: this.categoria.codigoCategoria }, this.form.value);
-        this.categoriaService[this.estadoSalvar](this.categoria).subscribe(function () { return _this.toaster.success("Categoria " + nomeAcaoRealizada + " com sucesso", 'Sucesso!'); }, function (error) {
-            var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
-            _this.toaster[template.tipoMensagem](MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemDeErroAoRealizarOperacao(nomeAcaoRealizada, "categoria", ['o', 'da']) + " Mensagem: " + template.mensagemErro, template.titulo);
+        this.categoriaService[this.estadoSalvar](this.categoria).subscribe(function (dados) { return _this.toaster.success("" + dados.mensagem, 'Sucesso!'); }, function (error) {
+            _this.mostrarAvisoErro(error, MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemDeErroAoRealizarOperacao(nomeAcaoRealizada, "categoria", ['o', 'da']) + "}");
         }, function () {
             setTimeout(function () {
                 _this.router.navigate(['dashboard/categoria/listagem']);
@@ -82,15 +98,18 @@ var CategoriaComponent = /** @class */ (function () {
         this.estadoSalvar = 'atualizarCategoria';
         this.spinner.show('carregando');
         this.categoriaService.obterApenasUmaCategoria(this.codigoCategoria).subscribe({
-            next: function (categoria) {
-                _this.categoria = __assign({}, categoria);
+            next: function (dados) {
+                _this.categoria = (dados.data);
                 _this.form.patchValue(_this.categoria);
             },
             error: function (error) {
-                var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
-                _this.toaster[template.tipoMensagem]("Houve um problema ao carregar a categoria. Mensagem: " + template.mensagemErro, template.titulo);
+                _this.mostrarAvisoErro(error, "Houve um problema ao carregar a categoria");
             }
         }).add(function () { return _this.spinner.hide('carregando'); });
+    };
+    CategoriaComponent.prototype.mostrarAvisoErro = function (error, mensagemInicial) {
+        var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
+        this.toaster[template.tipoMensagem](mensagemInicial + ". Mensagem " + template.mensagemErro, template.titulo);
     };
     CategoriaComponent = __decorate([
         core_1.Component({
@@ -100,5 +119,5 @@ var CategoriaComponent = /** @class */ (function () {
         })
     ], CategoriaComponent);
     return CategoriaComponent;
-}());
+}(Componente_1["default"]));
 exports.CategoriaComponent = CategoriaComponent;

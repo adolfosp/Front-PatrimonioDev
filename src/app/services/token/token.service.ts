@@ -30,6 +30,7 @@ export class TokenService {
     if (typeof token == 'undefined' || token == null)
       return '';
 
+      debugger;
     return this.encriptar.decrypt(token);
   }
 

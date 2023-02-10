@@ -11,7 +11,6 @@ import { UsuarioService } from '@nvs-services/usuario/usuario.service';
 
 import { LocalStorageChave } from '@nvs-enum/local-storage-chave.enum';
 import { MensagemRequisicao } from '@nvs-helpers/MensagemRequisicaoHelper';
-import { Usuario } from '@nvs-models/Usuario';
 
 import { atribuirModoDarkLightPadrao, atribuirTemaCorretoAoRecarregarPagina } from '@nvs-helpers/ModoDarkLightHelper';
 import { CriptografiaService } from '@nvs-services/criptografia/criptografia.service';
@@ -23,7 +22,6 @@ import { CriptografiaService } from '@nvs-services/criptografia/criptografia.ser
 })
 export class LoginComponent implements OnInit {
 //REFATORAR: Melhorar parte de login pelo google e facebook
-  usuario = {} as Usuario;
   form!: FormGroup
   public lembrarMe: boolean;
 
@@ -120,16 +118,16 @@ export class LoginComponent implements OnInit {
     this.ehAutenticacaoAuth = autenticacaoAuth;
     this.spinner.show()
 
-    this.usuarioService.obterUsuarioPorEmailESenha(email, senha, autenticacaoAuth).subscribe(
-      (result: any) => {
-        this.usuario = { ...result };
+    this.usuarioService.obterUsuarioPorEmailESenha(email, senha, autenticacaoAuth).subscribe({
+      next: (result: any) => {
+        debugger;
         this.localStorageService.adicionarChave(LocalStorageChave.Valor, this.encriptar.encrypt(result.token))
 
-        if (Object.keys(this.usuario).length !== 0) {
+        if (result.length !== 0) {
           this.router.navigate(['dashboard']);
         }
       },
-      (error: unknown) => {
+      error: (error: unknown) => {
         this.toaster.toastrConfig.timeOut = 5000;
         if (error["status"] == 400 && this.ehAutenticacaoAuth) {
           this.router.navigate(["register"], { queryParams: { email: this.usuarioAuth.email } })
@@ -140,7 +138,7 @@ export class LoginComponent implements OnInit {
           this.toaster[template.tipoMensagem](`Houve um erro ao fazer login. Mensagem: ${template.mensagemErro}`, template.titulo);
         }
       }
-    ).add(() => this.spinner.hide())
+    }).add(() => this.spinner.hide())
   }
 
   private removerToken() {

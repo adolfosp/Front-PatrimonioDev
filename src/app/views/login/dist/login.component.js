@@ -35,8 +35,6 @@ var LoginComponent = /** @class */ (function () {
         this.authService = authService;
         this.encriptar = encriptar;
         this.localStorageService = localStorageService;
-        //REFATORAR: Melhorar parte de login pelo google e facebook
-        this.usuario = {};
     }
     Object.defineProperty(LoginComponent.prototype, "f", {
         get: function () {
@@ -100,21 +98,24 @@ var LoginComponent = /** @class */ (function () {
         var _this = this;
         this.ehAutenticacaoAuth = autenticacaoAuth;
         this.spinner.show();
-        this.usuarioService.obterUsuarioPorEmailESenha(email, senha, autenticacaoAuth).subscribe(function (result) {
-            _this.usuario = __assign({}, result);
-            _this.localStorageService.adicionarChave(local_storage_chave_enum_1.LocalStorageChave.Valor, _this.encriptar.encrypt(result.token));
-            if (Object.keys(_this.usuario).length !== 0) {
-                _this.router.navigate(['dashboard']);
-            }
-        }, function (error) {
-            _this.toaster.toastrConfig.timeOut = 5000;
-            if (error["status"] == 400 && _this.ehAutenticacaoAuth) {
-                _this.router.navigate(["register"], { queryParams: { email: _this.usuarioAuth.email } });
-                _this.toaster.info("Para continuar, \u00E9 necess\u00E1rio preencher o formul\u00E1rio.");
-            }
-            else {
-                var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
-                _this.toaster[template.tipoMensagem]("Houve um erro ao fazer login. Mensagem: " + template.mensagemErro, template.titulo);
+        this.usuarioService.obterUsuarioPorEmailESenha(email, senha, autenticacaoAuth).subscribe({
+            next: function (result) {
+                debugger;
+                _this.localStorageService.adicionarChave(local_storage_chave_enum_1.LocalStorageChave.Valor, _this.encriptar.encrypt(result.token));
+                if (result.length !== 0) {
+                    _this.router.navigate(['dashboard']);
+                }
+            },
+            error: function (error) {
+                _this.toaster.toastrConfig.timeOut = 5000;
+                if (error["status"] == 400 && _this.ehAutenticacaoAuth) {
+                    _this.router.navigate(["register"], { queryParams: { email: _this.usuarioAuth.email } });
+                    _this.toaster.info("Para continuar, \u00E9 necess\u00E1rio preencher o formul\u00E1rio.");
+                }
+                else {
+                    var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
+                    _this.toaster[template.tipoMensagem]("Houve um erro ao fazer login. Mensagem: " + template.mensagemErro, template.titulo);
+                }
             }
         }).add(function () { return _this.spinner.hide(); });
     };

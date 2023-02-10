@@ -1,4 +1,17 @@
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -9,24 +22,28 @@ exports.__esModule = true;
 exports.ListagemCategoriaComponent = void 0;
 var core_1 = require("@angular/core");
 var MensagemRequisicaoHelper_1 = require("@nvs-helpers/MensagemRequisicaoHelper");
+var Componente_1 = require("@nvs-models/Componente");
+var configuracao_tabela_1 = require("@nvs-utils/configuracao-tabela");
 var ngx_easy_table_1 = require("ngx-easy-table");
 var XLSX = require("xlsx");
-var configuracao_tabela_1 = require("@nvs-utils/configuracao-tabela");
-var ListagemCategoriaComponent = /** @class */ (function () {
+var ListagemCategoriaComponent = /** @class */ (function (_super) {
+    __extends(ListagemCategoriaComponent, _super);
     function ListagemCategoriaComponent(categoriaService, spinner, modalService, toaster, router, token, detectorAlteracao) {
-        this.categoriaService = categoriaService;
-        this.spinner = spinner;
-        this.modalService = modalService;
-        this.toaster = toaster;
-        this.router = router;
-        this.token = token;
-        this.detectorAlteracao = detectorAlteracao;
-        this.data = [];
-        this.categorias = [];
-        this.ehAdministrador = false;
-        this.dataFiltradaExcel = [];
-        this.linhas = 0;
-        this.toggledRows = new Set();
+        var _this = _super.call(this) || this;
+        _this.categoriaService = categoriaService;
+        _this.spinner = spinner;
+        _this.modalService = modalService;
+        _this.toaster = toaster;
+        _this.router = router;
+        _this.token = token;
+        _this.detectorAlteracao = detectorAlteracao;
+        _this.data = [];
+        _this.categorias = [];
+        _this.ehAdministrador = false;
+        _this.dataFiltradaExcel = [];
+        _this.linhas = 0;
+        _this.toggledRows = new Set();
+        return _this;
     }
     ListagemCategoriaComponent.prototype.ngOnInit = function () {
         this.configuracao = configuracao_tabela_1["default"]();
@@ -46,13 +63,12 @@ var ListagemCategoriaComponent = /** @class */ (function () {
         var _this = this;
         this.spinner.show("buscando");
         this.categoriaService.obterTodasCategorias().subscribe({
-            next: function (categorias) {
-                _this.data = categorias;
-                _this.dataFiltradaExcel = categorias;
+            next: function (dados) {
+                _this.data = dados.data;
+                _this.dataFiltradaExcel = dados.data;
             },
             error: function (error) {
-                var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
-                _this.toaster[template.tipoMensagem]("Houve um erro ao buscar pelas categorias. Mensagem " + template.mensagemErro, template.titulo);
+                _this.mostrarAvisoErro(error, "Houve um erro ao buscar pelas categorias");
             },
             complete: function () {
                 _this.detectorAlteracao.markForCheck();
@@ -69,12 +85,14 @@ var ListagemCategoriaComponent = /** @class */ (function () {
         var _a;
         (_a = this.modalRef) === null || _a === void 0 ? void 0 : _a.hide();
         this.spinner.show("excluindo");
-        this.categoriaService.deletarCategoria(this.codigoCategoria).subscribe(function () {
-            _this.toaster.success('Categoria removida com sucesso!', 'Excluindo');
-            _this.obterCategorias();
-        }, function (error) {
-            var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
-            _this.toaster[template.tipoMensagem]("Houve um erro ao excluir a categoria. Mensagem " + template.mensagemErro, template.titulo);
+        this.categoriaService.deletarCategoria(this.codigoCategoria).subscribe({
+            next: function () {
+                _this.toaster.success('Categoria removida com sucesso!', 'Excluindo');
+                _this.obterCategorias();
+            },
+            error: function (error) {
+                _this.mostrarAvisoErro(error, "Houve um erro ao excluir a categoria");
+            }
         }).add(function () { return _this.spinner.hide("excluindo"); });
     };
     ListagemCategoriaComponent.prototype.recusar = function () {
@@ -145,6 +163,10 @@ var ListagemCategoriaComponent = /** @class */ (function () {
             this.toggledRows.add(index);
         }
     };
+    ListagemCategoriaComponent.prototype.mostrarAvisoErro = function (error, mensagemInicial) {
+        var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
+        this.toaster[template.tipoMensagem](mensagemInicial + ". Mensagem " + template.mensagemErro, template.titulo);
+    };
     __decorate([
         core_1.ViewChild('table', { static: true })
     ], ListagemCategoriaComponent.prototype, "table");
@@ -160,5 +182,5 @@ var ListagemCategoriaComponent = /** @class */ (function () {
         })
     ], ListagemCategoriaComponent);
     return ListagemCategoriaComponent;
-}());
+}(Componente_1["default"]));
 exports.ListagemCategoriaComponent = ListagemCategoriaComponent;

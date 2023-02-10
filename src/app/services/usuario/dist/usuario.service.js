@@ -28,7 +28,6 @@ var UsuarioService = /** @class */ (function () {
         return this.api.post(this.baseUrl + "/" + email + "/" + senha, autenticacaoAuth).pipe(operators_1.take(1));
     };
     UsuarioService.prototype.desativarUsuario = function (codigoUsuario) {
-        debugger;
         return this.api["delete"](this.baseUrl + "/" + codigoUsuario).pipe(operators_1.take(1));
     };
     UsuarioService.prototype.atualizarUsuario = function (usuario) {

@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { MensagemRequisicao } from '@nvs-helpers/MensagemRequisicaoHelper';
 import { Categoria } from '@nvs-models/Categoria';
+import { DadosRequisicao } from '@nvs-models/DadosRequisicao';
 import { Equipamento } from '@nvs-models/Equipamento';
 import { Fabricante } from '@nvs-models/Fabricante';
 import { CategoriaService } from '@nvs-services/categoria/categoria.service';
@@ -75,16 +76,16 @@ export class EquipamentoComponent implements OnInit {
 
   private carregarCategorias(): void {
 
-    this.categoriaService.obterTodasCategorias().subscribe(
-      (result: Categoria[]) => {
-        this.categorias = result;
+    this.categoriaService.obterTodasCategorias().subscribe({
+      next: (result: DadosRequisicao) => {
+        this.categorias = result.data as Categoria[];
       },
-      (error: unknown) => {
+      error: (error: unknown) => {
         const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
         this.toaster[template.tipoMensagem](`Houve um problema ao carregar as categorias. Mensagem: ${template.mensagemErro}`, template.titulo);
       },
 
-    );
+    });
   }
 
   private validacao(): void {

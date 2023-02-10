@@ -25,6 +25,7 @@ var TokenService = /** @class */ (function () {
         var token = this.localStorageService.obterChave(local_storage_chave_enum_1.LocalStorageChave.Valor);
         if (typeof token == 'undefined' || token == null)
             return '';
+        debugger;
         return this.encriptar.decrypt(token);
     };
     TokenService.prototype.obterPermissaoToken = function () {
