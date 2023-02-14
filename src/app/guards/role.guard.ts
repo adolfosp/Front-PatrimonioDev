@@ -11,12 +11,11 @@ export class RoleGuard implements CanActivate {
     private token: TokenService) { }
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
-    return true;
-    const permissaoEsperada: number[] = route.data['permissaoEsperada'];
-    const permissaoToken = this.token.obterPermissaoToken()
-    const permissaoEncontrada = permissaoEsperada.find(x => x == permissaoToken);
+    // const permissaoEsperada: number[] = route.data['permissaoEsperada'];
+    // const permissaoToken = this.token.obterPermissaoToken()
+    // const permissaoEncontrada = permissaoEsperada.find(x => permissaoToken);
 
-    if (!this.token.usuarioEstaAutenticado() || permissaoEncontrada == undefined)
+    if (!this.token.usuarioEstaAutenticado())
     {
       this.router.navigate(['403']);
       return false;

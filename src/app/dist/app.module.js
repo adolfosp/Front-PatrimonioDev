@@ -33,6 +33,7 @@ var angularx_qrcode_1 = require("angularx-qrcode");
 var ngx_echarts_1 = require("ngx-echarts");
 var ngx_mask_1 = require("ngx-mask");
 var environment_1 = require("src/environments/environment");
+var custom_preload_strategy_1 = require("./configs/custom-preload-strategy");
 var dashboard_component_1 = require("./views/dashboard/dashboard.component");
 var _403_component_1 = require("./views/error/403.component");
 var _404_component_1 = require("./views/error/404.component");
@@ -40,7 +41,6 @@ var grafico_component_1 = require("./views/grafico/grafico.component");
 var registrar_component_1 = require("./views/login/registrar/registrar.component");
 var qr_code_component_1 = require("./views/qr-code/qr-code.component");
 var http_code_mensagem_component_1 = require("./views/shared/http-code-mensagem/http-code-mensagem.component");
-var custom_preload_strategy_1 = require("./configs/custom-preload-strategy");
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
@@ -55,7 +55,7 @@ var AppModule = /** @class */ (function () {
                 qr_code_component_1.QrCodeComponent,
                 registrar_component_1.RegistrarComponent,
                 dashboard_component_1.DashboardComponent,
-                grafico_component_1.GraficoComponent
+                grafico_component_1.GraficoComponent,
             ],
             imports: [
                 ngx_mask_1.NgxMaskModule.forRoot({

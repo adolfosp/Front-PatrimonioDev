@@ -127,22 +127,23 @@ var GraficoComponent = /** @class */ (function () {
             .obterEstatisticas()
             .subscribe({
             next: function (listaDeResposta) {
-                _this.estatisticaCategoria = listaDeResposta[0];
+                _this.estatisticaCategoria = listaDeResposta[0].data;
+                console.log(listaDeResposta);
                 var quantidadeEquipamentoPorCategoria = _this.estatisticaCategoria.map(function (valorAtual) { return valorAtual.quantidadeEquipamento; });
                 _this.calcularQuantidadeDeEquipamentos(quantidadeEquipamentoPorCategoria);
                 _this.quantidadeDeEquipamentos = _this.quantidadeDeEquipamentos || 0;
                 for (var i = 0; i < quantidadeEquipamentoPorCategoria.length; i++) {
                     _this.quantidadeDeEquipamentos += +quantidadeEquipamentoPorCategoria[i];
                 }
-                _this.mediaEquipamento = +(listaDeResposta[1][0].quantidadeTotalDeEquipamento /
-                    listaDeResposta[1][0].quantidadeTotalFuncionario).toFixed(2);
+                _this.mediaEquipamento = +(listaDeResposta[1].data[0].quantidadeTotalDeEquipamento /
+                    listaDeResposta[1].data[0].quantidadeTotalFuncionario).toFixed(2);
                 _this.mediaEquipamento = _this.mediaEquipamento || 0;
                 _this.quantidadeTotalDePatrimonios =
-                    +listaDeResposta[2][0].quantidadeTotalPatrimonio;
+                    +listaDeResposta[2].data[0].quantidadeTotalPatrimonio;
                 _this.quantidadeTotalDePatrimoniosDisponiveis =
-                    +listaDeResposta[2][0].quantidadePatrimonioDisponivel;
+                    +listaDeResposta[2].data[0].quantidadePatrimonioDisponivel;
                 _this.quantidadeMovimentacoes =
-                    +listaDeResposta[3].quantidadeMovimentacao;
+                    +listaDeResposta[3].data.quantidadeMovimentacao;
             },
             // eslint-disable-next-line rxjs/no-implicit-any-catch
             error: function (error) {

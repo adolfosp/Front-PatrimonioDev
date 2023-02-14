@@ -25,13 +25,13 @@ var TokenService = /** @class */ (function () {
         var token = this.localStorageService.obterChave(local_storage_chave_enum_1.LocalStorageChave.Valor);
         if (typeof token == 'undefined' || token == null)
             return '';
-        debugger;
         return this.encriptar.decrypt(token);
     };
     TokenService.prototype.obterPermissaoToken = function () {
+        var _a;
         var token = this.localStorageService.obterChave(local_storage_chave_enum_1.LocalStorageChave.Valor);
         //@ts-ignore
-        return +jwt_decode_1["default"](this.encriptar.decrypt(token))[this.nomeCampoPermissao];
+        return ((_a = jwt_decode_1["default"](this.encriptar.decrypt(token))["descricaoPerfil"]) === null || _a === void 0 ? void 0 : _a.toString().toLowerCase()) == "administrador";
     };
     TokenService.prototype.obterNomeUsuarioToken = function () {
         var token = this.localStorageService.obterChave(local_storage_chave_enum_1.LocalStorageChave.Valor);

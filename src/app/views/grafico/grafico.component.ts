@@ -146,7 +146,8 @@ export class GraficoComponent implements OnInit {
       .obterEstatisticas()
       .subscribe({
         next: (listaDeResposta) => {
-          this.estatisticaCategoria = listaDeResposta[0];
+          this.estatisticaCategoria = listaDeResposta[0].data;
+          console.log(listaDeResposta);
 
           const quantidadeEquipamentoPorCategoria = this.estatisticaCategoria.map(
             (valorAtual) => {return valorAtual.quantidadeEquipamento; });
@@ -160,18 +161,18 @@ export class GraficoComponent implements OnInit {
           }
 
           this.mediaEquipamento = +(
-            listaDeResposta[1][0].quantidadeTotalDeEquipamento /
-            listaDeResposta[1][0].quantidadeTotalFuncionario
+            listaDeResposta[1].data[0].quantidadeTotalDeEquipamento /
+            listaDeResposta[1].data[0].quantidadeTotalFuncionario
           ).toFixed(2);
 
           this.mediaEquipamento = this.mediaEquipamento || 0;
 
           this.quantidadeTotalDePatrimonios =
-            +listaDeResposta[2][0].quantidadeTotalPatrimonio;
+            +listaDeResposta[2].data[0].quantidadeTotalPatrimonio;
           this.quantidadeTotalDePatrimoniosDisponiveis =
-            +listaDeResposta[2][0].quantidadePatrimonioDisponivel;
+            +listaDeResposta[2].data[0].quantidadePatrimonioDisponivel;
           this.quantidadeMovimentacoes =
-            +listaDeResposta[3].quantidadeMovimentacao;
+            +listaDeResposta[3].data.quantidadeMovimentacao;
         },
         // eslint-disable-next-line rxjs/no-implicit-any-catch
         error: (error: any) => {

@@ -40,15 +40,15 @@ var classes_sass_constant_1 = require("src/app/utils/classes-sass.constant");
 var CategoriaComponent = /** @class */ (function (_super) {
     __extends(CategoriaComponent, _super);
     function CategoriaComponent(fb, spinner, toaster, router, categoriaService, activateRouter) {
-        var _this = _super.call(this) || this;
+        var _this = _super.call(this, toaster) || this;
         _this.fb = fb;
         _this.spinner = spinner;
         _this.toaster = toaster;
         _this.router = router;
         _this.categoriaService = categoriaService;
         _this.activateRouter = activateRouter;
-        _this.categoria = {};
-        _this.limpandoCampo = false;
+        _this._categoria = {};
+        _this._limpandoCampo = false;
         _this.estadoSalvar = "cadastrarCategoria";
         _this.classeBotaoLimpar = classes_sass_constant_1.CLASSE_BOTAO_LIMPAR;
         return _this;
@@ -65,13 +65,13 @@ var CategoriaComponent = /** @class */ (function (_super) {
         this.carregarCategoria();
     };
     CategoriaComponent.prototype.limparCampos = function () {
-        this.limpandoCampo = true;
+        this._limpandoCampo = true;
         this.validacao();
     };
     CategoriaComponent.prototype.validacao = function () {
         var _a;
         this.form = this.fb.group({
-            codigoCategoria: new forms_1.FormControl(this.limpandoCampo ? (_a = this.form.get('codigoCategoria')) === null || _a === void 0 ? void 0 : _a.value : 0, []),
+            codigoCategoria: new forms_1.FormControl(this._limpandoCampo ? (_a = this.form.get('codigoCategoria')) === null || _a === void 0 ? void 0 : _a.value : 0, []),
             descricao: new forms_1.FormControl('', [forms_1.Validators.required, forms_1.Validators.minLength(2), forms_1.Validators.maxLength(50)])
         });
     };
@@ -80,8 +80,8 @@ var CategoriaComponent = /** @class */ (function (_super) {
         var atualizando = this.estadoSalvar == 'atualizarCategoria';
         var nomeAcaoRealizada = atualizando ? 'atualizada' : 'cadastrada';
         this.spinner.show(nomeAcaoRealizada);
-        this.categoria = (this.estadoSalvar === 'cadastrarCategoria') ? __assign({}, this.form.value) : __assign({ codigoCategoria: this.categoria.codigoCategoria }, this.form.value);
-        this.categoriaService[this.estadoSalvar](this.categoria).subscribe(function (dados) { return _this.toaster.success("" + dados.mensagem, 'Sucesso!'); }, function (error) {
+        this._categoria = (this.estadoSalvar === 'cadastrarCategoria') ? __assign({}, this.form.value) : __assign({ codigoCategoria: this._categoria.codigoCategoria }, this.form.value);
+        this.categoriaService[this.estadoSalvar](this._categoria).subscribe(function (dados) { return _this.mostrarAvisoSucesso(dados.mensagem); }, function (error) {
             _this.mostrarAvisoErro(error, MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemDeErroAoRealizarOperacao(nomeAcaoRealizada, "categoria", ['o', 'da']) + "}");
         }, function () {
             setTimeout(function () {
@@ -92,24 +92,20 @@ var CategoriaComponent = /** @class */ (function (_super) {
     CategoriaComponent.prototype.carregarCategoria = function () {
         var _this = this;
         var _a;
-        this.codigoCategoria = +((_a = this.activateRouter.snapshot.paramMap) === null || _a === void 0 ? void 0 : _a.get('codigoCategoria'));
-        if (this.codigoCategoria == null || this.codigoCategoria == 0)
+        this._codigoCategoria = +((_a = this.activateRouter.snapshot.paramMap) === null || _a === void 0 ? void 0 : _a.get('codigoCategoria'));
+        if (this._codigoCategoria == null || this._codigoCategoria == 0)
             return;
         this.estadoSalvar = 'atualizarCategoria';
         this.spinner.show('carregando');
-        this.categoriaService.obterApenasUmaCategoria(this.codigoCategoria).subscribe({
+        this.categoriaService.obterApenasUmaCategoria(this._codigoCategoria).subscribe({
             next: function (dados) {
-                _this.categoria = (dados.data);
-                _this.form.patchValue(_this.categoria);
+                _this._categoria = (dados.data);
+                _this.form.patchValue(_this._categoria);
             },
             error: function (error) {
                 _this.mostrarAvisoErro(error, "Houve um problema ao carregar a categoria");
             }
         }).add(function () { return _this.spinner.hide('carregando'); });
-    };
-    CategoriaComponent.prototype.mostrarAvisoErro = function (error, mensagemInicial) {
-        var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
-        this.toaster[template.tipoMensagem](mensagemInicial + ". Mensagem " + template.mensagemErro, template.titulo);
     };
     CategoriaComponent = __decorate([
         core_1.Component({

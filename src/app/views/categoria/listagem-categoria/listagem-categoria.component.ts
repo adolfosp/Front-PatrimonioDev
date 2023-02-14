@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { MensagemRequisicao } from '@nvs-helpers/MensagemRequisicaoHelper';
 import { Categoria } from '@nvs-models/Categoria';
 import Componente from '@nvs-models/Componente';
 import { DadosRequisicao } from '@nvs-models/DadosRequisicao';
@@ -48,7 +47,7 @@ export class ListagemCategoriaComponent extends Componente implements OnInit {
     private token: TokenService,
     private detectorAlteracao: ChangeDetectorRef
   ) {
-    super();
+    super(toaster);
 
   }
 
@@ -95,7 +94,7 @@ export class ListagemCategoriaComponent extends Componente implements OnInit {
 
     this.categoriaService.deletarCategoria(this.codigoCategoria).subscribe({
       next: () => {
-        this.toaster.success('Categoria removida com sucesso!', 'Excluindo');
+        this.mostrarAvisoSucesso("Categoria removida com sucesso!")
         this.obterCategorias();
       },
       error: (error: unknown) => {
@@ -139,7 +138,7 @@ export class ListagemCategoriaComponent extends Componente implements OnInit {
 
       XLSX.writeFile(wb, 'categorias.xlsx');
     } catch (err) {
-      this.toaster.error(`Não foi possível exportar a planilha. Mensagem: ${err}`, "Erro")
+      this.mostrarAvisoXLS(`Não foi possível exportar a planilha. Mensagem: ${err}`);
     }
   }
 
@@ -180,10 +179,4 @@ export class ListagemCategoriaComponent extends Componente implements OnInit {
       this.toggledRows.add(index);
     }
   }
-
-  public mostrarAvisoErro(error: unknown, mensagemInicial: string): void {
-    const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
-    this.toaster[template.tipoMensagem](`${mensagemInicial}. Mensagem ${template.mensagemErro}`, template.titulo);
-  }
-
 }

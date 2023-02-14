@@ -21,7 +21,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 exports.__esModule = true;
 exports.ListagemCategoriaComponent = void 0;
 var core_1 = require("@angular/core");
-var MensagemRequisicaoHelper_1 = require("@nvs-helpers/MensagemRequisicaoHelper");
 var Componente_1 = require("@nvs-models/Componente");
 var configuracao_tabela_1 = require("@nvs-utils/configuracao-tabela");
 var ngx_easy_table_1 = require("ngx-easy-table");
@@ -29,7 +28,7 @@ var XLSX = require("xlsx");
 var ListagemCategoriaComponent = /** @class */ (function (_super) {
     __extends(ListagemCategoriaComponent, _super);
     function ListagemCategoriaComponent(categoriaService, spinner, modalService, toaster, router, token, detectorAlteracao) {
-        var _this = _super.call(this) || this;
+        var _this = _super.call(this, toaster) || this;
         _this.categoriaService = categoriaService;
         _this.spinner = spinner;
         _this.modalService = modalService;
@@ -87,7 +86,7 @@ var ListagemCategoriaComponent = /** @class */ (function (_super) {
         this.spinner.show("excluindo");
         this.categoriaService.deletarCategoria(this.codigoCategoria).subscribe({
             next: function () {
-                _this.toaster.success('Categoria removida com sucesso!', 'Excluindo');
+                _this.mostrarAvisoSucesso("Categoria removida com sucesso!");
                 _this.obterCategorias();
             },
             error: function (error) {
@@ -124,7 +123,7 @@ var ListagemCategoriaComponent = /** @class */ (function (_super) {
             XLSX.writeFile(wb, 'categorias.xlsx');
         }
         catch (err) {
-            this.toaster.error("N\u00E3o foi poss\u00EDvel exportar a planilha. Mensagem: " + err, "Erro");
+            this.mostrarAvisoXLS("N\u00E3o foi poss\u00EDvel exportar a planilha. Mensagem: " + err);
         }
     };
     ListagemCategoriaComponent.prototype.obterColunasDaTabela = function () {
@@ -162,10 +161,6 @@ var ListagemCategoriaComponent = /** @class */ (function (_super) {
         else {
             this.toggledRows.add(index);
         }
-    };
-    ListagemCategoriaComponent.prototype.mostrarAvisoErro = function (error, mensagemInicial) {
-        var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
-        this.toaster[template.tipoMensagem](mensagemInicial + ". Mensagem " + template.mensagemErro, template.titulo);
     };
     __decorate([
         core_1.ViewChild('table', { static: true })

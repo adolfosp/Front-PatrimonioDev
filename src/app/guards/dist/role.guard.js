@@ -14,11 +14,10 @@ var RoleGuard = /** @class */ (function () {
         this.token = token;
     }
     RoleGuard.prototype.canActivate = function (route) {
-        return true;
-        var permissaoEsperada = route.data['permissaoEsperada'];
-        var permissaoToken = this.token.obterPermissaoToken();
-        var permissaoEncontrada = permissaoEsperada.find(function (x) { return x == permissaoToken; });
-        if (!this.token.usuarioEstaAutenticado() || permissaoEncontrada == undefined) {
+        // const permissaoEsperada: number[] = route.data['permissaoEsperada'];
+        // const permissaoToken = this.token.obterPermissaoToken()
+        // const permissaoEncontrada = permissaoEsperada.find(x => permissaoToken);
+        if (!this.token.usuarioEstaAutenticado()) {
             this.router.navigate(['403']);
             return false;
         }

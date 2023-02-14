@@ -26,6 +26,7 @@ import { QRCodeModule } from 'angularx-qrcode';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { NgxMaskModule } from 'ngx-mask';
 import { environment } from 'src/environments/environment';
+import { CustomPreloader } from './configs/custom-preload-strategy';
 import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { P403Component } from './views/error/403.component';
 import { P404Component } from './views/error/404.component';
@@ -33,7 +34,6 @@ import { GraficoComponent } from './views/grafico/grafico.component';
 import { RegistrarComponent } from './views/login/registrar/registrar.component';
 import { QrCodeComponent } from './views/qr-code/qr-code.component';
 import { HttpCodeMensagemComponent } from './views/shared/http-code-mensagem/http-code-mensagem.component';
-import { CustomPreloader } from './configs/custom-preload-strategy';
 
 @NgModule({
   declarations: [
@@ -45,7 +45,7 @@ import { CustomPreloader } from './configs/custom-preload-strategy';
     QrCodeComponent,
     RegistrarComponent,
     DashboardComponent,
-    GraficoComponent
+    GraficoComponent,
   ],
   imports: [
     NgxMaskModule.forRoot({
