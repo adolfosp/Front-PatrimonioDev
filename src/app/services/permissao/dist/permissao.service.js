@@ -19,7 +19,6 @@ var PermissaoService = /** @class */ (function () {
         return this.api.get(this.baseUrl).pipe(operators_1.take(1));
     };
     PermissaoService.prototype.cadastrarPermissao = function (usuarioPermissao) {
-        debugger;
         return this.api
             .post(this.baseUrl, { perfilDto: usuarioPermissao })
             .pipe(operators_1.take(1));
@@ -34,7 +33,6 @@ var PermissaoService = /** @class */ (function () {
             .pipe(operators_1.take(1));
     };
     PermissaoService.prototype.atualizarPermissao = function (usuarioPermissao) {
-        debugger;
         return this.api
             .put(this.baseUrl + "/" + usuarioPermissao.codigoPerfil, { usuarioPermissao: usuarioPermissao })
             .pipe(operators_1.take(1));

@@ -9,6 +9,7 @@ import { API, APIDefinition, Columns, Config } from 'ngx-easy-table';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import * as XLSX from 'xlsx';
+import { DadosRequisicao } from '../../../models/DadosRequisicao';
 import configuracaoTabela from '../../../utils/configuracao-tabela';
 
 @Component({
@@ -30,7 +31,7 @@ export class ListagemSetorComponent implements OnInit {
 
   public dataFiltradaExcel: Setor[] = [];
   public setores: Setor[] = [];
-  public setorId: number = 0;
+  public setorId = 0;
   public ehAdministrador = false;
 
   modalRef?: BsModalRef;
@@ -74,22 +75,21 @@ export class ListagemSetorComponent implements OnInit {
     this.spinner.show("buscando");
 
     this.setorService.obterSetor().subscribe({
-      next: (setores: Setor[]) => {
-        this.dataFiltradaExcel = setores;
-        this.data = setores;
+      next: (dados: DadosRequisicao) => {
+        this.dataFiltradaExcel = dados.data as Setor[];
+        this.data = dados.data as Setor[];
 
       },
-      error: (error: any) => {
-        debugger;
-        if(error.status == 403){
+      error: (error: unknown) => {
+        if(error["status"] == 403){
           this.toaster.info(`Você não tem acesso para realizar essa ação!`, 'Informação');
 
         }
-        let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+        const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
         this.toaster[template.tipoMensagem](`Houve um erro ao buscar pelo setores. Mensagem ${template.mensagemErro}`, 'Erro');
 
       },
-      complete: () =>{
+       complete: () =>{
         this.detectorAlteracao.markForCheck();
 
       }
@@ -107,8 +107,8 @@ export class ListagemSetorComponent implements OnInit {
         this.toaster.success('Setor removido com sucesso!', 'Deletado');
         this.obterSetores();
       },
-      (error: any) =>{
-        let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+      (error: unknown) =>{
+        const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
         this.toaster[template.tipoMensagem](`Houve um erro ao remover o setor. Mensagem: ${template.mensagemErro}`, 'Erro');
       }
     ).add(() => this.spinner.hide("excluindo"));
@@ -124,7 +124,7 @@ export class ListagemSetorComponent implements OnInit {
   }
 
   public onChange(event: Event): void {
-    let valorDigitado = (event.target as HTMLInputElement).value;
+    const valorDigitado = (event.target as HTMLInputElement).value;
     this.filtrarSetores(valorDigitado);
 
     this.table.apiEvent({

@@ -5,10 +5,11 @@ import { MensagemRequisicao } from '@nvs-helpers/MensagemRequisicaoHelper';
 import { Funcionario } from '@nvs-models/Funcionario';
 import { Setor } from '@nvs-models/Setor';
 import { FuncionarioService } from '@nvs-services/funcionario/funcionario.service';
+import { SetorService } from '@nvs-services/setor/setor.service';
 import { CLASSE_BOTAO_LIMPAR } from '@nvs-utils/classes-sass.constant';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
-import { SetorService } from '@nvs-services/setor/setor.service';
+import { DadosRequisicao } from '../../models/DadosRequisicao';
 
 @Component({
   selector: 'app-funcionario',
@@ -17,9 +18,9 @@ import { SetorService } from '@nvs-services/setor/setor.service';
 })
 export class FuncionarioComponent implements OnInit {
 
-  private funcionario = {} as Funcionario;
-  private codigoFuncionario: number;
-  private limpandoCampo = false;
+  private _funcionario = {} as Funcionario;
+  private _codigoFuncionario: number;
+  private _limpandoCampo = false;
 
   public estadoSalvar = 'cadastrarFuncionario';
   public setores: Setor[];
@@ -48,14 +49,14 @@ export class FuncionarioComponent implements OnInit {
   }
 
   public limparCampos(): void {
-    this.limpandoCampo = true;
+    this._limpandoCampo = true;
     this.validacao();
   }
 
   private carregarSetor(): void {
     this.setorService.obterSetor().subscribe({
-      next: (setores: Setor[]) => {
-        this.setores = setores
+      next: (dados: DadosRequisicao) => {
+        this.setores = dados.data as Setor[];
       },
       error: (error: unknown) => {
         this.toaster.error(`Houve um erro ao carregar o setor. Mensagem ${error["message"]}`, 'Erro!');
@@ -73,7 +74,7 @@ export class FuncionarioComponent implements OnInit {
 
   private validacao(): void {
     this.form = this.fb.group({
-      codigoFuncionario: new FormControl(this.limpandoCampo ? this.form.get('codigoFuncionario').value : 0, []),
+      codigoFuncionario: new FormControl(this._limpandoCampo ? this.form.get('codigoFuncionario').value : 0, []),
       nomeFuncionario: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(100)]),
       ativo: new FormControl(true),
       codigoSetor: new FormControl('' ,[Validators.required]),
@@ -88,9 +89,9 @@ export class FuncionarioComponent implements OnInit {
 
     this.spinner.show(nomeAcaoRealizada);
 
-    this.funcionario = (this.estadoSalvar === 'cadastrarFuncionario') ? { ...this.form.value } : { codigoFuncionario: this.funcionario.codigoFuncionario, ...this.form.value };
+    this._funcionario = (this.estadoSalvar === 'cadastrarFuncionario') ? { ...this.form.value } : { codigoFuncionario: this._funcionario.codigoFuncionario, ...this.form.value };
 
-    this.funcionarioService[this.estadoSalvar](this.funcionario).subscribe(
+    this.funcionarioService[this.estadoSalvar](this._funcionario).subscribe(
       () => this.toaster.success(`Funcionário ${nomeAcaoRealizada} com sucesso`, 'Sucesso!'),
       (error: unknown) => {
         const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
@@ -106,17 +107,17 @@ export class FuncionarioComponent implements OnInit {
 
   public carregarFuncionario(): void {
 
-    this.codigoFuncionario = +this.activateRouter.snapshot.paramMap.get('codigoFuncionario');
+    this._codigoFuncionario = +this.activateRouter.snapshot.paramMap.get('codigoFuncionario');
 
-    if (this.codigoFuncionario !== null && this.codigoFuncionario !== 0) {
+    if (this._codigoFuncionario !== null && this._codigoFuncionario !== 0) {
       this.estadoSalvar = 'atualizarFuncionario';
       this.spinner.show('carregando');
 
-      this.funcionarioService.obterApenasUmFuncionario(this.codigoFuncionario).subscribe(
+      this.funcionarioService.obterApenasUmFuncionario(this._codigoFuncionario).subscribe(
         {
           next: (funcionario: Funcionario) => {
-            this.funcionario = { ...funcionario };
-            this.form.patchValue(this.funcionario);
+            this._funcionario = { ...funcionario };
+            this.form.patchValue(this._funcionario);
           },
           error: (error: unknown) => {
             const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);

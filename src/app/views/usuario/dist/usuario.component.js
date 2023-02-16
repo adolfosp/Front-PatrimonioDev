@@ -65,18 +65,24 @@ var UsuarioComponent = /** @class */ (function () {
     };
     UsuarioComponent.prototype.carregarSetor = function () {
         var _this = this;
-        this.setorService.obterSetor().subscribe(function (setores) {
-            _this.setores = setores;
-        }, function (error) {
-            _this.toaster.error("Houve um erro ao carregar o setor. Mensagem " + error.message, 'Erro!');
+        this.setorService.obterSetor().subscribe({
+            next: function (dados) {
+                _this.setores = dados.data;
+            },
+            error: function (error) {
+                _this.toaster.error("Houve um erro ao carregar o setor. Mensagem " + error["message"], 'Erro!');
+            }
         });
     };
     UsuarioComponent.prototype.carregarEmpresa = function () {
         var _this = this;
-        this.empresaService.obterEmpresas().subscribe(function (empresas) {
-            _this.empresas = empresas;
-        }, function (error) {
-            _this.toaster.error("Houve um erro ao carregar a empresa. Mensagem " + error.message, 'Erro!');
+        this.empresaService.obterEmpresas().subscribe({
+            next: function (dados) {
+                _this.empresas = dados.data;
+            },
+            error: function (error) {
+                _this.toaster.error("Houve um erro ao carregar a empresa. Mensagem " + error["message"], 'Erro!');
+            }
         });
     };
     UsuarioComponent.prototype.limparCampos = function () {
@@ -85,10 +91,13 @@ var UsuarioComponent = /** @class */ (function () {
     };
     UsuarioComponent.prototype.carregarPermissao = function () {
         var _this = this;
-        this.permissaoService.obterPermissoes().subscribe(function (permissoes) {
-            _this.permissoes = permissoes;
-        }, function (error) {
-            _this.toaster.error("Houve um erro ao carregar a permiss\u00E3o. Mensagem " + error.message, 'Erro!');
+        this.permissaoService.obterPermissoes().subscribe({
+            next: function (dados) {
+                _this.permissoes = dados.data;
+            },
+            error: function (error) {
+                _this.toaster.error("Houve um erro ao carregar a permiss\u00E3o. Mensagem " + error["message"], 'Erro!');
+            }
         });
     };
     UsuarioComponent.prototype.validacao = function () {
@@ -113,7 +122,6 @@ var UsuarioComponent = /** @class */ (function () {
         var nomeAcaoRealizada = atualizando ? 'atualizado' : 'cadastrado';
         this.spinner.show(nomeAcaoRealizada);
         this.usuario = (this.estadoSalvar === 'cadastrarUsuario') ? __assign({}, this.form.value) : __assign({ codigoUsuario: this.usuario.codigoUsuario }, this.form.value);
-        debugger;
         this.usuarioService[this.estadoSalvar](this.usuario).subscribe(function () { return _this.toaster.success("Usu\u00E1rio " + nomeAcaoRealizada + " com sucesso", 'Sucesso!'); }, function (error) {
             var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
             _this.toaster[template.tipoMensagem](MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemDeErroAoRealizarOperacao(nomeAcaoRealizada, "usuário", ['o', 'do']) + " Mensagem: " + template.mensagemErro, 'Erro!');
@@ -136,7 +144,7 @@ var UsuarioComponent = /** @class */ (function () {
                     _this.form.controls['confirmeSenha'].setValue(usuario.senha);
                 },
                 error: function (error) {
-                    _this.toaster.error("Houve um erro ao tentar carregar o usu\u00E1rio. Mensagem: " + error.message, 'Erro!');
+                    _this.toaster.error("Houve um erro ao tentar carregar o usu\u00E1rio. Mensagem: " + error["message"], 'Erro!');
                 }
             }).add(function () { return _this.spinner.hide('carregando'); });
         }

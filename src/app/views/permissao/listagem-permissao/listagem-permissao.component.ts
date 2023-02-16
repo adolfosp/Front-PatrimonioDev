@@ -9,10 +9,10 @@ import { API, APIDefinition, Columns, Config } from 'ngx-easy-table';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import * as XLSX from 'xlsx';
+import { DadosRequisicao } from '../../../models/DadosRequisicao';
 import configuracaoTabela from '../../../utils/configuracao-tabela';
 
 @Component({
-  selector: 'app-listarPermissao',
   templateUrl: './listagem-permissao.component.html',
   styleUrls: ['./listagem-permissao.component.sass', ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -73,9 +73,9 @@ export class ListagemPermissaoComponent implements OnInit {
     this.spinner.show("buscando")
 
     this.permissaoService.obterPermissoes().subscribe({
-      next: (permissoes: UsuarioPermissao[]) => {
-        this.data = permissoes;
-        this.dataFiltradaExcel = permissoes;
+      next: (dados: DadosRequisicao) => {
+        this.data = dados.data as UsuarioPermissao[];
+        this.dataFiltradaExcel = dados.data as UsuarioPermissao[];
 
       },
       // eslint-disable-next-line rxjs/no-implicit-any-catch

@@ -25,7 +25,6 @@ var SetorService = /** @class */ (function () {
     };
     SetorService.prototype.obterApenasUmSetor = function (codigoSetor) {
         return this.api.get(this.baseUrl + "/" + codigoSetor).pipe(operators_1.take(1));
-        ;
     };
     SetorService.prototype.deletarSetor = function (setorId) {
         return this.api["delete"](this.baseUrl + "/" + setorId)

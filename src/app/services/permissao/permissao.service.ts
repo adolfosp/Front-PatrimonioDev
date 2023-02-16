@@ -4,6 +4,7 @@ import { ApiService } from '@nvs-services/api/api.service';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
+import { DadosRequisicao } from '../../models/DadosRequisicao';
 
 @Injectable({
   providedIn: 'root'
@@ -13,12 +14,11 @@ export class PermissaoService {
 
   constructor(private api: ApiService) { }
 
-  public obterPermissoes(): Observable<UsuarioPermissao[]>{
-    return this.api.get<UsuarioPermissao[]>(this.baseUrl).pipe(take(1));
+  public obterPermissoes(): Observable<DadosRequisicao>{
+    return this.api.get<DadosRequisicao>(this.baseUrl).pipe(take(1));
   }
 
   public cadastrarPermissao(usuarioPermissao: UsuarioPermissao): Observable<UsuarioPermissao> {
-    debugger;
     return this.api
     .post<UsuarioPermissao>(this.baseUrl, {perfilDto: usuarioPermissao})
     .pipe(take(1));
@@ -37,7 +37,6 @@ export class PermissaoService {
   }
 
   public atualizarPermissao(usuarioPermissao: UsuarioPermissao): Observable<UsuarioPermissao>{
-    debugger;
     return this.api
     .put<UsuarioPermissao>(`${this.baseUrl}/${usuarioPermissao.codigoPerfil}`, {usuarioPermissao})
     .pipe(take(1));

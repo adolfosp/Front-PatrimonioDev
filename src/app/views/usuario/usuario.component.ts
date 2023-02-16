@@ -14,6 +14,7 @@ import { UsuarioService } from '@nvs-services/usuario/usuario.service';
 import { CLASSE_BOTAO_LIMPAR } from '@nvs-utils/classes-sass.constant';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
+import { DadosRequisicao } from '../../models/DadosRequisicao';
 
 @Component({
   selector: 'app-usuario',
@@ -65,25 +66,25 @@ export class UsuarioComponent implements OnInit {
   }
 
   private carregarSetor(): void {
-    this.setorService.obterSetor().subscribe(
-      (setores: Setor[]) => {
-        this.setores = setores
+    this.setorService.obterSetor().subscribe({
+      next: (dados: DadosRequisicao) => {
+        this.setores = dados.data as Setor[]
       },
-      (error: any) => {
-        this.toaster.error(`Houve um erro ao carregar o setor. Mensagem ${error.message}`, 'Erro!');
+      error: (error: unknown) => {
+        this.toaster.error(`Houve um erro ao carregar o setor. Mensagem ${error["message"]}`, 'Erro!');
       },
-    );
+    });
   }
 
   private carregarEmpresa(): void {
-    this.empresaService.obterEmpresas().subscribe(
-      (empresas: Empresa[]) => {
-        this.empresas = empresas
+    this.empresaService.obterEmpresas().subscribe({
+      next: (dados: DadosRequisicao) => {
+        this.empresas = dados.data as Empresa[]
       },
-      (error: any) => {
-        this.toaster.error(`Houve um erro ao carregar a empresa. Mensagem ${error.message}`, 'Erro!');
+      error: (error: unknown) => {
+        this.toaster.error(`Houve um erro ao carregar a empresa. Mensagem ${error["message"]}`, 'Erro!');
       },
-    );
+    });
   }
 
   public limparCampos(): void{
@@ -92,14 +93,14 @@ export class UsuarioComponent implements OnInit {
   }
 
   private carregarPermissao(): void {
-    this.permissaoService.obterPermissoes().subscribe(
-      (permissoes: UsuarioPermissao[]) => {
-        this.permissoes = permissoes
+    this.permissaoService.obterPermissoes().subscribe({
+      next: (dados: DadosRequisicao) => {
+        this.permissoes = dados.data as UsuarioPermissao[]
       },
-      (error: any) => {
-        this.toaster.error(`Houve um erro ao carregar a permissão. Mensagem ${error.message}`, 'Erro!');
+      error: (error: unknown) => {
+        this.toaster.error(`Houve um erro ao carregar a permissão. Mensagem ${error["message"]}`, 'Erro!');
       },
-    );
+    });
   }
 
   private validacao(): void {
@@ -123,17 +124,16 @@ export class UsuarioComponent implements OnInit {
 
   public salvarAlteracao(): void {
 
-    let atualizando = this.estadoSalvar == 'atualizarUsuario';
-    let nomeAcaoRealizada = atualizando? 'atualizado': 'cadastrado';
+    const atualizando = this.estadoSalvar == 'atualizarUsuario';
+    const nomeAcaoRealizada = atualizando? 'atualizado': 'cadastrado';
 
     this.spinner.show(nomeAcaoRealizada);
 
     this.usuario = (this.estadoSalvar === 'cadastrarUsuario') ? {...this.form.value} : {codigoUsuario: this.usuario.codigoUsuario, ...this.form.value};
-    debugger;
     this.usuarioService[this.estadoSalvar](this.usuario).subscribe(
       () => this.toaster.success(`Usuário ${nomeAcaoRealizada} com sucesso`, 'Sucesso!'),
       (error: any) => {
-        let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+        const template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
         this.toaster[template.tipoMensagem](`${MensagemRequisicao.retornarMensagemDeErroAoRealizarOperacao(nomeAcaoRealizada,"usuário", ['o','do'])} Mensagem: ${template.mensagemErro}`, 'Erro!');      },
       () =>
       {
@@ -157,8 +157,8 @@ export class UsuarioComponent implements OnInit {
              this.form.patchValue(this.usuario);
              this.form.controls['confirmeSenha'].setValue(usuario.senha);
            },
-           error: (error: any) => {
-             this.toaster.error(`Houve um erro ao tentar carregar o usuário. Mensagem: ${error.message}`, 'Erro!');
+           error: (error: unknown) => {
+             this.toaster.error(`Houve um erro ao tentar carregar o usuário. Mensagem: ${error["message"]}`, 'Erro!');
            }
          }
        ).add(() => this.spinner.hide('carregando'));

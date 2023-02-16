@@ -52,9 +52,9 @@ var ListagemPermissaoComponent = /** @class */ (function () {
         var _this = this;
         this.spinner.show("buscando");
         this.permissaoService.obterPermissoes().subscribe({
-            next: function (permissoes) {
-                _this.data = permissoes;
-                _this.dataFiltradaExcel = permissoes;
+            next: function (dados) {
+                _this.data = dados.data;
+                _this.dataFiltradaExcel = dados.data;
             },
             // eslint-disable-next-line rxjs/no-implicit-any-catch
             error: function (error) {
@@ -158,7 +158,6 @@ var ListagemPermissaoComponent = /** @class */ (function () {
     ], ListagemPermissaoComponent.prototype, "onResize");
     ListagemPermissaoComponent = __decorate([
         core_1.Component({
-            selector: 'app-listarPermissao',
             templateUrl: './listagem-permissao.component.html',
             styleUrls: ['./listagem-permissao.component.sass',],
             changeDetection: core_1.ChangeDetectionStrategy.OnPush

@@ -53,16 +53,15 @@ var ListagemSetorComponent = /** @class */ (function () {
         var _this = this;
         this.spinner.show("buscando");
         this.setorService.obterSetor().subscribe({
-            next: function (setores) {
-                _this.dataFiltradaExcel = setores;
-                _this.data = setores;
+            next: function (dados) {
+                _this.dataFiltradaExcel = dados.data;
+                _this.data = dados.data;
             },
             error: function (error) {
-                debugger;
-                if (error.status == 403) {
+                if (error["status"] == 403) {
                     _this.toaster.info("Voc\u00EA n\u00E3o tem acesso para realizar essa a\u00E7\u00E3o!", 'Informação');
                 }
-                var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+                var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
                 _this.toaster[template.tipoMensagem]("Houve um erro ao buscar pelo setores. Mensagem " + template.mensagemErro, 'Erro');
             },
             complete: function () {
@@ -79,7 +78,7 @@ var ListagemSetorComponent = /** @class */ (function () {
             _this.toaster.success('Setor removido com sucesso!', 'Deletado');
             _this.obterSetores();
         }, function (error) {
-            var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
+            var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
             _this.toaster[template.tipoMensagem]("Houve um erro ao remover o setor. Mensagem: " + template.mensagemErro, 'Erro');
         }).add(function () { return _this.spinner.hide("excluindo"); });
     };

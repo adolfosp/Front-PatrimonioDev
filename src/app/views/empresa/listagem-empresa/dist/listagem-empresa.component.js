@@ -1,4 +1,17 @@
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,25 +21,28 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 exports.__esModule = true;
 exports.ListagemEmpresaComponent = void 0;
 var core_1 = require("@angular/core");
-var MensagemRequisicaoHelper_1 = require("@nvs-helpers/MensagemRequisicaoHelper");
+var Componente_1 = require("@nvs-models/Componente");
+var configuracao_tabela_1 = require("@nvs-utils/configuracao-tabela");
 var ngx_easy_table_1 = require("ngx-easy-table");
 var XLSX = require("xlsx");
-var configuracao_tabela_1 = require("../../../utils/configuracao-tabela");
-var ListagemEmpresaComponent = /** @class */ (function () {
+var ListagemEmpresaComponent = /** @class */ (function (_super) {
+    __extends(ListagemEmpresaComponent, _super);
     function ListagemEmpresaComponent(empresaService, modalService, toaster, spinner, router, token, detectorAlteracao) {
-        this.empresaService = empresaService;
-        this.modalService = modalService;
-        this.toaster = toaster;
-        this.spinner = spinner;
-        this.router = router;
-        this.token = token;
-        this.detectorAlteracao = detectorAlteracao;
-        this.linhas = 0;
-        this.toggledRows = new Set();
-        this.data = [];
-        this.dataFiltradaExcel = [];
-        this.empresaId = 0;
-        this.ehAdministrador = false;
+        var _this = _super.call(this, toaster) || this;
+        _this.empresaService = empresaService;
+        _this.modalService = modalService;
+        _this.toaster = toaster;
+        _this.spinner = spinner;
+        _this.router = router;
+        _this.token = token;
+        _this.detectorAlteracao = detectorAlteracao;
+        _this.linhas = 0;
+        _this.toggledRows = new Set();
+        _this.data = [];
+        _this.dataFiltradaExcel = [];
+        _this.empresaId = 0;
+        _this.ehAdministrador = false;
+        return _this;
     }
     ListagemEmpresaComponent.prototype.ngOnInit = function () {
         this.obterEmpresas();
@@ -52,13 +68,12 @@ var ListagemEmpresaComponent = /** @class */ (function () {
         var _this = this;
         this.spinner.show("buscando");
         this.empresaService.obterEmpresas().subscribe({
-            next: function (empresa) {
-                _this.data = empresa;
-                _this.dataFiltradaExcel = empresa;
+            next: function (dados) {
+                _this.data = dados.data;
+                _this.dataFiltradaExcel = dados.data;
             },
             error: function (error) {
-                var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
-                _this.toaster[template.tipoMensagem]("Houve um erro ao carregar as empresas. Mensagem " + template.mensagemErro, template.titulo);
+                _this.mostrarAvisoErro(error, "Houve um erro ao carregar as empresas");
             },
             complete: function () {
                 _this.detectorAlteracao.markForCheck();
@@ -70,13 +85,14 @@ var ListagemEmpresaComponent = /** @class */ (function () {
         var _a;
         (_a = this.modalRef) === null || _a === void 0 ? void 0 : _a.hide();
         this.spinner.show("excluindo");
-        debugger;
-        this.empresaService.deletarEmpresa(this.empresaId).subscribe(function () {
-            _this.toaster.success('Empresa excluída com sucesso!', 'Exclusão');
-            _this.obterEmpresas();
-        }, function (error) {
-            var template = MensagemRequisicaoHelper_1.MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
-            _this.toaster[template.tipoMensagem]("Houve um erro ao excluir a empresa. Mensagem " + template.mensagemErro, template.titulo);
+        this.empresaService.deletarEmpresa(this.empresaId).subscribe({
+            next: function () {
+                _this.mostrarAvisoSucesso("Empresa excluída com sucesso!");
+                _this.obterEmpresas();
+            },
+            error: function (error) {
+                _this.mostrarAvisoErro(error, "Houve um erro ao excluir a empresa");
+            }
         }).add(function () { return _this.spinner.hide("excluindo"); });
     };
     ListagemEmpresaComponent.prototype.recusar = function () {
@@ -110,7 +126,7 @@ var ListagemEmpresaComponent = /** @class */ (function () {
             XLSX.writeFile(wb, 'empresas.xlsx');
         }
         catch (err) {
-            this.toaster.error("N\u00E3o foi poss\u00EDvel exportar a planilha. Mensagem: " + err, "Erro");
+            this.mostrarAvisoXLS("N\u00E3o foi poss\u00EDvel exportar a planilha. Mensagem: " + err);
         }
     };
     ListagemEmpresaComponent.prototype.obterColunasDaTabela = function () {
@@ -167,5 +183,5 @@ var ListagemEmpresaComponent = /** @class */ (function () {
         })
     ], ListagemEmpresaComponent);
     return ListagemEmpresaComponent;
-}());
+}(Componente_1["default"]));
 exports.ListagemEmpresaComponent = ListagemEmpresaComponent;
