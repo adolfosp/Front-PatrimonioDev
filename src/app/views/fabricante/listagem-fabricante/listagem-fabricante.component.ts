@@ -1,24 +1,24 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { MensagemRequisicao } from '@nvs-helpers/MensagemRequisicaoHelper';
+import { DadosRequisicao } from '@nvs-models/DadosRequisicao';
 import { Fabricante } from '@nvs-models/Fabricante';
 import { FabricanteService } from '@nvs-services/fabricante/fabricante.service';
 import { TokenService } from '@nvs-services/token/token.service';
+import configuracaoTabela from '@nvs-utils/configuracao-tabela';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { API, APIDefinition, Columns, Config } from 'ngx-easy-table';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import * as XLSX from 'xlsx';
-import configuracaoTabela from '../../../utils/configuracao-tabela';
+import Componente from '../../../models/Componente';
 
 @Component({
-  selector: 'app-listarFabricante',
   templateUrl: './listagem-fabricante.component.html',
   styleUrls: ['./listagem-fabricante.component.sass', '../../../../assets/style-listagem.sass'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 
 })
-export class ListagemFabricanteComponent implements OnInit {
+export class ListagemFabricanteComponent extends Componente implements OnInit {
   @ViewChild('table', { static: true }) table: APIDefinition;
 
   public configuracao: Config;
@@ -44,7 +44,9 @@ export class ListagemFabricanteComponent implements OnInit {
               private router: Router,
               private token: TokenService,
               private detectorAlteracao: ChangeDetectorRef
-              ) { }
+              ) {
+                super(toaster);
+               }
 
   ngOnInit(): void {
 
@@ -63,14 +65,12 @@ export class ListagemFabricanteComponent implements OnInit {
   public obterFabricante(): void {
     this.spinner.show("buscando");
     this.fabricanteService.obterTodosFabricante().subscribe({
-      next: (fabricantes: Fabricante[]) => {
-        this.data = fabricantes;
-        this.dataFiltradaExcel = fabricantes;
+      next: (dados: DadosRequisicao) => {
+        this.data = dados.data as Fabricante[];
+        this.dataFiltradaExcel = dados.data as Fabricante[];
       },
-      error: (error: any) => {
-        let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
-        this.toaster[template.tipoMensagem](`Houve um erro ao buscar pelos fabricantes. Mensagem ${template.mensagemErro}`, template.titulo);
-
+      error: (error: unknown) => {
+        this.mostrarAvisoErro(error,"Houve um erro ao buscar pelos fabricantes.");
       },
       complete: () =>{
         this.detectorAlteracao.markForCheck();
@@ -89,16 +89,15 @@ export class ListagemFabricanteComponent implements OnInit {
     this.modalRef?.hide();
     this.spinner.show("excluindo");
 
-    this.fabricanteService.deletarFabricante(this.codigoFabricante).subscribe(
-      () =>{
-        this.toaster.success('Fabricante removido com sucesso!', 'Excluindo');
+    this.fabricanteService.deletarFabricante(this.codigoFabricante).subscribe({
+      next: () =>{
+        this.mostrarAvisoSucesso("Fabricante removido com sucesso!");
         this.obterFabricante();
       },
-      (error: any) =>{
-        let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
-        this.toaster[template.tipoMensagem](`Houve um erro ao excluir o fabricante. Mensagem ${template.mensagemErro}`, template.titulo);
+      error: (error: unknown) =>{
+        this.mostrarAvisoErro(error, "Houve um erro ao excluir o fabricante.");
       }
-    ).add(()=>this.spinner.hide("excluindo"));
+    }).add(()=>this.spinner.hide("excluindo"));
   }
 
   public recusar(): void {
@@ -106,7 +105,7 @@ export class ListagemFabricanteComponent implements OnInit {
   }
 
   public onChange(event: Event): void {
-    let valorDigitado = (event.target as HTMLInputElement).value;
+    const valorDigitado = (event.target as HTMLInputElement).value;
     this.filtrarFabricantes(valorDigitado);
 
     this.table.apiEvent({
@@ -137,7 +136,7 @@ export class ListagemFabricanteComponent implements OnInit {
 
      XLSX.writeFile(wb, 'fabricantes.xlsx');
    } catch (err) {
-     this.toaster.error(`Não foi possível exportar a planilha. Mensagem: ${err}`,"Erro")
+    this.mostrarAvisoXLS(`Não foi possível exportar a planilha. Mensagem: ${err}`);
    }
  }
 
@@ -179,5 +178,4 @@ export class ListagemFabricanteComponent implements OnInit {
       this.toggledRows.add(index);
     }
   }
-
 }
