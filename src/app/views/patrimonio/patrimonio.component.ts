@@ -3,6 +3,8 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { SituacaoEquipamento } from '@nvs-enum/situacao-equipamento.enum';
 import { MensagemRequisicao } from '@nvs-helpers/MensagemRequisicaoHelper';
+import Componente from '@nvs-models/Componente';
+import { DadosRequisicao } from '@nvs-models/DadosRequisicao';
 import { Equipamento } from '@nvs-models/Equipamento';
 import { Funcionario } from '@nvs-models/Funcionario';
 import { InformacaoAdicional } from '@nvs-models/InformacaoAdicional';
@@ -20,7 +22,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './patrimonio.component.html',
   styleUrls: ['./patrimonio.component.sass','../../../assets/style-base.sass']
 })
-export class PatrimonioComponent implements OnInit {
+export class PatrimonioComponent extends Componente implements OnInit {
 
   public form = {} as FormGroup;
   public formAdicional = {} as FormGroup;
@@ -58,12 +60,13 @@ export class PatrimonioComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute)
     {
+      super(toaster);
       this.chaveSituacaoEquipamento = Object.keys(this.situacaoEquipamentoEnum).filter(Number);
     }
 
     public salvarAlteracao(): void {
-      let atualizando = this.estadoSalvar == 'atualizarPatrimonio';
-      let nomeAcaoRealizada = atualizando? 'atualizado': 'cadastrado';
+      const atualizando = this.estadoSalvar == 'atualizarPatrimonio';
+      const nomeAcaoRealizada = atualizando? 'atualizado': 'cadastrado';
 
       this.spinner.show(nomeAcaoRealizada);
 
@@ -72,10 +75,9 @@ export class PatrimonioComponent implements OnInit {
 
       this.informacaoAdicional = (this.estadoSalvar === 'cadastrarPatrimonio') ? {...this.formAdicional.value} : {codigoInformacaoAdicional: this.informacaoAdicional.codigoInformacaoAdicional, ...this.formAdicional.value};
       this.patrimonioService[this.estadoSalvar](this.patrimonio, this.informacaoAdicional).subscribe(
-        () => this.toaster.success(`Patrimônio ${nomeAcaoRealizada} com sucesso`, 'Sucesso!'),
+        () => this.mostrarAvisoSucesso(`Patrimônio ${nomeAcaoRealizada} com sucesso`),
         (error: unknown) => {
-          let template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
-          this.toaster[template.tipoMensagem](`${MensagemRequisicao.retornarMensagemDeErroAoRealizarOperacao(nomeAcaoRealizada,"patrimônio", ['o','do'])} Mensagem: ${template.mensagemErro}`, 'Erro!');
+          this.mostrarAvisoErro(error, `${MensagemRequisicao.retornarMensagemDeErroAoRealizarOperacao(nomeAcaoRealizada,"patrimônio", ['o','do'])}`);
         },
         () => {
           setTimeout(() => {
@@ -115,10 +117,8 @@ export class PatrimonioComponent implements OnInit {
         this.valorAtualSituacaoEquipamento = listaDeResposta[0].situacaoEquipamento.toString();
 
        },
-       (error: any) => {
-        let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
-        this.toaster[template.tipoMensagem](`Houve um erro ao tentar carregar o patrimônio. Mensagem: ${template.mensagemErro}`, template.titulo);
-
+       (error: unknown) => {
+        this.mostrarAvisoErro(error, "Houve um erro ao tentar carregar o patrimônio.");
       }).add(() => this.spinner.hide('carregando'));
     }
   }
@@ -126,12 +126,11 @@ export class PatrimonioComponent implements OnInit {
 
   private obterEquipamentos(): void {
     this.equipamento.obterTodosEquipamentos().subscribe({
-      next: (result: Equipamento[]) =>{
-        this.equipamentos = result;
+      next: (dados: DadosRequisicao) =>{
+        this.equipamentos = dados.data as Equipamento[];
       },
       error: (error: unknown) =>{
-        let template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
-        this.toaster[template.tipoMensagem](`Houve um problema ao carregar os equipamentos. Mensagem: ${template.mensagemErro}`, template.titulo);
+        this.mostrarAvisoErro(error,"Houve um problema ao carregar os equipamentos.");
       }});
   }
 
@@ -142,8 +141,7 @@ export class PatrimonioComponent implements OnInit {
         this.funcionarios = result;
       },
       error: (error: unknown) =>{
-        let template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
-        this.toaster[template.tipoMensagem](`Houve um problema ao carregar os funcionários. Mensagem: ${template.mensagemErro}`, 'Erro!');
+        this.mostrarAvisoErro(error, "Houve um problema ao carregar os funcionários.")
       }
     });
   }

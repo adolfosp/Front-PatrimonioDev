@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MensagemRequisicao } from '@nvs-helpers/MensagemRequisicaoHelper';
+import { DadosRequisicao } from '@nvs-models/DadosRequisicao';
 import { Funcionario } from '@nvs-models/Funcionario';
 import { Setor } from '@nvs-models/Setor';
 import { FuncionarioService } from '@nvs-services/funcionario/funcionario.service';
@@ -9,7 +10,6 @@ import { SetorService } from '@nvs-services/setor/setor.service';
 import { CLASSE_BOTAO_LIMPAR } from '@nvs-utils/classes-sass.constant';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
-import { DadosRequisicao } from '../../models/DadosRequisicao';
 
 @Component({
   selector: 'app-funcionario',

@@ -4,6 +4,7 @@ import { ApiService } from '@nvs-services/api/api.service';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
+import { DadosRequisicao } from '../../models/DadosRequisicao';
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +19,8 @@ export class EquipamentoService {
     return this.api.post<Equipamento>(this.baseUrl, {equipamento}).pipe(take(1));
   }
 
-  public obterTodosEquipamentos(): Observable<Equipamento[]> {
-    return this.api.get<Equipamento[]>(this.baseUrl).pipe(take(1));
+  public obterTodosEquipamentos(): Observable<DadosRequisicao> {
+    return this.api.get<DadosRequisicao>(this.baseUrl).pipe(take(1));
   }
 
   public deletarEquipamento(codigoEquipamento: number): Observable<any>{
@@ -28,8 +29,8 @@ export class EquipamentoService {
     .pipe(take(1));
   }
 
-  public obterApenasUmEquipamento(codigoEquipamento: number): Observable<Equipamento> {
-    return this.api.get<Equipamento>(`${this.baseUrl}/${codigoEquipamento}`).pipe(take(1));;
+  public obterApenasUmEquipamento(codigoEquipamento: number): Observable<DadosRequisicao> {
+    return this.api.get<DadosRequisicao>(`${this.baseUrl}/${codigoEquipamento}`).pipe(take(1));
   }
 
   public atualizarEquipamento(equipamento: Equipamento): Observable<Equipamento>{
