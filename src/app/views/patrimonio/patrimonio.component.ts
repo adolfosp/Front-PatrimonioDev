@@ -137,8 +137,8 @@ export class PatrimonioComponent extends Componente implements OnInit {
   private obterFuncionarios(): void{
 
     this.funcionario.obterTodosFuncionarios().subscribe({
-      next: (result: Funcionario[]) =>{
-        this.funcionarios = result;
+      next: (dados: DadosRequisicao) =>{
+        this.funcionarios = dados.data as Funcionario[];
       },
       error: (error: unknown) =>{
         this.mostrarAvisoErro(error, "Houve um problema ao carregar os funcionários.")

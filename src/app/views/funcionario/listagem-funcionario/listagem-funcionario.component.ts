@@ -1,24 +1,24 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { MensagemRequisicao } from '@nvs-helpers/MensagemRequisicaoHelper';
+import Componente from '@nvs-models/Componente';
+import { DadosRequisicao } from '@nvs-models/DadosRequisicao';
 import { Funcionario } from '@nvs-models/Funcionario';
 import { FuncionarioService } from '@nvs-services/funcionario/funcionario.service';
 import { TokenService } from '@nvs-services/token/token.service';
+import configuracaoTabela from '@nvs-utils/configuracao-tabela';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { API, APIDefinition, Columns, Config } from 'ngx-easy-table';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import * as XLSX from 'xlsx';
-import configuracaoTabela from '../../../utils/configuracao-tabela';
 
 @Component({
-  selector: 'app-listagem-funcionario',
   templateUrl: './listagem-funcionario.component.html',
   styleUrls: ['./listagem-funcionario.component.sass'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 
 })
-export class ListagemFuncionarioComponent implements OnInit {
+export class ListagemFuncionarioComponent extends Componente implements OnInit {
 
   @ViewChild('table', { static: true }) table: APIDefinition;
 
@@ -31,7 +31,7 @@ export class ListagemFuncionarioComponent implements OnInit {
 
   public dataFiltradaExcel: Funcionario[] = [];
   public funcionarios: Funcionario[] = [];
-  public funcionarioId: number = 0;
+  public funcionarioId = 0;
   public ehAdministrador = false;
 
   modalRef?: BsModalRef;
@@ -45,7 +45,7 @@ export class ListagemFuncionarioComponent implements OnInit {
     private token: TokenService,
     private detectorAlteracao: ChangeDetectorRef
   ) {
-
+    super(toaster);
   }
 
   ngOnInit(): void {
@@ -75,15 +75,14 @@ export class ListagemFuncionarioComponent implements OnInit {
     this.spinner.show("buscando");
 
     this.funcionarioService.obterTodosFuncionarios().subscribe({
-      next: (funcionarios: Funcionario[]) => {
-        this.dataFiltradaExcel = funcionarios;
+      next: (dados: DadosRequisicao) => {
+        const funcionarios = dados.data as Funcionario[];
+        this.dataFiltradaExcel = funcionarios
         this.data = funcionarios;
 
       },
-      error: (error: any) => {
-        let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
-        this.toaster[template.tipoMensagem](`Houve um erro ao buscar pelos funcionários. Mensagem ${template.mensagemErro}`, template.titulo);
-
+      error: (error: unknown) => {
+        this.mostrarAvisoErro(error,"Houve um erro ao buscar pelos funcionários.")
       },
       complete: () => {
         this.detectorAlteracao.markForCheck();
@@ -97,18 +96,15 @@ export class ListagemFuncionarioComponent implements OnInit {
     this.modalRef?.hide();
     this.spinner.show("desativando");
 
-    debugger;
     this.funcionarioService.desativarFuncionario(this.funcionarioId).subscribe(
       () => {
-        this.toaster.success('Funcionário desativado com sucesso!', 'Deletado');
+        this.mostrarAvisoSucesso("Funcionário desativado com sucesso!");
         this.obterFuncionarios();
       },
-      (error: any) => {
-        let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
-        this.toaster[template.tipoMensagem](`Houve um erro ao desativar o funcionário. Mensagem: ${template.mensagemErro}`, template.titulo);
+      (error: unknown) => {
+        this.mostrarAvisoErro(error, "Houve um erro ao desativar o funcionário.");
       }
     ).add(() => this.spinner.hide("desativando"));
-
   }
 
   public recusar(): void {
@@ -120,7 +116,7 @@ export class ListagemFuncionarioComponent implements OnInit {
   }
 
   public onChange(event: Event): void {
-    let valorDigitado = (event.target as HTMLInputElement).value;
+    const valorDigitado = (event.target as HTMLInputElement).value;
     this.filtrarFuncionarios(valorDigitado);
 
     this.table.apiEvent({
@@ -146,7 +142,7 @@ export class ListagemFuncionarioComponent implements OnInit {
 
       XLSX.writeFile(wb, 'funcionarios.xlsx');
     } catch (err) {
-      this.toaster.error(`Não foi possível exportar a planilha. Mensagem: ${err}`, "Erro")
+      this.mostrarAvisoXLS(`Não foi possível exportar a planilha. Mensagem: ${err}`);
     }
   }
 

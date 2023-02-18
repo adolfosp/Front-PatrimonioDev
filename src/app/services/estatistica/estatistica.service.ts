@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
+import { DadosRequisicao } from '@nvs-models/DadosRequisicao';
 import { ApiService } from '@nvs-services/api/api.service';
 import { Observable, forkJoin } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { DadosRequisicao } from '../../models/DadosRequisicao';
 
 @Injectable({
   providedIn: 'root'

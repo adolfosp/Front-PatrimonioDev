@@ -27,8 +27,8 @@ export class FabricanteService {
     .pipe(take(1));
   }
 
-  public obterApenasUmFabricante(codigoFabricante: number): Observable<Fabricante> {
-    return this.api.get<Fabricante>(`${this.baseUrl}/${codigoFabricante}`).pipe(take(1));
+  public obterApenasUmFabricante(codigoFabricante: number): Observable<DadosRequisicao> {
+    return this.api.get<DadosRequisicao>(`${this.baseUrl}/${codigoFabricante}`).pipe(take(1));
   }
 
   public atualizarFabricante(fabricante: Fabricante): Observable<Fabricante>{
