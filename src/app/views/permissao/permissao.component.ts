@@ -1,28 +1,28 @@
-import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MensagemRequisicao } from '@nvs-helpers/MensagemRequisicaoHelper';
-import { UsuarioPermissao } from '@nvs-models/UsuarioPermissao';
-import { PermissaoService } from '@nvs-services/permissao/permissao.service';
-import { CLASSE_BOTAO_LIMPAR } from '@nvs-utils/classes-sass.constant';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { ToastrService } from 'ngx-toastr';
+import { Component, OnInit } from "@angular/core";
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
+import { MensagemRequisicao } from "@nvs-helpers/MensagemRequisicaoHelper";
+import Componente from "@nvs-models/Componente";
+import { UsuarioPermissao } from "@nvs-models/UsuarioPermissao";
+import { PermissaoService } from "@nvs-services/permissao/permissao.service";
+import { CLASSE_BOTAO_LIMPAR } from "@nvs-utils/classes-sass.constant";
+import { NgxSpinnerService } from "ngx-spinner";
+import { ToastrService } from "ngx-toastr";
+import { DadosRequisicao } from '../../models/DadosRequisicao';
 
 @Component({
-  selector: 'app-permissao',
-  templateUrl: './permissao.component.html',
-  styleUrls: ['./permissao.component.sass', '../../../assets/style-base.sass']
+  selector: "app-permissao",
+  templateUrl: "./permissao.component.html",
+  styleUrls: ["./permissao.component.sass", "../../../assets/style-base.sass"],
 })
-export class PermissaoComponent implements OnInit {
-
+export class PermissaoComponent extends Componente implements OnInit {
   private usuarioPermissao = {} as UsuarioPermissao;
   private codigoPerfil: number;
   private limpandoCampo = false;
 
   public form!: FormGroup;
-  public estadoSalvar = 'cadastrarPermissao';
+  public estadoSalvar = "cadastrarPermissao";
   public readonly classeBotaoLimpar = CLASSE_BOTAO_LIMPAR;
-
 
   get f(): any {
     return this.form.controls;
@@ -34,7 +34,10 @@ export class PermissaoComponent implements OnInit {
     private toaster: ToastrService,
     private router: Router,
     private permissaoService: PermissaoService,
-    private activateRouter: ActivatedRoute) { }
+    private activateRouter: ActivatedRoute,
+  ) {
+    super(toaster);
+  }
 
   ngOnInit(): void {
     this.validacao();
@@ -44,17 +47,116 @@ export class PermissaoComponent implements OnInit {
 
   //TODO: Realizar busca do banco
   permissoesPorContexto: Array<any> = [
-    { nomeContexto: 'Patrimônio', codigo: 1, permissoes: [{ name: 'Alterar', value: 1, checked: false }, { name: 'Adicionar', value: 2, checked: false }, { name: 'Listar', value: 3, checked: false }, { name: 'Remover', value: 4, checked: false }, { name: 'Desativar', value: 5, checked: false }] },
-    { nomeContexto: 'Setor', codigo: 2, permissoes: [{ name: 'Alterar', value: 1, checked: false }, { name: 'Adicionar', value: 2, checked: false }, { name: 'Listar', value: 3, checked: false }, { name: 'Remover', value: 4, checked: false }, { name: 'Desativar', value: 5, checked: false }] },
-    { nomeContexto: 'Empresa', codigo: 3, permissoes: [{ name: 'Alterar', value: 1, checked: false }, { name: 'Adicionar', value: 2, checked: false }, { name: 'Listar', value: 3, checked: false }, { name: 'Remover', value: 4, checked: false }, { name: 'Desativar', value: 5, checked: false }] },
-    { nomeContexto: 'Equipamento', codigo: 4, permissoes: [{ name: 'Alterar', value: 1, checked: false }, { name: 'Adicionar', value: 2, checked: false }, { name: 'Listar', value: 3, checked: false }, { name: 'Remover', value: 4, checked: false }, { name: 'Desativar', value: 5, checked: false }] },
-    { nomeContexto: 'Permissão', codigo: 5, permissoes: [{ name: 'Alterar', value: 1, checked: false }, { name: 'Adicionar', value: 2, checked: false }, { name: 'Listar', value: 3, checked: false }, { name: 'Remover', value: 4, checked: false }, { name: 'Desativar', value: 5, checked: false }] },
-    { nomeContexto: 'Fabricante', codigo: 6, permissoes: [{ name: 'Alterar', value: 1, checked: false }, { name: 'Adicionar', value: 2, checked: false }, { name: 'Listar', value: 3, checked: false }, { name: 'Remover', value: 4, checked: false }, { name: 'Desativar', value: 5, checked: false }] },
-    { nomeContexto: 'Funcionário', codigo: 7, permissoes: [{ name: 'Alterar', value: 1, checked: false }, { name: 'Adicionar', value: 2, checked: false }, { name: 'Listar', value: 3, checked: false }, { name: 'Remover', value: 4, checked: false }, { name: 'Desativar', value: 5, checked: false }] },
-    { nomeContexto: 'Movimentação', codigo: 8, permissoes: [{ name: 'Alterar', value: 1, checked: false }, { name: 'Adicionar', value: 2, checked: false }, { name: 'Listar', value: 3, checked: false }, { name: 'Remover', value: 4, checked: false }, { name: 'Desativar', value: 5, checked: false }] },
-    { nomeContexto: 'Categoria Equipamento', codigo: 9, permissoes: [{ name: 'Alterar', value: 1, checked: false }, { name: 'Adicionar', value: 2, checked: false }, { name: 'Listar', value: 3, checked: false }, { name: 'Remover', value: 4, checked: false }, { name: 'Desativar', value: 5, checked: false }] },
-    { nomeContexto: 'Usuário', codigo: 10, permissoes: [{ name: 'Alterar', value: 1, checked: false }, { name: 'Adicionar', value: 2, checked: false }, { name: 'Listar', value: 3, checked: false }, { name: 'Remover', value: 4, checked: false }, { name: 'Desativar', value: 5, checked: false }] },
-
+    {
+      nomeContexto: "Patrimônio",
+      codigo: 1,
+      permissoes: [
+        { name: "Alterar", value: 1, checked: false },
+        { name: "Adicionar", value: 2, checked: false },
+        { name: "Listar", value: 3, checked: false },
+        { name: "Remover", value: 4, checked: false },
+        { name: "Desativar", value: 5, checked: false },
+      ],
+    },
+    {
+      nomeContexto: "Setor",
+      codigo: 2,
+      permissoes: [
+        { name: "Alterar", value: 1, checked: false },
+        { name: "Adicionar", value: 2, checked: false },
+        { name: "Listar", value: 3, checked: false },
+        { name: "Remover", value: 4, checked: false },
+        { name: "Desativar", value: 5, checked: false },
+      ],
+    },
+    {
+      nomeContexto: "Empresa",
+      codigo: 3,
+      permissoes: [
+        { name: "Alterar", value: 1, checked: false },
+        { name: "Adicionar", value: 2, checked: false },
+        { name: "Listar", value: 3, checked: false },
+        { name: "Remover", value: 4, checked: false },
+        { name: "Desativar", value: 5, checked: false },
+      ],
+    },
+    {
+      nomeContexto: "Equipamento",
+      codigo: 4,
+      permissoes: [
+        { name: "Alterar", value: 1, checked: false },
+        { name: "Adicionar", value: 2, checked: false },
+        { name: "Listar", value: 3, checked: false },
+        { name: "Remover", value: 4, checked: false },
+        { name: "Desativar", value: 5, checked: false },
+      ],
+    },
+    {
+      nomeContexto: "Permissão",
+      codigo: 5,
+      permissoes: [
+        { name: "Alterar", value: 1, checked: false },
+        { name: "Adicionar", value: 2, checked: false },
+        { name: "Listar", value: 3, checked: false },
+        { name: "Remover", value: 4, checked: false },
+        { name: "Desativar", value: 5, checked: false },
+      ],
+    },
+    {
+      nomeContexto: "Fabricante",
+      codigo: 6,
+      permissoes: [
+        { name: "Alterar", value: 1, checked: false },
+        { name: "Adicionar", value: 2, checked: false },
+        { name: "Listar", value: 3, checked: false },
+        { name: "Remover", value: 4, checked: false },
+        { name: "Desativar", value: 5, checked: false },
+      ],
+    },
+    {
+      nomeContexto: "Funcionário",
+      codigo: 7,
+      permissoes: [
+        { name: "Alterar", value: 1, checked: false },
+        { name: "Adicionar", value: 2, checked: false },
+        { name: "Listar", value: 3, checked: false },
+        { name: "Remover", value: 4, checked: false },
+        { name: "Desativar", value: 5, checked: false },
+      ],
+    },
+    {
+      nomeContexto: "Movimentação",
+      codigo: 8,
+      permissoes: [
+        { name: "Alterar", value: 1, checked: false },
+        { name: "Adicionar", value: 2, checked: false },
+        { name: "Listar", value: 3, checked: false },
+        { name: "Remover", value: 4, checked: false },
+        { name: "Desativar", value: 5, checked: false },
+      ],
+    },
+    {
+      nomeContexto: "Categoria Equipamento",
+      codigo: 9,
+      permissoes: [
+        { name: "Alterar", value: 1, checked: false },
+        { name: "Adicionar", value: 2, checked: false },
+        { name: "Listar", value: 3, checked: false },
+        { name: "Remover", value: 4, checked: false },
+        { name: "Desativar", value: 5, checked: false },
+      ],
+    },
+    {
+      nomeContexto: "Usuário",
+      codigo: 10,
+      permissoes: [
+        { name: "Alterar", value: 1, checked: false },
+        { name: "Adicionar", value: 2, checked: false },
+        { name: "Listar", value: 3, checked: false },
+        { name: "Remover", value: 4, checked: false },
+        { name: "Desativar", value: 5, checked: false },
+      ],
+    },
   ];
 
   public limparCampos(): void {
@@ -63,66 +165,67 @@ export class PermissaoComponent implements OnInit {
   }
 
   private controlarVisibilidadeCampoAtivo(): void {
-
-    if (this.estadoSalvar == 'cadastrarPermissao'){
-      this.form.controls['ativo'].disable();
+    if (this.estadoSalvar == "cadastrarPermissao") {
+      this.form.controls["ativo"].disable();
       return;
     }
 
-    this.form.controls['ativo'].enable()
+    this.form.controls["ativo"].enable();
   }
 
   public carregarPermissao(): void {
-    this.codigoPerfil = +this.activateRouter.snapshot.paramMap.get('codigoPermissao');
+    this.codigoPerfil = +this.activateRouter.snapshot.paramMap.get("codigoPermissao");
 
     if (this.codigoPerfil !== null && this.codigoPerfil !== 0) {
-      this.estadoSalvar = 'atualizarPermissao';
-      this.spinner.show('carregando');
+      this.estadoSalvar = "atualizarPermissao";
+      this.spinner.show("carregando");
 
-      this.permissaoService.obterApenasUmaPermissao(this.codigoPerfil).subscribe(
-        {
-          next: (permissao: UsuarioPermissao[]) => {
-            this.usuarioPermissao = permissao[0];
+      this.permissaoService
+        .obterApenasUmaPermissao(this.codigoPerfil)
+        .subscribe({
+          next: (dados: DadosRequisicao) => {
+            this.usuarioPermissao = dados.data[0];
             this.form.patchValue(this.usuarioPermissao);
-            this.atribuirPermissoesAoControleForm(permissao);
+            this.atribuirPermissoesAoControleForm(dados.data);
           },
           error: (error: unknown) => {
-            const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
-            this.toaster[template.tipoMensagem](`Houve um erro ao carregar a permissão. Mensagem ${template.mensagemErro}`, template.titulo);
-          }
-        }
-      ).add(() => this.spinner.hide('carregando'));
+            this.mostrarAvisoErro(error, "Houve um erro ao carregar a permissão.");
+          },
+        })
+        .add(() => this.spinner.hide("carregando"));
     }
   }
 
   private atribuirPermissoesAoControleForm(permissao: UsuarioPermissao[]): void {
-
-    const acoesPorContexto: FormArray = this.form.get('acoesPorContexto') as FormArray;
+    const acoesPorContexto: FormArray = this.form.get("acoesPorContexto") as FormArray;
     for (let i = 0; i < permissao.length; i++) {
-
       //TODO: IMPLEMENTAR A PERMISSAO DE PERDA E PERFIL
-      if(i>= 10) continue;
+      if (i >= 10) continue;
 
       for (let k = 0; k < permissao[i].codigosPermissao?.length; k++) {
-        this.permissoesPorContexto[permissao[i].codigoContexto - 1].permissoes[permissao[i].codigosPermissao[k] - 1].checked = true;
-        const permissaoFormatada = `${permissao[i].codigoContexto}-${this.permissoesPorContexto[permissao[i].codigoContexto - 1].permissoes[permissao[i].codigosPermissao[k] - 1].value}`;
+        this.permissoesPorContexto[permissao[i].codigoContexto - 1].permissoes[
+          permissao[i].codigosPermissao[k] - 1
+        ].checked = true;
+        const permissaoFormatada = `${permissao[i].codigoContexto}-${
+          this.permissoesPorContexto[permissao[i].codigoContexto - 1].permissoes[permissao[i].codigosPermissao[k] - 1]
+            .value
+        }`;
         acoesPorContexto.push(new FormControl(permissaoFormatada));
       }
-
     }
   }
 
   private validacao(): void {
     this.form = this.fb.group({
-      codigoPerfil: new FormControl(this.limpandoCampo ? this.form.get('codigoUsuarioPermissao').value : 0, []),
-      descricaoPerfil: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
+      codigoPerfil: new FormControl(this.limpandoCampo ? this.form.get("codigoUsuarioPermissao").value : 0, []),
+      descricaoPerfil: new FormControl("", [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
       ativo: new FormControl(true),
-      acoesPorContexto: this.fb.array([], [Validators.required])
+      acoesPorContexto: this.fb.array([], [Validators.required]),
     });
   }
 
   public onCheckBoxMarcada(e) {
-    const acoesPorContexto: FormArray = this.form.get('acoesPorContexto') as FormArray;
+    const acoesPorContexto: FormArray = this.form.get("acoesPorContexto") as FormArray;
     if (e.checked) {
       acoesPorContexto.push(new FormControl(e.source.value));
     } else {
@@ -138,27 +241,34 @@ export class PermissaoComponent implements OnInit {
   }
 
   public salvarAlteracao(): void {
-
-    const atualizando = this.estadoSalvar == 'atualizarPatrimonio';
-    const nomeAcaoRealizada = atualizando ? 'atualizada' : 'cadastrada';
+    const atualizando = this.estadoSalvar == "atualizarPatrimonio";
+    const nomeAcaoRealizada = atualizando ? "atualizada" : "cadastrada";
 
     this.spinner.show(nomeAcaoRealizada);
 
-    this.usuarioPermissao = (this.estadoSalvar === 'cadastrarPermissao') ? { ...this.form.value } : { codigoPerfil: this.usuarioPermissao.codigoPerfil, ...this.form.value };
+    this.usuarioPermissao =
+      this.estadoSalvar === "cadastrarPermissao"
+        ? { ...this.form.value }
+        : { codigoPerfil: this.usuarioPermissao.codigoPerfil, ...this.form.value };
 
-    this.permissaoService[this.estadoSalvar](this.usuarioPermissao).subscribe(
-      () => this.toaster.success(`Permissão ${nomeAcaoRealizada} com sucesso`, 'Sucesso!'),
-      (error: unknown) => {
-        const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
-        this.toaster[template.tipoMensagem](`${MensagemRequisicao.retornarMensagemDeErroAoRealizarOperacao(nomeAcaoRealizada, "permissão", ['o', 'da'])} Mensagem: ${template.mensagemErro}`, template.titulo);
-      },
-      () => {
-        setTimeout(() => {
-          this.router.navigate(['dashboard/permissao/listagem'])
-        }, 1700)
-      }
-    ).add(() => this.spinner.hide(nomeAcaoRealizada));
+    this.permissaoService[this.estadoSalvar](this.usuarioPermissao)
+      .subscribe(
+        () => this.mostrarAvisoSucesso(`Permissão ${nomeAcaoRealizada} com sucesso`),
+        (error: unknown) => {
+          this.mostrarAvisoErro(
+            error,
+            `${MensagemRequisicao.retornarMensagemDeErroAoRealizarOperacao(nomeAcaoRealizada, "permissão", [
+              "o",
+              "da",
+            ])}`,
+          );
+        },
+        () => {
+          setTimeout(() => {
+            this.router.navigate(["dashboard/permissao/listagem"]);
+          }, 1700);
+        },
+      )
+      .add(() => this.spinner.hide(nomeAcaoRealizada));
   }
 }
-
-

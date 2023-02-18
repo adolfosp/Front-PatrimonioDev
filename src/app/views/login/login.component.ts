@@ -1,28 +1,32 @@
-import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { ToastrService } from 'ngx-toastr';
-import { from } from 'rxjs';
+import {
+  FacebookLoginProvider,
+  GoogleLoginProvider,
+  SocialAuthService,
+  SocialUser
+} from "@abacritt/angularx-social-login";
+import { Component, OnInit } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Router } from "@angular/router";
+import { NgxSpinnerService } from "ngx-spinner";
+import { ToastrService } from "ngx-toastr";
 
-import { LocalStorageService } from '@nvs-services/local-storage/local-storage.service';
-import { UsuarioService } from '@nvs-services/usuario/usuario.service';
+import { LocalStorageService } from "@nvs-services/local-storage/local-storage.service";
+import { UsuarioService } from "@nvs-services/usuario/usuario.service";
 
-import { LocalStorageChave } from '@nvs-enum/local-storage-chave.enum';
-import { MensagemRequisicao } from '@nvs-helpers/MensagemRequisicaoHelper';
+import { LocalStorageChave } from "@nvs-enum/local-storage-chave.enum";
 
-import { atribuirModoDarkLightPadrao, atribuirTemaCorretoAoRecarregarPagina } from '@nvs-helpers/ModoDarkLightHelper';
-import { CriptografiaService } from '@nvs-services/criptografia/criptografia.service';
+import { atribuirModoDarkLightPadrao, atribuirTemaCorretoAoRecarregarPagina } from "@nvs-helpers/ModoDarkLightHelper";
+import Componente from "@nvs-models/Componente";
+import { CriptografiaService } from "@nvs-services/criptografia/criptografia.service";
+import { from } from "rxjs";
 
 @Component({
-  selector: 'app-dashboard',
-  styleUrls: ['./login.component.sass', '../../../assets/style-base.sass'],
-  templateUrl: 'login.component.html'
+  selector: "app-dashboard",
+  styleUrls: ["./login.component.sass", "../../../assets/style-base.sass"],
+  templateUrl: "login.component.html",
 })
-export class LoginComponent implements OnInit {
-//REFATORAR: Melhorar parte de login pelo google e facebook
-  form!: FormGroup
+export class LoginComponent extends Componente implements OnInit {
+  form!: FormGroup;
   public lembrarMe: boolean;
 
   public ehAutenticacaoAuth: boolean;
@@ -34,8 +38,8 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.authService.authState.subscribe((user) => {
-      if(typeof user !== 'undefined' || user !== null){
-        this.realizarRequisicaoObterUsuario(user.email, "1e9g63", true)
+      if (typeof user !== "undefined" || user !== null) {
+        this.realizarRequisicaoObterUsuario(user.email, "1e9g63", true);
       }
     });
 
@@ -53,33 +57,32 @@ export class LoginComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private authService: SocialAuthService,
     private encriptar: CriptografiaService,
-    private localStorageService: LocalStorageService) {
+    private localStorageService: LocalStorageService,
+  ) {
+    super(toaster);
   }
 
-
   private atribuirTipoModoVisualizacaoPadrao(): void {
-
-    if (this.localStorageService.obterChave(LocalStorageChave.DarkMode) == ''){
+    if (this.localStorageService.obterChave(LocalStorageChave.DarkMode) == "") {
       atribuirModoDarkLightPadrao();
       return;
     }
 
     atribuirTemaCorretoAoRecarregarPagina();
-
   }
 
-  public alterarLembrarMe():void {
-    const decisaoUsuario = this.lembrarMe == true ? 'sim': 'nao';
+  public alterarLembrarMe(): void {
+    const decisaoUsuario = this.lembrarMe == true ? "sim" : "nao";
     this.localStorageService.adicionarChave(LocalStorageChave.LembrarMe, decisaoUsuario);
   }
 
   private atribuirValorLembrarMe(): void {
     const valor: string = this.localStorageService.obterChave(LocalStorageChave.LembrarMe);
-    this.lembrarMe = valor == 'sim';
+    this.lembrarMe = valor == "sim";
   }
 
   private googleLogIn() {
-    return from(this.authService.signIn(GoogleLoginProvider.PROVIDER_ID))
+    return from(this.authService.signIn(GoogleLoginProvider.PROVIDER_ID));
   }
 
   private signInWithFB() {
@@ -87,78 +90,73 @@ export class LoginComponent implements OnInit {
   }
 
   public logarComFacebook() {
-
-    this.signInWithFB().subscribe(
-      (result: any) => {
-        this.usuarioAuth = result
+    this.signInWithFB().subscribe({
+      next: (result: any) => {
+        this.usuarioAuth = result;
       },
-      (error: unknown) => {
+      error: (error: unknown) => {
         if (error["error"] !== "popup_closed_by_user")
-          this.toaster.error(`Houve um erro ao fazer login com a conta da Google. Mensagem : ${error["error"]}`)
+        this.mostrarAvisoErro(error, "Houve um erro ao fazer login com a conta da Google.");
       },
-      () => {
+      complete: () => {
         //TODO: Realizar tudo por post
-        this.realizarRequisicaoObterUsuario(this.usuarioAuth.email, "1e9g63", true)
-      }
-    );
+        this.realizarRequisicaoObterUsuario(this.usuarioAuth.email, "1e9g63", true);
+      },
+    });
   }
 
   public validarCredenciais(): void {
-
     this.removerToken();
     this.spinner.show();
 
-    const credenciais = { ...this.form.value }
+    const credenciais = { ...this.form.value };
     this.realizarRequisicaoObterUsuario(credenciais.email, credenciais.senha, false);
-
   }
 
   private realizarRequisicaoObterUsuario(email: string, senha: string, autenticacaoAuth: boolean): void {
-
     this.ehAutenticacaoAuth = autenticacaoAuth;
-    this.spinner.show()
+    this.spinner.show();
 
-    this.usuarioService.obterUsuarioPorEmailESenha(email, senha, autenticacaoAuth).subscribe({
-      next: (result: any) => {
-        debugger;
-        this.localStorageService.adicionarChave(LocalStorageChave.Valor, this.encriptar.encrypt(result.token))
+    this.usuarioService
+      .obterUsuarioPorEmailESenha(email, senha, autenticacaoAuth)
+      .subscribe({
+        next: (result: any) => {
+          this.localStorageService.adicionarChave(LocalStorageChave.Valor, this.encriptar.encrypt(result.token));
 
-        if (result.length !== 0) {
-          this.router.navigate(['dashboard']);
-        }
-      },
-      error: (error: unknown) => {
-        this.toaster.toastrConfig.timeOut = 5000;
-        if (error["status"] == 400 && this.ehAutenticacaoAuth) {
-          this.router.navigate(["register"], { queryParams: { email: this.usuarioAuth.email } })
-          this.toaster.info(`Para continuar, é necessário preencher o formulário.`)
-
-        } else {
-          const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
-          this.toaster[template.tipoMensagem](`Houve um erro ao fazer login. Mensagem: ${template.mensagemErro}`, template.titulo);
-        }
-      }
-    }).add(() => this.spinner.hide())
+          if (result.length !== 0) {
+            this.router.navigate(["dashboard"]);
+          }
+        },
+        error: (error: unknown) => {
+          this.toaster.toastrConfig.timeOut = 5000;
+          if (error["status"] == 400 && this.ehAutenticacaoAuth) {
+            this.router.navigate(["register"], { queryParams: { email: this.usuarioAuth.email } });
+            this.toaster.info(`Para continuar, é necessário preencher o formulário.`);
+          } else {
+            this.mostrarAvisoErro(error, "Houve um erro ao fazer login.")
+          }
+        },
+      })
+      .add(() => this.spinner.hide());
   }
 
   private removerToken() {
-    this.localStorageService.removerChave(LocalStorageChave.Valor)
+    this.localStorageService.removerChave(LocalStorageChave.Valor);
   }
 
   public validarCamposFormulario(): void {
     this.form = this.fb.group({
-      email: ['', [Validators.required, Validators.minLength(10), Validators.email]],
-      senha: ['', [Validators.required, Validators.minLength(5)]],
+      email: ["", [Validators.required, Validators.minLength(10), Validators.email]],
+      senha: ["", [Validators.required, Validators.minLength(5)]],
     });
   }
 
   private autoLogin() {
     const token = this.localStorageService.obterChave(LocalStorageChave.Valor);
-    const lembrarMe =  this.localStorageService.obterChave(LocalStorageChave.LembrarMe);
+    const lembrarMe = this.localStorageService.obterChave(LocalStorageChave.LembrarMe);
 
-    if (token && lembrarMe == 'sim') {
-      this.router.navigate(['dashboard']);
+    if (token && lembrarMe == "sim") {
+      this.router.navigate(["dashboard"]);
     }
   }
-
 }

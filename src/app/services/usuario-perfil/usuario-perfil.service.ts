@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DadosRequisicao } from '@nvs-models/DadosRequisicao';
 import { UsuarioPerfil } from '@nvs-models/UsuarioPerfil';
 import { ApiService } from '@nvs-services/api/api.service';
 import { Observable } from 'rxjs';
@@ -14,8 +15,8 @@ export class UsuarioPerfilService {
 
   constructor(private api: ApiService) { }
 
-  public obterPerfilUsuario(codigoUsuario: number): Observable<UsuarioPerfil>{
-    return this.api.get<UsuarioPerfil>(`${this.baseUrl}/${codigoUsuario}`).pipe(take(1));
+  public obterPerfilUsuario(codigoUsuario: number): Observable<DadosRequisicao>{
+    return this.api.get<DadosRequisicao>(`${this.baseUrl}/${codigoUsuario}`).pipe(take(1));
   }
 
   public atualizarPerfilUsuario(perfil: UsuarioPerfil): Observable<number>{
@@ -26,7 +27,6 @@ export class UsuarioPerfilService {
     const arquivoUpload = file;
     const formData = new FormData();
     formData.append('file', arquivoUpload);
-
     return this.api.postImage<UsuarioPerfil>(`${this.baseUrl}/upload-imagem/${codigoUsuario}`, formData);
   }
 

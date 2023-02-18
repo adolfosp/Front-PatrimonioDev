@@ -1,24 +1,26 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MovimentacaoEquipamento } from '@nvs-enum/movimentacao-equipamento.enum';
-import { MensagemRequisicao } from '@nvs-helpers/MensagemRequisicaoHelper';
+import Componente from '@nvs-models/Componente';
 import { Movimentacao } from '@nvs-models/Movimentacao';
 import { CriptografiaService } from '@nvs-services/criptografia/criptografia.service';
 import { MovimentacaoService } from '@nvs-services/movimentacao/movimentacao.service';
+import configuracaoTabela from '@nvs-utils/configuracao-tabela';
 import { API, APIDefinition, Columns, Config } from 'ngx-easy-table';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
-import configuracaoTabela from '../../../utils/configuracao-tabela';
+import { DadosRequisicao } from '../../../models/DadosRequisicao';
 
 @Component({
-  selector: 'app-listagem-movimentacao',
   templateUrl: './listagem-movimentacao.component.html',
   styleUrls: ['./listagem-movimentacao.component.sass'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 
 })
-export class ListagemMovimentacaoComponent implements OnInit {
+export class ListagemMovimentacaoComponent extends Componente implements OnInit {
   @ViewChild('table', { static: true }) table: APIDefinition;
+
+  private _codigoPatrimonio: number;
 
   public configuracao: Config;
   public data: Movimentacao[] = [];
@@ -26,8 +28,6 @@ export class ListagemMovimentacaoComponent implements OnInit {
   public innerWidth: number;
   public toggledRows = new Set<number>();
   public colunas: Columns[];
-
-  private codigoPatrimonio: number;
   public movimentacoes: Movimentacao[] = [];
 
   constructor(
@@ -38,7 +38,9 @@ export class ListagemMovimentacaoComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private encriptacao: CriptografiaService,
     private detectorAlteracao: ChangeDetectorRef
-  ) { }
+  ) {
+    super(toaster);
+  }
 
   get isMobile(): boolean {
     return this.innerWidth <= 768;
@@ -57,7 +59,7 @@ export class ListagemMovimentacaoComponent implements OnInit {
   }
 
   public onChange(event: Event): void {
-    let valorDigitado = (event.target as HTMLInputElement).value;
+    const valorDigitado = (event.target as HTMLInputElement).value;
 
     this.table.apiEvent({
       type: API.onGlobalSearch,
@@ -109,24 +111,22 @@ export class ListagemMovimentacaoComponent implements OnInit {
   }
 
   private obterMovimentacoes(): void {
-    this.activatedRoute.queryParams.subscribe(parametro => {this.codigoPatrimonio = +this.encriptacao.decrypt(parametro['codigoPatrimonio']) })
+    this.activatedRoute.queryParams.subscribe(parametro => {this._codigoPatrimonio = +this.encriptacao.decrypt(parametro['codigoPatrimonio']) })
 
     this.spinner.show("buscando");
 
-    this.movimentacaoService.obterTodasMovimentacoesDoPatrimonio(this.codigoPatrimonio).subscribe({
-      next: (movimentacoes: Movimentacao[]) => {
-        this.movimentacoes = movimentacoes;
-        this.data = movimentacoes;
+    this.movimentacaoService.obterTodasMovimentacoesDoPatrimonio(this._codigoPatrimonio).subscribe({
+      next: (dados: DadosRequisicao) => {
+        const movimentacao = dados.data as Movimentacao[];
+        this.movimentacoes = movimentacao
+        this.data = movimentacao;
       },
-      error: (error: any) => {
-        let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
-        this.toaster[template.tipoMensagem](`Houve um erro ao buscar pelas movimentações. Mensagem ${template.mensagemErro}`, 'Erro');
-
+      error: (error: unknown) => {
+        this.mostrarAvisoErro(error, "Houve um erro ao buscar pelas movimentações.");
       },
       complete: () =>{
         this.detectorAlteracao.markForCheck();
       }
-
     }).add(() => this.spinner.hide("buscando"));
   }
 
