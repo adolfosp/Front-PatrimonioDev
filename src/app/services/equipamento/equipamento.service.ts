@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
+import { DadosRequisicao } from '@nvs-models/DadosRequisicao';
 import { Equipamento } from '@nvs-models/Equipamento';
 import { ApiService } from '@nvs-services/api/api.service';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { DadosRequisicao } from '@nvs-models/DadosRequisicao';
 
 @Injectable({
   providedIn: 'root'
