@@ -15,7 +15,6 @@ import { SetorService } from "@nvs-services/setor/setor.service";
 import { UsuarioService } from "@nvs-services/usuario/usuario.service";
 import { CLASSE_BOTAO_LIMPAR } from "@nvs-utils/classes-sass.constant";
 import { NgxSpinnerService } from "ngx-spinner";
-import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: "app-usuario",
@@ -40,7 +39,6 @@ export class UsuarioComponent extends Componente implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private toaster: ToastrService,
     private spinner: NgxSpinnerService,
     private setorService: SetorService,
     private empresaService: EmpresaService,
@@ -49,7 +47,7 @@ export class UsuarioComponent extends Componente implements OnInit {
     private usuarioService: UsuarioService,
     private activateRouter: ActivatedRoute,
   ) {
-    super(toaster);
+    super();
   }
 
   ngOnInit(): void {

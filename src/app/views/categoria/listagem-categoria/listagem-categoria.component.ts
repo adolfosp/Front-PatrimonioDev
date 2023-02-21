@@ -9,7 +9,6 @@ import configuracaoTabela from '@nvs-utils/configuracao-tabela';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { API, APIDefinition, Columns, Config } from 'ngx-easy-table';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ToastrService } from 'ngx-toastr';
 import * as XLSX from 'xlsx';
 
 
@@ -42,12 +41,11 @@ export class ListagemCategoriaComponent extends Componente implements OnInit {
     private categoriaService: CategoriaService,
     private spinner: NgxSpinnerService,
     private modalService: BsModalService,
-    private toaster: ToastrService,
     private router: Router,
     private token: TokenService,
     private detectorAlteracao: ChangeDetectorRef
   ) {
-    super(toaster);
+    super();
 
   }
 

@@ -3,7 +3,6 @@ import { AbstractControlOptions, FormBuilder, FormControl, FormGroup, Validators
 import { Router } from "@angular/router";
 
 import { NgxSpinnerService } from "ngx-spinner";
-import { ToastrService } from "ngx-toastr";
 
 import { DarkModeImagemHelper } from "@nvs-helpers/DarkModeImagemHelper";
 import { atribuirTemaCorretoAoRecarregarPagina } from "@nvs-helpers/ModoDarkLightHelper";
@@ -30,10 +29,9 @@ export class RegistrarComponent extends Componente implements OnInit {
     private fb: FormBuilder,
     private spinner: NgxSpinnerService,
     private usuarioService: UsuarioService,
-    private toaster: ToastrService,
     private router: Router,
   ) {
-    super(toaster);
+    super();
     const emailURL = this.router.getCurrentNavigation().extras;
     this.emailAuth = typeof emailURL.queryParams == "undefined" ? "" : emailURL.queryParams["email"];
   }
@@ -85,7 +83,6 @@ export class RegistrarComponent extends Componente implements OnInit {
       .subscribe({
         next: () => this.mostrarAvisoSucesso("Usuário cadastrado com sucesso. Redirecionando para a tela de login"),
         error: (error: unknown) => {
-          this.toaster.toastrConfig.timeOut = 2000;
           this.mostrarAvisoErro(error, "Houve um erro durante o cadastro do usuário.");
         },
         complete: () => {

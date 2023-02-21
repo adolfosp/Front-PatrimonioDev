@@ -12,7 +12,6 @@ import { EquipamentoService } from "@nvs-services/equipamento/equipamento.servic
 import { FabricanteService } from "@nvs-services/fabricante/fabricante.service";
 import { CLASSE_BOTAO_LIMPAR } from "@nvs-utils/classes-sass.constant";
 import { NgxSpinnerService } from "ngx-spinner";
-import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: "app-equipamento",
@@ -38,14 +37,13 @@ export class EquipamentoComponent extends Componente implements OnInit {
   constructor(
     private fb: FormBuilder,
     private spinner: NgxSpinnerService,
-    private toaster: ToastrService,
     private router: Router,
     private equipamentoService: EquipamentoService,
     private fabricanteService: FabricanteService,
     private categoriaService: CategoriaService,
     private activateRouter: ActivatedRoute,
   ) {
-    super(toaster);
+    super();
   }
 
   ngOnInit(): void {

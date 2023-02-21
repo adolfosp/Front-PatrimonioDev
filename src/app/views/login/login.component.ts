@@ -1,14 +1,10 @@
 import {
-  FacebookLoginProvider,
-  GoogleLoginProvider,
-  SocialAuthService,
   SocialUser
 } from "@abacritt/angularx-social-login";
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { NgxSpinnerService } from "ngx-spinner";
-import { ToastrService } from "ngx-toastr";
 
 import { LocalStorageService } from "@nvs-services/local-storage/local-storage.service";
 import { UsuarioService } from "@nvs-services/usuario/usuario.service";
@@ -18,7 +14,6 @@ import { LocalStorageChave } from "@nvs-enum/local-storage-chave.enum";
 import { atribuirModoDarkLightPadrao, atribuirTemaCorretoAoRecarregarPagina } from "@nvs-helpers/ModoDarkLightHelper";
 import Componente from "@nvs-models/Componente";
 import { CriptografiaService } from "@nvs-services/criptografia/criptografia.service";
-import { from } from "rxjs";
 
 @Component({
   selector: "app-dashboard",
@@ -37,12 +32,6 @@ export class LoginComponent extends Componente implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authService.authState.subscribe((user) => {
-      if (typeof user !== "undefined" || user !== null) {
-        this.realizarRequisicaoObterUsuario(user.email, "1e9g63", true);
-      }
-    });
-
     this.validarCamposFormulario();
     this.atribuirValorLembrarMe();
     this.autoLogin();
@@ -52,14 +41,12 @@ export class LoginComponent extends Componente implements OnInit {
   constructor(
     private usuarioService: UsuarioService,
     private fb: FormBuilder,
-    private toaster: ToastrService,
     private router: Router,
     private spinner: NgxSpinnerService,
-    private authService: SocialAuthService,
     private encriptar: CriptografiaService,
     private localStorageService: LocalStorageService,
   ) {
-    super(toaster);
+    super();
   }
 
   private atribuirTipoModoVisualizacaoPadrao(): void {
@@ -79,30 +66,6 @@ export class LoginComponent extends Componente implements OnInit {
   private atribuirValorLembrarMe(): void {
     const valor: string = this.localStorageService.obterChave(LocalStorageChave.LembrarMe);
     this.lembrarMe = valor == "sim";
-  }
-
-  private googleLogIn() {
-    return from(this.authService.signIn(GoogleLoginProvider.PROVIDER_ID));
-  }
-
-  private signInWithFB() {
-    return from(this.authService.signIn(FacebookLoginProvider.PROVIDER_ID));
-  }
-
-  public logarComFacebook() {
-    this.signInWithFB().subscribe({
-      next: (result: any) => {
-        this.usuarioAuth = result;
-      },
-      error: (error: unknown) => {
-        if (error["error"] !== "popup_closed_by_user")
-        this.mostrarAvisoErro(error, "Houve um erro ao fazer login com a conta da Google.");
-      },
-      complete: () => {
-        //TODO: Realizar tudo por post
-        this.realizarRequisicaoObterUsuario(this.usuarioAuth.email, "1e9g63", true);
-      },
-    });
   }
 
   public validarCredenciais(): void {
@@ -128,10 +91,9 @@ export class LoginComponent extends Componente implements OnInit {
           }
         },
         error: (error: unknown) => {
-          this.toaster.toastrConfig.timeOut = 5000;
           if (error["status"] == 400 && this.ehAutenticacaoAuth) {
             this.router.navigate(["register"], { queryParams: { email: this.usuarioAuth.email } });
-            this.toaster.info(`Para continuar, é necessário preencher o formulário.`);
+            this.mostrarAvisoInfo('Para continuar, é necessário preencher o formulário.');
           } else {
             this.mostrarAvisoErro(error, "Houve um erro ao fazer login.")
           }

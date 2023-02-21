@@ -3,12 +3,11 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@ang
 import { ActivatedRoute, Router } from "@angular/router";
 import { MensagemRequisicao } from "@nvs-helpers/MensagemRequisicaoHelper";
 import Componente from "@nvs-models/Componente";
+import { DadosRequisicao } from '@nvs-models/DadosRequisicao';
 import { UsuarioPermissao } from "@nvs-models/UsuarioPermissao";
 import { PermissaoService } from "@nvs-services/permissao/permissao.service";
 import { CLASSE_BOTAO_LIMPAR } from "@nvs-utils/classes-sass.constant";
 import { NgxSpinnerService } from "ngx-spinner";
-import { ToastrService } from "ngx-toastr";
-import { DadosRequisicao } from '../../models/DadosRequisicao';
 
 @Component({
   selector: "app-permissao",
@@ -31,12 +30,11 @@ export class PermissaoComponent extends Componente implements OnInit {
   constructor(
     private fb: FormBuilder,
     private spinner: NgxSpinnerService,
-    private toaster: ToastrService,
     private router: Router,
     private permissaoService: PermissaoService,
     private activateRouter: ActivatedRoute,
   ) {
-    super(toaster);
+    super();
   }
 
   ngOnInit(): void {

@@ -8,7 +8,6 @@ import Componente from '@nvs-models/Componente';
 import { DadosRequisicao } from '@nvs-models/DadosRequisicao';
 import { CategoriaService } from '@nvs-services/categoria/categoria.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ToastrService } from 'ngx-toastr';
 import { CLASSE_BOTAO_LIMPAR } from 'src/app/utils/classes-sass.constant';
 
 @Component({
@@ -33,11 +32,10 @@ export class CategoriaComponent extends Componente implements OnInit, Componente
   constructor(
     private fb: FormBuilder,
     private spinner: NgxSpinnerService,
-    private toaster: ToastrService,
     private router: Router,
     private categoriaService: CategoriaService,
     private activateRouter: ActivatedRoute) {
-    super(toaster);
+    super();
   }
 
   ngOnInit(): void {

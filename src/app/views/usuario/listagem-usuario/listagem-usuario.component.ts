@@ -9,6 +9,7 @@ import {
 } from "@angular/core";
 import { Router } from "@angular/router";
 import Componente from "@nvs-models/Componente";
+import { DadosRequisicao } from "@nvs-models/DadosRequisicao";
 import { Usuario } from "@nvs-models/Usuario";
 import { TokenService } from "@nvs-services/token/token.service";
 import { UsuarioService } from "@nvs-services/usuario/usuario.service";
@@ -16,9 +17,7 @@ import configuracaoTabela from "@nvs-utils/configuracao-tabela";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { API, APIDefinition, Columns, Config } from "ngx-easy-table";
 import { NgxSpinnerService } from "ngx-spinner";
-import { ToastrService } from "ngx-toastr";
 import * as XLSX from "xlsx";
-import { DadosRequisicao } from '../../../models/DadosRequisicao';
 
 @Component({
   selector: "app-listagem-usuario",
@@ -44,7 +43,6 @@ export class ListagemUsuarioComponent extends Componente implements OnInit {
   codigoUsuario: number;
 
   constructor(
-    private toaster: ToastrService,
     private usuarioService: UsuarioService,
     private spinner: NgxSpinnerService,
     private modalService: BsModalService,
@@ -52,7 +50,7 @@ export class ListagemUsuarioComponent extends Componente implements OnInit {
     private detectorAlteracao: ChangeDetectorRef,
     private token: TokenService,
   ) {
-    super(toaster);
+    super();
   }
 
   ngOnInit(): void {
@@ -158,7 +156,6 @@ export class ListagemUsuarioComponent extends Componente implements OnInit {
         },
         error: (error: unknown) => {
           this.mostrarAvisoErro(error, "Houve um erro ao desativar o usuário.");
-
         },
       })
       .add(() => this.spinner.hide("desativando"));

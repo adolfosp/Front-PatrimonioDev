@@ -10,6 +10,7 @@ import {
 import { Router } from "@angular/router";
 import { SituacaoEquipamento } from "@nvs-enum/situacao-equipamento.enum";
 import Componente from "@nvs-models/Componente";
+import { DadosRequisicao } from "@nvs-models/DadosRequisicao";
 import { Patrimonio } from "@nvs-models/Patrimonio";
 import { CriptografiaService } from "@nvs-services/criptografia/criptografia.service";
 import { PatrimonioService } from "@nvs-services/patrimonio/patrimonio.service";
@@ -18,9 +19,7 @@ import configuracaoTabela from "@nvs-utils/configuracao-tabela";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { API, APIDefinition, Columns, Config } from "ngx-easy-table";
 import { NgxSpinnerService } from "ngx-spinner";
-import { ToastrService } from "ngx-toastr";
 import * as XLSX from "xlsx";
-import { DadosRequisicao } from "../../../models/DadosRequisicao";
 
 @Component({
   templateUrl: "./listagem-patrimonio.component.html",
@@ -47,14 +46,13 @@ export class ListagemPatrimonioComponent extends Componente implements OnInit {
   constructor(
     private patrimonioService: PatrimonioService,
     private modalService: BsModalService,
-    private toaster: ToastrService,
     private spinner: NgxSpinnerService,
     private router: Router,
     private token: TokenService,
     private encriptacao: CriptografiaService,
     private detectorAlteracao: ChangeDetectorRef,
   ) {
-    super(toaster);
+    super();
   }
 
   ngOnInit(): void {
@@ -179,7 +177,7 @@ export class ListagemPatrimonioComponent extends Componente implements OnInit {
 
       XLSX.writeFile(wb, "patrimonios.xlsx");
     } catch (err) {
-      this.mostrarAvisoXLS(`Não foi possível exportar a planilha. Mensagem: ${err}`)
+      this.mostrarAvisoXLS(`Não foi possível exportar a planilha. Mensagem: ${err}`);
     }
   }
   public atribuirCodigoPatrimonio(codigoPatrimonio: number): void {

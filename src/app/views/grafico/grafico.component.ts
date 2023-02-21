@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import Componente from '@nvs-models/Componente';
 import { EstatisticaService } from '@nvs-services/estatistica/estatistica.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ToastrService } from 'ngx-toastr';
 import LinearGradient from 'zrender/lib/graphic/LinearGradient';
 
 type EquipamentoInformacao = {
@@ -29,10 +28,9 @@ export class GraficoComponent extends Componente implements OnInit {
 
   constructor(
     private estatisticaService: EstatisticaService,
-    private toaster: ToastrService,
     private spinner: NgxSpinnerService
   ) {
-    super(toaster);
+    super();
   }
 
   ngOnInit(): void {

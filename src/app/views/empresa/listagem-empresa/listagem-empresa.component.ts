@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import Componente from '@nvs-models/Componente';
+import { DadosRequisicao } from '@nvs-models/DadosRequisicao';
 import { Empresa } from '@nvs-models/Empresa';
 import { EmpresaService } from '@nvs-services/empresa/empresa.service';
 import { TokenService } from '@nvs-services/token/token.service';
@@ -8,9 +9,7 @@ import configuracaoTabela from '@nvs-utils/configuracao-tabela';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { API, APIDefinition, Columns, Config } from 'ngx-easy-table';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ToastrService } from 'ngx-toastr';
 import * as XLSX from 'xlsx';
-import { DadosRequisicao } from '../../../models/DadosRequisicao';
 
 @Component({
   selector: 'app-listarempresa',
@@ -38,13 +37,12 @@ export class ListagemEmpresaComponent extends Componente implements OnInit {
   constructor(
     private empresaService: EmpresaService,
     private modalService: BsModalService,
-    private toaster: ToastrService,
     private spinner: NgxSpinnerService,
     private router: Router,
     private token: TokenService,
     private detectorAlteracao: ChangeDetectorRef
     ) {
-      super(toaster);
+      super();
     }
 
   ngOnInit(): void {

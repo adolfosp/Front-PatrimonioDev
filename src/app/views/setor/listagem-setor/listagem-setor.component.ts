@@ -9,16 +9,15 @@ import {
 } from "@angular/core";
 import { Router } from "@angular/router";
 import Componente from "@nvs-models/Componente";
+import { DadosRequisicao } from "@nvs-models/DadosRequisicao";
 import { Setor } from "@nvs-models/Setor";
 import { SetorService } from "@nvs-services/setor/setor.service";
 import { TokenService } from "@nvs-services/token/token.service";
+import configuracaoTabela from "@nvs-utils/configuracao-tabela";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { API, APIDefinition, Columns, Config } from "ngx-easy-table";
 import { NgxSpinnerService } from "ngx-spinner";
-import { ToastrService } from "ngx-toastr";
 import * as XLSX from "xlsx";
-import { DadosRequisicao } from "../../../models/DadosRequisicao";
-import configuracaoTabela from "../../../utils/configuracao-tabela";
 
 @Component({
   selector: "app-listagem-setor",
@@ -46,13 +45,12 @@ export class ListagemSetorComponent extends Componente implements OnInit {
   constructor(
     private setorService: SetorService,
     private modalService: BsModalService,
-    private toaster: ToastrService,
     private spinner: NgxSpinnerService,
     private router: Router,
     private token: TokenService,
     private detectorAlteracao: ChangeDetectorRef,
   ) {
-    super(toaster);
+    super();
   }
 
   ngOnInit(): void {

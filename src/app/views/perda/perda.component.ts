@@ -5,7 +5,6 @@ import Componente from "@nvs-models/Componente";
 import { PerdaEquipamento } from "@nvs-models/PerdaEquipamento";
 import { PerdaService } from "@nvs-services/perda/perda.service";
 import { NgxSpinnerService } from "ngx-spinner";
-import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: "app-perda",
@@ -27,9 +26,8 @@ export class PerdaComponent extends Componente implements OnInit {
     private fb: FormBuilder,
     private perdaService: PerdaService,
     private spinner: NgxSpinnerService,
-    private toaster: ToastrService,
   ) {
-    super(toaster);
+    super();
   }
 
   ngOnInit(): void {

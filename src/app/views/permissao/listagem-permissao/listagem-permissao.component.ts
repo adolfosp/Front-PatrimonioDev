@@ -17,7 +17,6 @@ import configuracaoTabela from "@nvs-utils/configuracao-tabela";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { API, APIDefinition, Columns, Config } from "ngx-easy-table";
 import { NgxSpinnerService } from "ngx-spinner";
-import { ToastrService } from "ngx-toastr";
 import * as XLSX from "xlsx";
 
 @Component({
@@ -44,13 +43,12 @@ export class ListagemPermissaoComponent extends Componente implements OnInit {
   constructor(
     private permissaoService: PermissaoService,
     private modalService: BsModalService,
-    private toaster: ToastrService,
     private spinner: NgxSpinnerService,
     private router: Router,
     private token: TokenService,
     private detectorAlteracao: ChangeDetectorRef,
   ) {
-    super(toaster);
+    super();
   }
 
   ngOnInit(): void {
@@ -85,8 +83,7 @@ export class ListagemPermissaoComponent extends Componente implements OnInit {
           this.data = permissoes
           this.dataFiltradaExcel = permissoes;
         },
-        // eslint-disable-next-line rxjs/no-implicit-any-catch
-        error: (error: any) => {
+        error: (error: unknown) => {
           this.mostrarAvisoErro(error, "Houve um erro ao carregar as permissões.");
         },
         complete: () => {
@@ -107,8 +104,7 @@ export class ListagemPermissaoComponent extends Componente implements OnInit {
           this.mostrarAvisoSucesso("Permissão desativada com sucesso!");
           this.obterPermissoes();
         },
-        // eslint-disable-next-line rxjs/no-implicit-any-catch
-        error: (error: any) => {
+        error: (error: unknown) => {
           this.mostrarAvisoErro(error, "Houve um erro ao desativar a permissão.");
         },
       })

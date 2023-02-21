@@ -7,7 +7,6 @@ import { UsuarioPerfil } from "@nvs-models/UsuarioPerfil";
 import { TokenService } from "@nvs-services/token/token.service";
 import { UsuarioPerfilService } from "@nvs-services/usuario-perfil/usuario-perfil.service";
 import { NgxSpinnerService } from "ngx-spinner";
-import { ToastrService } from "ngx-toastr";
 import { environment } from "../../../../environments/environment";
 
 @Component({
@@ -25,11 +24,10 @@ export class PerfilComponent extends Componente implements OnInit {
   constructor(
     private perfilService: UsuarioPerfilService,
     private token: TokenService,
-    private toaster: ToastrService,
     private fb: FormBuilder,
     private spinner: NgxSpinnerService,
   ) {
-    super(toaster);
+    super();
   }
 
   public get f(): any {

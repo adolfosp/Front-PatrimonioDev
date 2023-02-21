@@ -15,7 +15,6 @@ import { PatrimonioService } from '@nvs-services/patrimonio/patrimonio.service';
 import { TokenService } from '@nvs-services/token/token.service';
 import { CLASSE_BOTAO_LIMPAR } from '@nvs-utils/classes-sass.constant';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-patrimonio',
@@ -54,13 +53,12 @@ export class PatrimonioComponent extends Componente implements OnInit {
     private funcionario: FuncionarioService,
     private equipamento: EquipamentoService,
     private patrimonioService: PatrimonioService,
-    private toaster: ToastrService,
     private token: TokenService,
     private spinner: NgxSpinnerService,
     private router: Router,
     private activatedRoute: ActivatedRoute)
     {
-      super(toaster);
+      super();
       this.chaveSituacaoEquipamento = Object.keys(this.situacaoEquipamentoEnum).filter(Number);
     }
 

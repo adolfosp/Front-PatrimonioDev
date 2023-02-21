@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { MovimentacaoEquipamento } from "@nvs-enum/movimentacao-equipamento.enum";
 import { MensagemRequisicao } from "@nvs-helpers/MensagemRequisicaoHelper";
 import Componente from "@nvs-models/Componente";
+import { DadosRequisicao } from "@nvs-models/DadosRequisicao";
 import { Movimentacao } from "@nvs-models/Movimentacao";
 import { CriptografiaService } from "@nvs-services/criptografia/criptografia.service";
 import { MovimentacaoService } from "@nvs-services/movimentacao/movimentacao.service";
@@ -11,8 +12,6 @@ import { TokenService } from "@nvs-services/token/token.service";
 import { CLASSE_BOTAO_LIMPAR } from "@nvs-utils/classes-sass.constant";
 import * as moment from "moment";
 import { NgxSpinnerService } from "ngx-spinner";
-import { ToastrService } from "ngx-toastr";
-import { DadosRequisicao } from "../../models/DadosRequisicao";
 
 @Component({
   selector: "app-movimentacao",
@@ -40,7 +39,6 @@ export class MovimentacaoComponent extends Componente implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private toaster: ToastrService,
     private spinner: NgxSpinnerService,
     private router: Router,
     private movimentacaoService: MovimentacaoService,
@@ -48,7 +46,7 @@ export class MovimentacaoComponent extends Componente implements OnInit {
     private encriptacao: CriptografiaService,
     private activatedRoute: ActivatedRoute,
   ) {
-    super(toaster);
+    super();
     this.chaveSituacaoMovimento = Object.keys(this.situacaoMovimentoEnum).filter(Number);
     this.activatedRoute.queryParams.subscribe((parametro) => {
       this._codigoPatrimonio = +this.encriptacao.decrypt(parametro["codigoPatrimonio"]);

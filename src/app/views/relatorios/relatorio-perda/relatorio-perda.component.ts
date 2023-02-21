@@ -1,14 +1,13 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from "@angular/core";
 import Componente from "@nvs-models/Componente";
+import { DadosRequisicao } from "@nvs-models/DadosRequisicao";
 import { PerdaRelatorio } from "@nvs-models/relatorios/PerdaRelatorio";
 import { PerdaService } from "@nvs-services/perda/perda.service";
 import { TokenService } from "@nvs-services/token/token.service";
 import configuracaoTabela from "@nvs-utils/configuracao-tabela";
 import { API, APIDefinition, Columns, Config } from "ngx-easy-table";
 import { NgxSpinnerService } from "ngx-spinner";
-import { ToastrService } from "ngx-toastr";
 import * as XLSX from "xlsx";
-import { DadosRequisicao } from "../../../models/DadosRequisicao";
 
 @Component({
   selector: "app-relatorio-perda",
@@ -31,13 +30,12 @@ export class RelatorioPerdaComponent extends Componente implements OnInit {
   public ehAdministrador = false;
 
   constructor(
-    private toaster: ToastrService,
     private token: TokenService,
     private spinner: NgxSpinnerService,
     private perdaService: PerdaService,
     private detectorAlteracao: ChangeDetectorRef,
   ) {
-    super(toaster);
+    super();
   }
 
   ngOnInit(): void {

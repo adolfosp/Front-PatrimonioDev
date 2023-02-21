@@ -1,25 +1,31 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-import { DadosRequisicao } from '@nvs-models/DadosRequisicao';
-import { Fabricante } from '@nvs-models/Fabricante';
-import { FabricanteService } from '@nvs-services/fabricante/fabricante.service';
-import { TokenService } from '@nvs-services/token/token.service';
-import configuracaoTabela from '@nvs-utils/configuracao-tabela';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { API, APIDefinition, Columns, Config } from 'ngx-easy-table';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { ToastrService } from 'ngx-toastr';
-import * as XLSX from 'xlsx';
-import Componente from '../../../models/Componente';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  HostListener,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+} from "@angular/core";
+import { Router } from "@angular/router";
+import Componente from "@nvs-models/Componente";
+import { DadosRequisicao } from "@nvs-models/DadosRequisicao";
+import { Fabricante } from "@nvs-models/Fabricante";
+import { FabricanteService } from "@nvs-services/fabricante/fabricante.service";
+import { TokenService } from "@nvs-services/token/token.service";
+import configuracaoTabela from "@nvs-utils/configuracao-tabela";
+import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
+import { API, APIDefinition, Columns, Config } from "ngx-easy-table";
+import { NgxSpinnerService } from "ngx-spinner";
+import * as XLSX from "xlsx";
 
 @Component({
-  templateUrl: './listagem-fabricante.component.html',
-  styleUrls: ['./listagem-fabricante.component.sass', '../../../../assets/style-listagem.sass'],
+  templateUrl: "./listagem-fabricante.component.html",
+  styleUrls: ["./listagem-fabricante.component.sass", "../../../../assets/style-listagem.sass"],
   changeDetection: ChangeDetectionStrategy.OnPush,
-
 })
 export class ListagemFabricanteComponent extends Componente implements OnInit {
-  @ViewChild('table', { static: true }) table: APIDefinition;
+  @ViewChild("table", { static: true }) table: APIDefinition;
 
   public configuracao: Config;
   public colunas: Columns[];
@@ -37,19 +43,17 @@ export class ListagemFabricanteComponent extends Componente implements OnInit {
   modalRef?: BsModalRef;
 
   constructor(
-              private fabricanteService: FabricanteService,
-              private spinner: NgxSpinnerService,
-              private modalService: BsModalService,
-              private toaster: ToastrService,
-              private router: Router,
-              private token: TokenService,
-              private detectorAlteracao: ChangeDetectorRef
-              ) {
-                super(toaster);
-               }
+    private fabricanteService: FabricanteService,
+    private spinner: NgxSpinnerService,
+    private modalService: BsModalService,
+    private router: Router,
+    private token: TokenService,
+    private detectorAlteracao: ChangeDetectorRef,
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
-
     this.configuracao = configuracaoTabela();
     this.colunas = this.obterColunasDaTabela();
 
@@ -64,40 +68,45 @@ export class ListagemFabricanteComponent extends Componente implements OnInit {
 
   public obterFabricante(): void {
     this.spinner.show("buscando");
-    this.fabricanteService.obterTodosFabricante().subscribe({
-      next: (dados: DadosRequisicao) => {
-        this.data = dados.data as Fabricante[];
-        this.dataFiltradaExcel = dados.data as Fabricante[];
-      },
-      error: (error: unknown) => {
-        this.mostrarAvisoErro(error,"Houve um erro ao buscar pelos fabricantes.");
-      },
-      complete: () =>{
-        this.detectorAlteracao.markForCheck();
-      }
-    }).add(() => this.spinner.hide("buscando"));
+    this.fabricanteService
+      .obterTodosFabricante()
+      .subscribe({
+        next: (dados: DadosRequisicao) => {
+          this.data = dados.data as Fabricante[];
+          this.dataFiltradaExcel = dados.data as Fabricante[];
+        },
+        error: (error: unknown) => {
+          this.mostrarAvisoErro(error, "Houve um erro ao buscar pelos fabricantes.");
+        },
+        complete: () => {
+          this.detectorAlteracao.markForCheck();
+        },
+      })
+      .add(() => this.spinner.hide("buscando"));
   }
 
   public abrirModal(event: any, template: TemplateRef<any>, codigoFabricante: number): void {
     event.stopPropagation();
     this.codigoFabricante = codigoFabricante;
-    this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
+    this.modalRef = this.modalService.show(template, { class: "modal-sm" });
   }
 
   public confirmar(): void {
-
     this.modalRef?.hide();
     this.spinner.show("excluindo");
 
-    this.fabricanteService.deletarFabricante(this.codigoFabricante).subscribe({
-      next: () =>{
-        this.mostrarAvisoSucesso("Fabricante removido com sucesso!");
-        this.obterFabricante();
-      },
-      error: (error: unknown) =>{
-        this.mostrarAvisoErro(error, "Houve um erro ao excluir o fabricante.");
-      }
-    }).add(()=>this.spinner.hide("excluindo"));
+    this.fabricanteService
+      .deletarFabricante(this.codigoFabricante)
+      .subscribe({
+        next: () => {
+          this.mostrarAvisoSucesso("Fabricante removido com sucesso!");
+          this.obterFabricante();
+        },
+        error: (error: unknown) => {
+          this.mostrarAvisoErro(error, "Houve um erro ao excluir o fabricante.");
+        },
+      })
+      .add(() => this.spinner.hide("excluindo"));
   }
 
   public recusar(): void {
@@ -114,54 +123,53 @@ export class ListagemFabricanteComponent extends Componente implements OnInit {
     });
   }
 
-  private filtrarFabricantes(valor: any): void{
+  private filtrarFabricantes(valor: any): void {
     this.dataFiltradaExcel = this.data.filter(
       (fabricante: Fabricante) =>
-       fabricante.codigoFabricante.toString().indexOf(valor) !== -1 ||
-       fabricante.nomeFabricante.toLocaleLowerCase().indexOf(valor) !== -1
+        fabricante.codigoFabricante.toString().indexOf(valor) !== -1 ||
+        fabricante.nomeFabricante.toLocaleLowerCase().indexOf(valor) !== -1,
     );
   }
 
-
   public detalheFabricante(codigoFabricante: number): void {
-    this.router.navigate([`dashboard/fabricante/${codigoFabricante}`])
+    this.router.navigate([`dashboard/fabricante/${codigoFabricante}`]);
   }
 
   public exportarParaExcel(): void {
     try {
-     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataFiltradaExcel);
+      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataFiltradaExcel);
 
-     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-     XLSX.utils.book_append_sheet(wb, ws, 'fabricantes');
+      const wb: XLSX.WorkBook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "fabricantes");
 
-     XLSX.writeFile(wb, 'fabricantes.xlsx');
-   } catch (err) {
-    this.mostrarAvisoXLS(`Não foi possível exportar a planilha. Mensagem: ${err}`);
-   }
- }
+      XLSX.writeFile(wb, "fabricantes.xlsx");
+    } catch (err) {
+      this.mostrarAvisoXLS(`Não foi possível exportar a planilha. Mensagem: ${err}`);
+    }
+  }
 
   private obterColunasDaTabela(): any {
     return [
-      { key: 'codigoFabricante', title: 'Código' },
-      { key: 'nomeFabricante', title: 'Nome' },
-      { key: '', title: 'Editar' },
-      { key: '', title: 'Excluir' },
+      { key: "codigoFabricante", title: "Código" },
+      { key: "nomeFabricante", title: "Nome" },
+      { key: "", title: "Editar" },
+      { key: "", title: "Excluir" },
     ];
   }
   private checkView(): void {
     this.innerWidth = window.innerWidth;
     if (this.isMobile) {
       this.colunas = [
-        { key: 'codigoFabricante', title: 'Código' },
-        { key: 'nomeFabricante', title: 'Nome' },
-        { key: '', title: 'Expandir' },
+        { key: "codigoFabricante", title: "Código" },
+        { key: "nomeFabricante", title: "Nome" },
+        { key: "", title: "Expandir" },
       ];
     } else {
       this.colunas = this.obterColunasDaTabela();
     }
   }
 
-  @HostListener('window:resize', [])
+  @HostListener("window:resize", [])
   onResize(): void {
     this.checkView();
   }
