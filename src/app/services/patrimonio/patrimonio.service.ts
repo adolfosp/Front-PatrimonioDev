@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
+import { DadosRequisicao } from '@nvs-models/DadosRequisicao';
 import { InformacaoAdicional } from '@nvs-models/InformacaoAdicional';
 import { Patrimonio } from '@nvs-models/Patrimonio';
 import { ApiService } from '@nvs-services/api/api.service';
-import { forkJoin, Observable } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 
@@ -15,8 +16,8 @@ export class PatrimonioService {
 
   constructor(private api: ApiService) { }
 
-  public obterPatrimonios(): Observable<Patrimonio[]>{
-    return this.api.get<Patrimonio[]>(this.baseUrl).pipe(take(1));
+  public obterPatrimonios(): Observable<DadosRequisicao>{
+    return this.api.get<DadosRequisicao>(this.baseUrl).pipe(take(1));
   }
 
   public cadastrarPatrimonio(patrimonio: Patrimonio, informacaoAdicional: InformacaoAdicional): Observable<Patrimonio> {
@@ -53,9 +54,9 @@ export class PatrimonioService {
 
   public obterPatrimonioEInformacaoAdicional(codigoPatrimonio: number): Observable<any[]> {
 
-    let respostaPatrimonio = this.obterApenasUmPatrimonio(codigoPatrimonio);
-    let respostaInformacaoAdicional = this.obterInformacaoAdicional(codigoPatrimonio);
-    let respostaEmpresaPadrao = this.obterEmpresaPadrao();
+    const respostaPatrimonio = this.obterApenasUmPatrimonio(codigoPatrimonio);
+    const respostaInformacaoAdicional = this.obterInformacaoAdicional(codigoPatrimonio);
+    const respostaEmpresaPadrao = this.obterEmpresaPadrao();
 
     return forkJoin([respostaPatrimonio, respostaInformacaoAdicional, respostaEmpresaPadrao]);
 

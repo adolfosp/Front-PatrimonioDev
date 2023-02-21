@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
+import { DadosRequisicao } from '@nvs-models/DadosRequisicao';
 import { PerdaEquipamento } from '@nvs-models/PerdaEquipamento';
-import { PerdaRelatorio } from '@nvs-models/relatorios/PerdaRelatorio';
 import { ApiService } from '@nvs-services/api/api.service';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -19,7 +19,7 @@ export class PerdaService {
     return this.api.post<PerdaEquipamento>(this.baseUrl, {perdaEquipamento}).pipe(take(1));
   }
 
-  public obterPerdas(): Observable<PerdaRelatorio[]>{
-    return this.api.get<PerdaRelatorio[]>(this.baseUrl).pipe(take(1));
+  public obterPerdas(): Observable<DadosRequisicao>{
+    return this.api.get<DadosRequisicao>(this.baseUrl).pipe(take(1));
   }
 }

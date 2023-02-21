@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DadosRequisicao } from '@nvs-models/DadosRequisicao';
 import { Usuario } from '@nvs-models/Usuario';
 import { ApiService } from '@nvs-services/api/api.service';
 import { Observable } from 'rxjs';
@@ -10,7 +11,7 @@ import { environment } from '../../../environments/environment';
 })
 export class UsuarioService {
 
-  baseUrl: string = `${environment.apiUrl}usuarios`
+  baseUrl = `${environment.apiUrl}usuarios`
 
   constructor(private api: ApiService) { }
 
@@ -18,12 +19,12 @@ export class UsuarioService {
     return this.api.post<Usuario>(this.baseUrl, {usuario}).pipe(take(1));
   }
 
-  public obterTodosUsuarios(): Observable<Usuario[]>{
-    return this.api.get<Usuario[]>(this.baseUrl).pipe(take(1));
+  public obterTodosUsuarios(): Observable<DadosRequisicao>{
+    return this.api.get<DadosRequisicao>(this.baseUrl).pipe(take(1));
   }
 
-  public obterApenasUmUsuario(codigoUsuario: number): Observable<Usuario>{
-    return this.api.get<Usuario>(`${this.baseUrl}/${codigoUsuario}`).pipe(take(1));
+  public obterApenasUmUsuario(codigoUsuario: number): Observable<DadosRequisicao>{
+    return this.api.get<DadosRequisicao>(`${this.baseUrl}/${codigoUsuario}`).pipe(take(1));
   }
 
   public obterUsuarioPorEmailESenha(email: string, senha: string, autenticacaoAuth: boolean){
@@ -31,7 +32,6 @@ export class UsuarioService {
   }
 
   public desativarUsuario(codigoUsuario: number){
-    debugger;
     return this.api.delete<number>(`${this.baseUrl}/${codigoUsuario}`).pipe(take(1));
   }
 

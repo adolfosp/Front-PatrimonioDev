@@ -19,7 +19,7 @@ export class ApiService implements IApi {
   }
 
   get<T>(url: string, options?: any): Observable<T> {
-    // @ts-ignore
+   // @ts-ignore
     return this.http.get<T>(url, {
       headers: {
        ...this.options,

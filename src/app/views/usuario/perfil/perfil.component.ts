@@ -1,12 +1,12 @@
 import { Component, OnInit } from "@angular/core";
 import { AbstractControlOptions, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { MensagemRequisicao } from "@nvs-helpers/MensagemRequisicaoHelper";
 import { ValidacaoCampoSenha } from "@nvs-helpers/ValidacaoSenhaHelper";
+import Componente from "@nvs-models/Componente";
+import { DadosRequisicao } from '@nvs-models/DadosRequisicao';
 import { UsuarioPerfil } from "@nvs-models/UsuarioPerfil";
 import { TokenService } from "@nvs-services/token/token.service";
 import { UsuarioPerfilService } from "@nvs-services/usuario-perfil/usuario-perfil.service";
 import { NgxSpinnerService } from "ngx-spinner";
-import { ToastrService } from "ngx-toastr";
 import { environment } from "../../../../environments/environment";
 
 @Component({
@@ -14,7 +14,7 @@ import { environment } from "../../../../environments/environment";
   templateUrl: "./perfil.component.html",
   styleUrls: ["./perfil.component.sass"],
 })
-export class PerfilComponent implements OnInit {
+export class PerfilComponent extends Componente implements OnInit {
   private _codigoUsuario: number;
   private _usuarioPerfil = {} as UsuarioPerfil;
   private _file: File;
@@ -24,10 +24,11 @@ export class PerfilComponent implements OnInit {
   constructor(
     private perfilService: UsuarioPerfilService,
     private token: TokenService,
-    private toaster: ToastrService,
     private fb: FormBuilder,
     private spinner: NgxSpinnerService,
-  ) {}
+  ) {
+    super();
+  }
 
   public get f(): any {
     return this.form.controls;
@@ -82,19 +83,15 @@ export class PerfilComponent implements OnInit {
     this.perfilService
       .obterPerfilUsuario(this._codigoUsuario)
       .subscribe({
-        next: (result: UsuarioPerfil) => {
-          this.form.patchValue(result);
-          this._codigoUsuario = result.codigoUsuario;
-          this.form.controls["confirmeSenha"].setValue(result.senha);
+        next: (dados: DadosRequisicao) => {
+          this.form.patchValue(dados.data);
+          this._codigoUsuario = dados.data.codigoUsuario;
+          this.form.controls["confirmeSenha"].setValue(dados.data.senha);
 
-          this.tratarUrlImagem(result.imagemUrl);
+          this.tratarUrlImagem(dados.data.imagemUrl);
         },
         error: (error: unknown) => {
-          const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
-          this.toaster[template.tipoMensagem](
-            `Houve um erro ao carregar o perfil. Mensagem: ${template.mensagemErro}`,
-            "Erro",
-          );
+          this.mostrarAvisoErro(error, "Houve um erro ao carregar o perfil.");
         },
       })
       .add(() => this.spinner.hide("carregando"));
@@ -114,14 +111,10 @@ export class PerfilComponent implements OnInit {
       .atualizarPerfilUsuario(this._usuarioPerfil)
       .subscribe({
         next: () => {
-          this.toaster.success(`Perfil atualizado com sucesso!`);
+          this.mostrarAvisoSucesso("Perfil atualizado com sucesso!");
         },
         error: (error: unknown) => {
-          const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
-          this.toaster[template.tipoMensagem](
-            `Houve um erro ao atualizar o perfil. Mensagem: ${template.mensagemErro}`,
-            "Erro",
-          );
+          this.mostrarAvisoErro(error,"Houve um erro ao atualizar o perfil.");
         },
       })
       .add(() => this.spinner.hide("atualizando"));
@@ -149,14 +142,10 @@ export class PerfilComponent implements OnInit {
       .subscribe({
         next: () => {
           this.carregarPerfilUsuario();
-          this.toaster.success("Imagem atualizada com sucesso", "Sucesso");
+          this.mostrarAvisoSucesso("Imagem atualizada com sucesso");
         },
         error: (error: unknown) => {
-          const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
-          this.toaster[template.tipoMensagem](
-            `Houve um erro ao subir a imagem: Mensagem: ${template.mensagemErro}`,
-            "Erro",
-          );
+          this.mostrarAvisoErro(error, "Houve um erro ao subir a imagem.")
         },
       })
       .add(() => this.spinner.hide("upload"));

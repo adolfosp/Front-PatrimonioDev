@@ -4,6 +4,7 @@ import { ApiService } from '@nvs-services/api/api.service';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
+import { DadosRequisicao } from '../../models/DadosRequisicao';
 
 @Injectable({
   providedIn: 'root'
@@ -20,9 +21,9 @@ export class MovimentacaoService {
     .pipe(take(1));
   }
 
-  public obterTodasMovimentacoesDoPatrimonio(codigoPatrimonio: number): Observable<Movimentacao[]> {
+  public obterTodasMovimentacoesDoPatrimonio(codigoPatrimonio: number): Observable<DadosRequisicao> {
     return this.api
-    .get<Movimentacao[]>(`${this.baseUrl}/movimentacao/${codigoPatrimonio}`)
+    .get<DadosRequisicao>(`${this.baseUrl}/movimentacao/${codigoPatrimonio}`)
     .pipe(take(1));
   }
 
@@ -32,8 +33,8 @@ export class MovimentacaoService {
     .pipe(take(1));
   }
 
-  public obterApenasUmaMovimentacao(codigoMovimentacao: number): Observable<Movimentacao> {
-    return this.api.get<Movimentacao>(`${this.baseUrl}/${codigoMovimentacao}`).pipe(take(1));;
+  public obterApenasUmaMovimentacao(codigoMovimentacao: number): Observable<DadosRequisicao> {
+    return this.api.get<DadosRequisicao>(`${this.baseUrl}/${codigoMovimentacao}`).pipe(take(1));
   }
 
 

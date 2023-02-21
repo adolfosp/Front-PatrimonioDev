@@ -1,28 +1,33 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-import { SituacaoEquipamento } from '@nvs-enum/situacao-equipamento.enum';
-import { MensagemRequisicao } from '@nvs-helpers/MensagemRequisicaoHelper';
-import { Patrimonio } from '@nvs-models/Patrimonio';
-import { CriptografiaService } from '@nvs-services/criptografia/criptografia.service';
-import { PatrimonioService } from '@nvs-services/patrimonio/patrimonio.service';
-import { TokenService } from '@nvs-services/token/token.service';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { API, APIDefinition, Columns, Config } from 'ngx-easy-table';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { ToastrService } from 'ngx-toastr';
-import * as XLSX from 'xlsx';
-import configuracaoTabela from '../../../utils/configuracao-tabela';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  HostListener,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+} from "@angular/core";
+import { Router } from "@angular/router";
+import { SituacaoEquipamento } from "@nvs-enum/situacao-equipamento.enum";
+import Componente from "@nvs-models/Componente";
+import { DadosRequisicao } from "@nvs-models/DadosRequisicao";
+import { Patrimonio } from "@nvs-models/Patrimonio";
+import { CriptografiaService } from "@nvs-services/criptografia/criptografia.service";
+import { PatrimonioService } from "@nvs-services/patrimonio/patrimonio.service";
+import { TokenService } from "@nvs-services/token/token.service";
+import configuracaoTabela from "@nvs-utils/configuracao-tabela";
+import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
+import { API, APIDefinition, Columns, Config } from "ngx-easy-table";
+import { NgxSpinnerService } from "ngx-spinner";
+import * as XLSX from "xlsx";
 
 @Component({
-  selector: 'app-listarPatrimonio',
-  templateUrl: './listagem-patrimonio.component.html',
-  styleUrls: ['./listagem-patrimonio.component.sass'],
+  templateUrl: "./listagem-patrimonio.component.html",
+  styleUrls: ["./listagem-patrimonio.component.sass"],
   changeDetection: ChangeDetectionStrategy.OnPush,
-
 })
-export class ListagemPatrimonioComponent implements OnInit {
-
-  @ViewChild('table', { static: true }) table: APIDefinition;
+export class ListagemPatrimonioComponent extends Componente implements OnInit {
+  @ViewChild("table", { static: true }) table: APIDefinition;
 
   public configuracao: Config;
   public colunas: Columns[];
@@ -33,7 +38,7 @@ export class ListagemPatrimonioComponent implements OnInit {
 
   public dataFiltradaExcel: Patrimonio[] = [];
   public patrimonios: Patrimonio[] = [];
-  public patrimonioId: number = 0;
+  public patrimonioId = 0;
   public ehAdministrador = false;
 
   modalRef?: BsModalRef;
@@ -41,19 +46,20 @@ export class ListagemPatrimonioComponent implements OnInit {
   constructor(
     private patrimonioService: PatrimonioService,
     private modalService: BsModalService,
-    private toaster: ToastrService,
     private spinner: NgxSpinnerService,
     private router: Router,
     private token: TokenService,
     private encriptacao: CriptografiaService,
-    private detectorAlteracao: ChangeDetectorRef) { }
+    private detectorAlteracao: ChangeDetectorRef,
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
-
-    this.ehAdministrador = this.token.ehUsuarioAdministrador()
+    this.ehAdministrador = this.token.ehUsuarioAdministrador();
     this.obterPatrimonios();
 
-    this.configuracao = configuracaoTabela()
+    this.configuracao = configuracaoTabela();
     this.linhas = this.data.map((_) => _.codigoPatrimonio).reduce((acc, cur) => cur + acc, 0);
 
     this.colunas = this.obterColunasDaTabela();
@@ -67,76 +73,82 @@ export class ListagemPatrimonioComponent implements OnInit {
   public abrirModal(event: any, template: TemplateRef<any>, patrimonioId: number): void {
     event.stopPropagation();
     this.patrimonioId = patrimonioId;
-    this.modalRef = this.modalService.show(template, { class: 'modal-sm' });
+    this.modalRef = this.modalService.show(template, { class: "modal-sm" });
   }
 
   private obterPatrimonios(): void {
-
     this.spinner.show("buscando");
 
-    this.patrimonioService.obterPatrimonios().subscribe({
-      next: (patrimonios: Patrimonio[]) => {
-        this.dataFiltradaExcel = patrimonios;
-        this.data = patrimonios;
-      },
-      error: (error: any) => {
-        let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
-        this.toaster[template.tipoMensagem](`Houve um erro ao buscar pelos patrimônios. Mensagem: ${template.mensagemErro}`, template.titulo);
-
-      },
-      complete: () => {
-        this.configuracao.isLoading = false;
-        this.detectorAlteracao.markForCheck();
-
-      }
-    }).add(() => this.spinner.hide("buscando"));
-
+    this.patrimonioService
+      .obterPatrimonios()
+      .subscribe({
+        next: (dados: DadosRequisicao) => {
+          const patrimonio = dados.data as Patrimonio[];
+          this.dataFiltradaExcel = patrimonio;
+          this.data = patrimonio;
+        },
+        error: (error: unknown) => {
+          this.mostrarAvisoErro(error, "Houve um erro ao buscar pelos patrimônios.");
+        },
+        complete: () => {
+          this.configuracao.isLoading = false;
+          this.detectorAlteracao.markForCheck();
+        },
+      })
+      .add(() => this.spinner.hide("buscando"));
   }
 
   public confirmar(): void {
-
     this.modalRef?.hide();
     this.spinner.show("excluindo");
 
-    this.patrimonioService.excluirPatrimonio(this.patrimonioId).subscribe(
-      () => {
-        this.toaster.success('Patrimônio excluído com sucesso!', 'Excluído');
-        this.obterPatrimonios();
-      },
-      (error: any) => {
-        let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
-        this.toaster[template.tipoMensagem](`Houve um erro ao excluir o patrimônio. Mensagem: ${template.mensagemErro}`, template.titulo);
-      }
-    ).add(() => this.spinner.hide("excluindo"));
-
+    this.patrimonioService
+      .excluirPatrimonio(this.patrimonioId)
+      .subscribe({
+        next: () => {
+          this.mostrarAvisoSucesso("Patrimônio excluído com sucesso!");
+          this.obterPatrimonios();
+        },
+        error: (error: unknown) => {
+          this.mostrarAvisoErro(error, "Houve um erro ao excluir o patrimônio.");
+        },
+      })
+      .add(() => this.spinner.hide("excluindo"));
   }
 
   public recusar(): void {
     this.modalRef?.hide();
   }
 
-  public fecharModalPerda(podeFechar: boolean){
-    let botaoFecharPerda = document.getElementById("botao-fechar-modal-perda")
+  public fecharModalPerda(podeFechar: boolean) {
+    const botaoFecharPerda = document.getElementById("botao-fechar-modal-perda");
     botaoFecharPerda.click();
-    this.obterPatrimonios()
+    this.obterPatrimonios();
   }
 
   public detalhePatrimonio(codigoPatrimonio: number, serviceTag: string): void {
-    this.router.navigate([`dashboard/patrimonio`], { queryParams: { codigoPatrimonio, serviceTag } })
+    this.router.navigate([`dashboard/patrimonio`], { queryParams: { codigoPatrimonio, serviceTag } });
   }
-  public obterDescricaoEnum(index: number): string{
+  public obterDescricaoEnum(index: number): string {
     return SituacaoEquipamento[index];
   }
   public cadastrarMovimentacao(codigoPatrimonio: number, tipoEquipamento: string, nomeFuncionario: string): void {
-    this.router.navigate([`dashboard/movimentacao`], { queryParams: { codigoPatrimonio: this.encriptacao.encrypt(codigoPatrimonio.toString()), nomePatrimonio: `${tipoEquipamento} - ${nomeFuncionario}` } })
+    this.router.navigate([`dashboard/movimentacao`], {
+      queryParams: {
+        codigoPatrimonio: this.encriptacao.encrypt(codigoPatrimonio.toString()),
+        nomePatrimonio: `${tipoEquipamento} - ${nomeFuncionario}`,
+      },
+    });
   }
 
   public listarTodasAsMovimentacoes(codigoPatrimonio: number): void {
-    this.router.navigate([`dashboard/movimentacao/listagem`], { queryParams: { codigoPatrimonio: this.encriptacao.encrypt(codigoPatrimonio.toString())}})
+    this.router.navigate([`dashboard/movimentacao/listagem`], {
+      queryParams: { codigoPatrimonio: this.encriptacao.encrypt(codigoPatrimonio.toString()) },
+    });
   }
 
   public onChange(event: Event): void {
-    let valorDigitado = (event.target as HTMLInputElement).value;
+    const valorDigitado = (event.target as HTMLInputElement).value;
     this.filtrarPatrimonios(valorDigitado);
 
     this.table.apiEvent({
@@ -152,8 +164,7 @@ export class ListagemPatrimonioComponent implements OnInit {
         patrimonios.codigoTipoEquipamento.toString().toLocaleLowerCase().indexOf(valor) !== -1 ||
         patrimonios.situacaoEquipamento.toString().toLocaleLowerCase().indexOf(valor) !== -1 ||
         patrimonios.modelo.toString().toLocaleLowerCase().indexOf(valor) !== -1 ||
-        patrimonios.nomeFuncionario.toLocaleLowerCase().indexOf(valor) !== -1
-
+        patrimonios.nomeFuncionario.toLocaleLowerCase().indexOf(valor) !== -1,
     );
   }
 
@@ -162,11 +173,11 @@ export class ListagemPatrimonioComponent implements OnInit {
       const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataFiltradaExcel);
 
       const wb: XLSX.WorkBook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, 'Patrimonios');
+      XLSX.utils.book_append_sheet(wb, ws, "Patrimonios");
 
-      XLSX.writeFile(wb, 'patrimonios.xlsx');
+      XLSX.writeFile(wb, "patrimonios.xlsx");
     } catch (err) {
-      this.toaster.error(`Não foi possível exportar a planilha. Mensagem: ${err}`, "Erro")
+      this.mostrarAvisoXLS(`Não foi possível exportar a planilha. Mensagem: ${err}`);
     }
   }
   public atribuirCodigoPatrimonio(codigoPatrimonio: number): void {
@@ -175,13 +186,13 @@ export class ListagemPatrimonioComponent implements OnInit {
 
   private obterColunasDaTabela(): any {
     return [
-      { key: 'codigoPatrimonio', title: 'Código', width: '3%' },
-      { key: 'situacaoEquipamento', title: 'Situação', width: '17%' },
-      { key: 'tipoEquipamento', title: 'Equipamento', width: '5%' },
-      { key: 'nomeFuncionario', title: 'Funcionário' },
-      { key: '', title: 'Editar' },
-      { key: '', title: 'Excluir' },
-      { key: '', title: 'Ações' },
+      { key: "codigoPatrimonio", title: "Código", width: "3%" },
+      { key: "situacaoEquipamento", title: "Situação", width: "17%" },
+      { key: "tipoEquipamento", title: "Equipamento", width: "5%" },
+      { key: "nomeFuncionario", title: "Funcionário" },
+      { key: "", title: "Editar" },
+      { key: "", title: "Excluir" },
+      { key: "", title: "Ações" },
     ];
   }
 
@@ -189,16 +200,16 @@ export class ListagemPatrimonioComponent implements OnInit {
     this.innerWidth = window.innerWidth;
     if (this.isMobile) {
       this.colunas = [
-        { key: 'tipoEquipamento', title: 'Equip.' },
-        { key: 'nomeFuncionario', title: 'Func.' },
-        { key: '', title: 'Expandir' },
+        { key: "tipoEquipamento", title: "Equip." },
+        { key: "nomeFuncionario", title: "Func." },
+        { key: "", title: "Expandir" },
       ];
     } else {
       this.colunas = this.obterColunasDaTabela();
     }
   }
 
-  @HostListener('window:resize', [])
+  @HostListener("window:resize", [])
   onResize(): void {
     this.checkView();
   }

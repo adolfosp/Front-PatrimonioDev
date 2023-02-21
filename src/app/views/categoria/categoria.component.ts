@@ -4,9 +4,10 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { MensagemRequisicao } from '@nvs-helpers/MensagemRequisicaoHelper';
 import { Categoria } from '@nvs-models/Categoria';
+import Componente from '@nvs-models/Componente';
+import { DadosRequisicao } from '@nvs-models/DadosRequisicao';
 import { CategoriaService } from '@nvs-services/categoria/categoria.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ToastrService } from 'ngx-toastr';
 import { CLASSE_BOTAO_LIMPAR } from 'src/app/utils/classes-sass.constant';
 
 @Component({
@@ -14,11 +15,11 @@ import { CLASSE_BOTAO_LIMPAR } from 'src/app/utils/classes-sass.constant';
   templateUrl: './categoria.component.html',
   styleUrls: ['./categoria.component.sass', '../../../assets/style-base.sass'],
 })
-export class CategoriaComponent implements OnInit {
+export class CategoriaComponent extends Componente implements OnInit, Componente {
 
-  private categoria = {} as Categoria;
-  private codigoCategoria: number | undefined;
-  private limpandoCampo = false;
+  private _categoria = {} as Categoria;
+  private _codigoCategoria: number | undefined;
+  private _limpandoCampo = false;
 
   public form!: FormGroup;
   public estadoSalvar = "cadastrarCategoria";
@@ -31,10 +32,11 @@ export class CategoriaComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private spinner: NgxSpinnerService,
-    private toaster: ToastrService,
     private router: Router,
     private categoriaService: CategoriaService,
-    private activateRouter: ActivatedRoute) { }
+    private activateRouter: ActivatedRoute) {
+    super();
+  }
 
   ngOnInit(): void {
     this.validacao();
@@ -42,13 +44,13 @@ export class CategoriaComponent implements OnInit {
   }
 
   public limparCampos(): void {
-    this.limpandoCampo = true;
+    this._limpandoCampo = true;
     this.validacao();
   }
 
   private validacao(): void {
     this.form = this.fb.group({
-      codigoCategoria: new FormControl(this.limpandoCampo ? this.form.get('codigoCategoria')?.value : 0, [],),
+      codigoCategoria: new FormControl(this._limpandoCampo ? this.form.get('codigoCategoria')?.value : 0, [],),
       descricao: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(50)])
 
     });
@@ -61,13 +63,12 @@ export class CategoriaComponent implements OnInit {
 
     this.spinner.show(nomeAcaoRealizada);
 
-    this.categoria = (this.estadoSalvar === 'cadastrarCategoria') ? { ...this.form.value } : { codigoCategoria: this.categoria.codigoCategoria, ...this.form.value };
+    this._categoria = (this.estadoSalvar === 'cadastrarCategoria') ? { ...this.form.value } : { codigoCategoria: this._categoria.codigoCategoria, ...this.form.value };
 
-    this.categoriaService[this.estadoSalvar](this.categoria).subscribe(
-      () => this.toaster.success(`Categoria ${nomeAcaoRealizada} com sucesso`, 'Sucesso!'),
+    this.categoriaService[this.estadoSalvar](this._categoria).subscribe(
+      (dados: DadosRequisicao) => this.mostrarAvisoSucesso(dados.mensagem),
       (error: unknown) => {
-        const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
-        this.toaster[template.tipoMensagem](`${MensagemRequisicao.retornarMensagemDeErroAoRealizarOperacao(nomeAcaoRealizada, "categoria", ['o', 'da'])} Mensagem: ${template.mensagemErro}`, template.titulo);
+        this.mostrarAvisoErro(error, `${MensagemRequisicao.retornarMensagemDeErroAoRealizarOperacao(nomeAcaoRealizada, "categoria", ['o', 'da'])}}`)
       },
       () => {
         setTimeout(() => {
@@ -79,25 +80,23 @@ export class CategoriaComponent implements OnInit {
 
   private carregarCategoria(): void {
 
-    this.codigoCategoria = +this.activateRouter.snapshot.paramMap?.get('codigoCategoria');
+    this._codigoCategoria = +this.activateRouter.snapshot.paramMap?.get('codigoCategoria');
 
-    if (this.codigoCategoria == null || this.codigoCategoria == 0) return;
+    if (this._codigoCategoria == null || this._codigoCategoria == 0) return;
 
     this.estadoSalvar = 'atualizarCategoria';
     this.spinner.show('carregando');
 
-    this.categoriaService.obterApenasUmaCategoria(this.codigoCategoria).subscribe(
+    this.categoriaService.obterApenasUmaCategoria(this._codigoCategoria).subscribe(
       {
-        next: (categoria: Categoria) => {
-          this.categoria = { ...categoria };
-          this.form.patchValue(this.categoria);
+        next: (dados: DadosRequisicao) => {
+          this._categoria = (dados.data) as Categoria;
+          this.form.patchValue(this._categoria);
         },
         error: (error: unknown) => {
-          const template = MensagemRequisicao.retornarMensagemTratada(error["message"], error["error"].mensagem);
-          this.toaster[template.tipoMensagem](`Houve um problema ao carregar a categoria. Mensagem: ${template.mensagemErro}`, template.titulo);
+          this.mostrarAvisoErro(error, "Houve um problema ao carregar a categoria")
         }
       }
     ).add(() => this.spinner.hide('carregando'));
   }
 }
-

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DadosRequisicao } from '@nvs-models/DadosRequisicao';
 import { Funcionario } from '@nvs-models/Funcionario';
 import { ApiService } from '@nvs-services/api/api.service';
 import { Observable } from 'rxjs';
@@ -18,8 +19,8 @@ export class FuncionarioService {
     return this.api.post<Funcionario>(this.baseUrl, {funcionario}).pipe(take(1));
   }
 
-  public obterTodosFuncionarios(): Observable<Funcionario[]> {
-    return this.api.get<Funcionario[]>(this.baseUrl).pipe(take(1));
+  public obterTodosFuncionarios(): Observable<DadosRequisicao> {
+    return this.api.get<DadosRequisicao>(this.baseUrl).pipe(take(1));
   }
 
   public desativarFuncionario(codigoFuncionario: number): Observable<any>{
@@ -28,8 +29,8 @@ export class FuncionarioService {
     .pipe(take(1));
   }
 
-  public obterApenasUmFuncionario(codigoFuncionario: number): Observable<Funcionario> {
-    return this.api.get<Funcionario>(`${this.baseUrl}/${codigoFuncionario}`).pipe(take(1));
+  public obterApenasUmFuncionario(codigoFuncionario: number): Observable<DadosRequisicao> {
+    return this.api.get<DadosRequisicao>(`${this.baseUrl}/${codigoFuncionario}`).pipe(take(1));
   }
 
   public atualizarFuncionario(funcionario: Funcionario): Observable<Funcionario>{

@@ -1,15 +1,15 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { MensagemRequisicao } from '@nvs-helpers/MensagemRequisicaoHelper';
+import Componente from '@nvs-models/Componente';
+import { DadosRequisicao } from '@nvs-models/DadosRequisicao';
 import { Empresa } from '@nvs-models/Empresa';
 import { EmpresaService } from '@nvs-services/empresa/empresa.service';
 import { TokenService } from '@nvs-services/token/token.service';
+import configuracaoTabela from '@nvs-utils/configuracao-tabela';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { API, APIDefinition, Columns, Config } from 'ngx-easy-table';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ToastrService } from 'ngx-toastr';
 import * as XLSX from 'xlsx';
-import configuracaoTabela from '../../../utils/configuracao-tabela';
 
 @Component({
   selector: 'app-listarempresa',
@@ -17,7 +17,7 @@ import configuracaoTabela from '../../../utils/configuracao-tabela';
   styleUrls: ['./listagem-empresa.component.sass'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ListagemEmpresaComponent implements OnInit {
+export class ListagemEmpresaComponent extends Componente implements OnInit {
 
   @ViewChild('table', { static: true }) table: APIDefinition;
 
@@ -29,7 +29,7 @@ export class ListagemEmpresaComponent implements OnInit {
 
   public data: Empresa[] = [];
   public dataFiltradaExcel: Empresa[] = [];
-  public empresaId: number = 0;
+  public empresaId = 0;
   public ehAdministrador = false;
 
   modalRef?: BsModalRef;
@@ -37,12 +37,13 @@ export class ListagemEmpresaComponent implements OnInit {
   constructor(
     private empresaService: EmpresaService,
     private modalService: BsModalService,
-    private toaster: ToastrService,
     private spinner: NgxSpinnerService,
     private router: Router,
     private token: TokenService,
     private detectorAlteracao: ChangeDetectorRef
-    ) { }
+    ) {
+      super();
+    }
 
   ngOnInit(): void {
 
@@ -72,15 +73,13 @@ export class ListagemEmpresaComponent implements OnInit {
     this.spinner.show("buscando")
 
     this.empresaService.obterEmpresas().subscribe({
-      next: (empresa: Empresa[]) => {
-        this.data = empresa;
-        this.dataFiltradaExcel = empresa;
+      next: (dados: DadosRequisicao) => {
+        this.data = dados.data as Empresa[];
+        this.dataFiltradaExcel = dados.data as Empresa[];
 
       },
-      error: (error: any) => {
-        let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
-        this.toaster[template.tipoMensagem](`Houve um erro ao carregar as empresas. Mensagem ${template.mensagemErro}`, template.titulo);
-
+      error: (error: unknown) => {
+        this.mostrarAvisoErro(error, "Houve um erro ao carregar as empresas");
       },
       complete: () =>{
         this.detectorAlteracao.markForCheck();
@@ -93,17 +92,15 @@ export class ListagemEmpresaComponent implements OnInit {
     this.modalRef?.hide();
     this.spinner.show("excluindo");
 
-    debugger;
-    this.empresaService.deletarEmpresa(this.empresaId).subscribe(
-      () =>{
-        this.toaster.success('Empresa excluída com sucesso!', 'Exclusão');
+    this.empresaService.deletarEmpresa(this.empresaId).subscribe({
+      next: () =>{
+        this.mostrarAvisoSucesso("Empresa excluída com sucesso!");
         this.obterEmpresas();
       },
-      (error: any) =>{
-        let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
-        this.toaster[template.tipoMensagem](`Houve um erro ao excluir a empresa. Mensagem ${template.mensagemErro}`, template.titulo);
+      error: (error: unknown) =>{
+        this.mostrarAvisoErro(error, "Houve um erro ao excluir a empresa")
       }
-    ).add(()=> this.spinner.hide("excluindo"));
+    }).add(()=> this.spinner.hide("excluindo"));
   }
 
   public recusar(): void {
@@ -115,7 +112,7 @@ export class ListagemEmpresaComponent implements OnInit {
   }
 
   public onChange(event: Event): void {
-    let valorDigitado = (event.target as HTMLInputElement).value;
+    const valorDigitado = (event.target as HTMLInputElement).value;
     this.filtrarEmpresas(valorDigitado);
 
     this.table.apiEvent({
@@ -143,7 +140,7 @@ export class ListagemEmpresaComponent implements OnInit {
 
       XLSX.writeFile(wb, 'empresas.xlsx');
     } catch (err) {
-      this.toaster.error(`Não foi possível exportar a planilha. Mensagem: ${err}`,"Erro")
+      this.mostrarAvisoXLS(`Não foi possível exportar a planilha. Mensagem: ${err}`);
     }
   }
 
@@ -188,5 +185,4 @@ export class ListagemEmpresaComponent implements OnInit {
       this.toggledRows.add(index);
     }
   }
-
 }

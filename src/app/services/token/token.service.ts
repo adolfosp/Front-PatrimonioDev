@@ -33,10 +33,10 @@ export class TokenService {
     return this.encriptar.decrypt(token);
   }
 
-  public obterPermissaoToken(): number {
+  public obterPermissaoToken(): boolean {
     const token: string = this.localStorageService.obterChave(LocalStorageChave.Valor);
     //@ts-ignore
-    return +decode(this.encriptar.decrypt(token))[this.nomeCampoPermissao]
+    return decode(this.encriptar.decrypt(token))["descricaoPerfil"]?.toString().toLowerCase() == "administrador";
   }
 
   public obterNomeUsuarioToken(): string {

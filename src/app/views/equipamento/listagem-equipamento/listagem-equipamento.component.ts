@@ -1,24 +1,23 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { MensagemRequisicao } from '@nvs-helpers/MensagemRequisicaoHelper';
+import Componente from '@nvs-models/Componente';
+import { DadosRequisicao } from '@nvs-models/DadosRequisicao';
 import { Equipamento } from '@nvs-models/Equipamento';
 import { EquipamentoService } from '@nvs-services/equipamento/equipamento.service';
 import { TokenService } from '@nvs-services/token/token.service';
+import configuracaoTabela from '@nvs-utils/configuracao-tabela';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { API, APIDefinition, Columns, Config } from 'ngx-easy-table';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ToastrService } from 'ngx-toastr';
 import * as XLSX from 'xlsx';
-import configuracaoTabela from '../../../utils/configuracao-tabela';
 
 @Component({
-  selector: 'app-listarEquipamento',
   templateUrl: './listagem-equipamento.component.html',
   styleUrls: ['./listagem-equipamento.component.sass'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 
 })
-export class ListagemEquipamentoComponent implements OnInit {
+export class ListagemEquipamentoComponent extends Componente implements OnInit {
 
 
   @ViewChild('table', { static: true }) table: APIDefinition;
@@ -31,7 +30,7 @@ export class ListagemEquipamentoComponent implements OnInit {
 
   public data: Equipamento[] = [];
   public dataFiltradaExcel: Equipamento[] = [];
-  public equipamentoId: number = 0;
+  public equipamentoId = 0;
   public ehAdministrador = false;
 
   modalRef?: BsModalRef;
@@ -39,12 +38,13 @@ export class ListagemEquipamentoComponent implements OnInit {
   constructor(
     private equipamentoService: EquipamentoService,
     private modalService: BsModalService,
-    private toaster: ToastrService,
     private spinner: NgxSpinnerService,
     private router: Router,
     private token: TokenService,
     private detectorAlteracao: ChangeDetectorRef
-    ) { }
+    ) {
+      super();
+     }
 
   ngOnInit(): void {
 
@@ -74,15 +74,13 @@ export class ListagemEquipamentoComponent implements OnInit {
     this.spinner.show("buscando")
 
     this.equipamentoService.obterTodosEquipamentos().subscribe({
-      next: (equipamento: Equipamento[]) => {
-        this.data = equipamento;
-        this.dataFiltradaExcel = equipamento;
+      next: (dados: DadosRequisicao) => {
+        this.data = dados.data as Equipamento[];
+        this.dataFiltradaExcel = dados.data as Equipamento[];
 
       },
-      error: (error: any) => {
-        let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
-        this.toaster[template.tipoMensagem](`Houve um erro ao carregar os equipamentos. Mensagem ${template.mensagemErro}`, template.titulo);
-
+      error: (error: unknown) => {
+        this.mostrarAvisoErro(error, "Houve um erro ao carregar os equipamentos.");
       },
       complete: () =>{
         this.detectorAlteracao.markForCheck();
@@ -95,15 +93,13 @@ export class ListagemEquipamentoComponent implements OnInit {
     this.modalRef?.hide();
     this.spinner.show("excluindo");
 
-    debugger;
     this.equipamentoService.deletarEquipamento(this.equipamentoId).subscribe(
       () =>{
-        this.toaster.success('Equipamento excluído com sucesso!', 'Exclusão');
+        this.mostrarAvisoSucesso("Equipamento excluído com sucesso!");
         this.obterEquipamentos();
       },
-      (error: any) =>{
-        let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
-        this.toaster[template.tipoMensagem](`Houve um erro ao excluir o equipamento. Mensagem ${template.mensagemErro}`, template.titulo);
+      (error: unknown) =>{
+        this.mostrarAvisoErro(error, "Houve um erro ao excluir o equipamento.");
       }
     ).add(()=> this.spinner.hide("excluindo"));
   }
@@ -117,7 +113,7 @@ export class ListagemEquipamentoComponent implements OnInit {
   }
 
   public onChange(event: Event): void {
-    let valorDigitado = (event.target as HTMLInputElement).value;
+    const valorDigitado = (event.target as HTMLInputElement).value;
     this.filtrarEquipamentos(valorDigitado);
 
     this.table.apiEvent({
@@ -145,7 +141,7 @@ export class ListagemEquipamentoComponent implements OnInit {
 
       XLSX.writeFile(wb, 'equipamentos.xlsx');
     } catch (err) {
-      this.toaster.error(`Não foi possível exportar a planilha. Mensagem: ${err}`,"Erro")
+      this.mostrarAvisoXLS(`Não foi possível exportar a planilha. Mensagem: ${err}`);
     }
   }
 
@@ -189,6 +185,4 @@ export class ListagemEquipamentoComponent implements OnInit {
       this.toggledRows.add(index);
     }
   }
-
-
 }

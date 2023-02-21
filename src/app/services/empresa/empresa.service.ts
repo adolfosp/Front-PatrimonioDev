@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DadosRequisicao } from '@nvs-models/DadosRequisicao';
 import { Empresa } from '@nvs-models/Empresa';
 import { ApiService } from '@nvs-services/api/api.service';
 import { Observable } from 'rxjs';
@@ -14,8 +15,8 @@ export class EmpresaService {
 
   constructor(private api: ApiService) { }
 
-  public obterEmpresas(): Observable<Empresa[]>{
-    return this.api.get<Empresa[]>(this.baseUrl).pipe(take(1))
+  public obterEmpresas(): Observable<DadosRequisicao>{
+    return this.api.get<DadosRequisicao>(this.baseUrl).pipe(take(1))
   }
 
   public cadastrarEmpresa(empresa: Empresa): Observable<Empresa> {
@@ -32,8 +33,8 @@ export class EmpresaService {
     .pipe(take(1));
   }
 
-  public obterApenasUmaEmpresa(codigoEmpresa: number): Observable<Empresa> {
-    return this.api.get<Empresa>(`${this.baseUrl}/${codigoEmpresa}`).pipe(take(1));
+  public obterApenasUmaEmpresa(codigoEmpresa: number): Observable<DadosRequisicao> {
+    return this.api.get<DadosRequisicao>(`${this.baseUrl}/${codigoEmpresa}`).pipe(take(1));
   }
 
   public atualizarEmpresa(empresa: Empresa): Observable<Empresa>{

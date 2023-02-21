@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { MensagemRequisicao } from '@nvs-helpers/MensagemRequisicaoHelper';
+import Componente from '@nvs-models/Componente';
 import { EstatisticaService } from '@nvs-services/estatistica/estatistica.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ToastrService } from 'ngx-toastr';
 import LinearGradient from 'zrender/lib/graphic/LinearGradient';
 
 type EquipamentoInformacao = {
@@ -15,22 +14,24 @@ type EquipamentoInformacao = {
   templateUrl: './grafico.component.html',
   styleUrls: ['./grafico.component.sass'],
 })
-export class GraficoComponent implements OnInit {
+export class GraficoComponent extends Componente implements OnInit {
   panelOpenState = false;
   options: any;
+
+  private _estatisticaCategoria: EquipamentoInformacao[];
 
   public quantidadeDeEquipamentos: number;
   public quantidadeTotalDePatrimonios: number;
   public quantidadeTotalDePatrimoniosDisponiveis: number;
   public quantidadeMovimentacoes: number;
-  private estatisticaCategoria: EquipamentoInformacao[];
   public mediaEquipamento: number;
 
   constructor(
     private estatisticaService: EstatisticaService,
-    private toaster: ToastrService,
     private spinner: NgxSpinnerService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.obterEstatisticas();
@@ -146,9 +147,9 @@ export class GraficoComponent implements OnInit {
       .obterEstatisticas()
       .subscribe({
         next: (listaDeResposta) => {
-          this.estatisticaCategoria = listaDeResposta[0];
+          this._estatisticaCategoria = listaDeResposta[0].data;
 
-          const quantidadeEquipamentoPorCategoria = this.estatisticaCategoria.map(
+          const quantidadeEquipamentoPorCategoria = this._estatisticaCategoria.map(
             (valorAtual) => {return valorAtual.quantidadeEquipamento; });
 
           this.calcularQuantidadeDeEquipamentos(quantidadeEquipamentoPorCategoria);
@@ -160,29 +161,22 @@ export class GraficoComponent implements OnInit {
           }
 
           this.mediaEquipamento = +(
-            listaDeResposta[1][0].quantidadeTotalDeEquipamento /
-            listaDeResposta[1][0].quantidadeTotalFuncionario
+            listaDeResposta[1].data[0].quantidadeTotalDeEquipamento /
+            listaDeResposta[1].data[0].quantidadeTotalFuncionario
           ).toFixed(2);
 
           this.mediaEquipamento = this.mediaEquipamento || 0;
 
           this.quantidadeTotalDePatrimonios =
-            +listaDeResposta[2][0].quantidadeTotalPatrimonio;
+            +listaDeResposta[2].data[0].quantidadeTotalPatrimonio;
           this.quantidadeTotalDePatrimoniosDisponiveis =
-            +listaDeResposta[2][0].quantidadePatrimonioDisponivel;
+            +listaDeResposta[2].data[0].quantidadePatrimonioDisponivel;
           this.quantidadeMovimentacoes =
-            +listaDeResposta[3].quantidadeMovimentacao;
+            +listaDeResposta[3].data.quantidadeMovimentacao;
         },
         // eslint-disable-next-line rxjs/no-implicit-any-catch
         error: (error: any) => {
-          const template = MensagemRequisicao.retornarMensagemTratada(
-            error.message,
-            error.error.mensagem
-          );
-          this.toaster[template.tipoMensagem](
-            `Houve um erro ao carregar as informações do Dashboard. Mensagem: ${template.mensagemErro}`,
-            template.titulo
-          );
+          this.mostrarAvisoErro(error, "Houve um erro ao carregar as informações do Dashboard.");
         },
       })
       .add(() => this.spinner.hide('graficoLinha'));

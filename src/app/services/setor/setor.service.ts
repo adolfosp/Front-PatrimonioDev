@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DadosRequisicao } from '@nvs-models/DadosRequisicao';
 import { Setor } from '@nvs-models/Setor';
 import { ApiService } from '@nvs-services/api/api.service';
 import { Observable } from 'rxjs';
@@ -20,12 +21,12 @@ export class SetorService  {
     .pipe(take(1));
   }
 
-  public obterSetor(): Observable<Setor[]> {
-    return this.api.get<Setor[]>(this.baseUrl).pipe(take(1));
+  public obterSetor(): Observable<DadosRequisicao> {
+    return this.api.get<DadosRequisicao>(this.baseUrl).pipe(take(1));
   }
 
   public obterApenasUmSetor(codigoSetor: number): Observable<Setor> {
-    return this.api.get<Setor>(`${this.baseUrl}/${codigoSetor}`).pipe(take(1));;
+    return this.api.get<Setor>(`${this.baseUrl}/${codigoSetor}`).pipe(take(1));
   }
 
   public deletarSetor(setorId: number): Observable<any>{

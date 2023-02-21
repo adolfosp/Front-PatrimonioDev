@@ -1,24 +1,22 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { MensagemRequisicao } from '@nvs-helpers/MensagemRequisicaoHelper';
-import { PerdaRelatorio } from '@nvs-models/relatorios/PerdaRelatorio';
-import { PerdaService } from '@nvs-services/perda/perda.service';
-import { TokenService } from '@nvs-services/token/token.service';
-import { API, APIDefinition, Columns, Config } from 'ngx-easy-table';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { ToastrService } from 'ngx-toastr';
-import * as XLSX from 'xlsx';
-import configuracaoTabela from '../../../utils/configuracao-tabela';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from "@angular/core";
+import Componente from "@nvs-models/Componente";
+import { DadosRequisicao } from "@nvs-models/DadosRequisicao";
+import { PerdaRelatorio } from "@nvs-models/relatorios/PerdaRelatorio";
+import { PerdaService } from "@nvs-services/perda/perda.service";
+import { TokenService } from "@nvs-services/token/token.service";
+import configuracaoTabela from "@nvs-utils/configuracao-tabela";
+import { API, APIDefinition, Columns, Config } from "ngx-easy-table";
+import { NgxSpinnerService } from "ngx-spinner";
+import * as XLSX from "xlsx";
 
 @Component({
-  selector: 'app-relatorio-perda',
-  templateUrl: './relatorio-perda.component.html',
-  styleUrls: ['./relatorio-perda.component.sass'],
+  selector: "app-relatorio-perda",
+  templateUrl: "./relatorio-perda.component.html",
+  styleUrls: ["./relatorio-perda.component.sass"],
   changeDetection: ChangeDetectionStrategy.OnPush,
-
 })
-export class RelatorioPerdaComponent implements OnInit  {
-
-  @ViewChild('table', { static: true }) table: APIDefinition;
+export class RelatorioPerdaComponent extends Componente implements OnInit {
+  @ViewChild("table", { static: true }) table: APIDefinition;
 
   public configuracao: Config;
   public colunas: Columns[];
@@ -32,19 +30,19 @@ export class RelatorioPerdaComponent implements OnInit  {
   public ehAdministrador = false;
 
   constructor(
-    private toaster: ToastrService,
     private token: TokenService,
     private spinner: NgxSpinnerService,
     private perdaService: PerdaService,
-    private detectorAlteracao: ChangeDetectorRef) {
-    }
+    private detectorAlteracao: ChangeDetectorRef,
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
-
-    this.ehAdministrador = this.token.ehUsuarioAdministrador()
+    this.ehAdministrador = this.token.ehUsuarioAdministrador();
     this.obterPerdas();
 
-    this.configuracao = configuracaoTabela()
+    this.configuracao = configuracaoTabela();
     this.linhas = this.data.map((_) => _.codigoPerda).reduce((acc, cur) => cur + acc, 0);
 
     this.colunas = this.obterColunasDaTabela();
@@ -55,29 +53,28 @@ export class RelatorioPerdaComponent implements OnInit  {
   }
 
   private obterPerdas(): void {
-
     this.spinner.show("buscando");
 
-    this.perdaService.obterPerdas().subscribe({
-      next: (perdas: PerdaRelatorio[]) => {
-        this.dataFiltradaExcel = perdas;
-        this.data = perdas;
-
-      },
-      error: (error: any) => {
-        let template = MensagemRequisicao.retornarMensagemTratada(error.message, error.error.mensagem);
-        this.toaster[template.tipoMensagem](`Houve um erro ao buscar pelas perdas. Mensagem ${template.mensagemErro}`, template.titulo);
-
-      },
-      complete: () =>{
-        this.detectorAlteracao.markForCheck();
-      }
-    }).add(() => this.spinner.hide("buscando"));
-
+    this.perdaService
+      .obterPerdas()
+      .subscribe({
+        next: (dados: DadosRequisicao) => {
+          const relatorio = dados.data as PerdaRelatorio[];
+          this.dataFiltradaExcel = relatorio;
+          this.data = relatorio;
+        },
+        error: (error: unknown) => {
+          this.mostrarAvisoErro(error, "Houve um erro ao buscar pelas perdas.");
+        },
+        complete: () => {
+          this.detectorAlteracao.markForCheck();
+        },
+      })
+      .add(() => this.spinner.hide("buscando"));
   }
 
   public onChange(event: Event): void {
-    let valorDigitado = (event.target as HTMLInputElement).value;
+    const valorDigitado = (event.target as HTMLInputElement).value;
     this.filtrarPerdas(valorDigitado);
 
     this.table.apiEvent({
@@ -86,34 +83,31 @@ export class RelatorioPerdaComponent implements OnInit  {
     });
   }
 
-  private filtrarPerdas(valor: any): void{
+  private filtrarPerdas(valor: any): void {
     this.dataFiltradaExcel = this.data.filter(
       (perdas: PerdaRelatorio) =>
-       perdas.motivoDaPerda.toString().indexOf(valor) !== -1 ||
-       perdas.codigoPerda.toString().indexOf(valor) !== -1 ||
-       perdas.nomeFuncionario.toString().indexOf(valor) !== -1 ||
-       perdas.nomeUsuario.toString().indexOf(valor) !== -1
+        perdas.motivoDaPerda.toString().indexOf(valor) !== -1 ||
+        perdas.codigoPerda.toString().indexOf(valor) !== -1 ||
+        perdas.nomeFuncionario.toString().indexOf(valor) !== -1 ||
+        perdas.nomeUsuario.toString().indexOf(valor) !== -1,
     );
   }
 
   public exportarParaExcel(): void {
-     try {
+    try {
       const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataFiltradaExcel);
 
       const wb: XLSX.WorkBook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, 'Perdas');
+      XLSX.utils.book_append_sheet(wb, ws, "Perdas");
 
-      XLSX.writeFile(wb, 'perdas.xlsx');
+      XLSX.writeFile(wb, "perdas.xlsx");
     } catch (err) {
-      this.toaster.error(`Não foi possível exportar a planilha. Mensagem: ${err}`,"Erro")
+      this.mostrarAvisoXLS(`Não foi possível exportar a planilha. Mensagem: ${err}`);
     }
   }
 
   private obterColunasDaTabela(): any {
-    return [
-      { key: 'motivoDaPerda', title: 'Perda'},
-
-    ];
+    return [{ key: "motivoDaPerda", title: "Perda" }];
   }
 
   onRowClickEvent($event: MouseEvent, index: number): void {

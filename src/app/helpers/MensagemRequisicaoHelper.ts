@@ -12,14 +12,16 @@ export abstract class MensagemRequisicao {
     mensagemServidor = this.validarMensagemServidor(mensagemServidor);
 
     const mensagemServidorLowerCase = mensagemServidor?.toLowerCase();
-
     switch (true) {
+
+      case errorMessageLowerCase?.includes(": 403"):
+        return new TemplateMensagemRequisicao("Você não tem permissão para realizar essa ação. Contate seu administrador!", TipoMensagem.info, "Informação");
 
       case mensagemServidorLowerCase?.includes("a empresa de nome fantasia"):
         return new TemplateMensagemRequisicao(mensagemServidor!, TipoMensagem.info, "Informação");
 
       case mensagemServidorLowerCase?.includes("não é possível realizar o cadastro pois o e-mail já foi utilizado em outro registro."):
-        return new TemplateMensagemRequisicao(mensagemServidor!, TipoMensagem.info, "Informação");
+        return new TemplateMensagemRequisicao(mensagemServidor!, TipoMensagem.error, "Informação");
 
       case mensagemServidorLowerCase?.includes("a instrução delete conflitou com a restrição do reference"):
       case mensagemServidorLowerCase?.includes("the delete statement conflicted with the reference constraint"):
