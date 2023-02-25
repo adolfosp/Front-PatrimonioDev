@@ -1,11 +1,8 @@
-import { CommonModule, HashLocationStrategy, LocationStrategy } from "@angular/common";
 import { HttpClientModule } from "@angular/common/http";
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { NgxSpinnerModule } from "ngx-spinner";
-import { ToastrModule } from "ngx-toastr";
 
 import { JWT_OPTIONS, JwtHelperService } from "@auth0/angular-jwt";
 import { ApiService } from "@nvs-services/api/api.service";
@@ -14,20 +11,21 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { LoginComponent } from "./views/login/login.component";
 
-import {
-  SocialLoginModule
-} from "@abacritt/angularx-social-login";
+import { CommonModule, HashLocationStrategy, LocationStrategy } from "@angular/common";
 import { MatButtonModule } from "@angular/material/button";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ZXingScannerModule } from "@zxing/ngx-scanner";
 import { QRCodeModule } from "angularx-qrcode";
 import { NgxEchartsModule } from "ngx-echarts";
 import { NgxMaskModule } from "ngx-mask";
-import { CustomPreloader } from "./configs/custom-preload-strategy";
+import { ToastrModule } from "ngx-toastr";
+import { CustomPreloader } from "./core/configs/custom-preload-strategy";
+import { ErrorHandlerModule } from "./core/errors/error-handler.module";
 import { DashboardComponent } from "./views/dashboard/dashboard.component";
 import { P403Component } from "./views/error/403.component";
 import { P404Component } from "./views/error/404.component";
@@ -58,7 +56,6 @@ import { HttpCodeMensagemComponent } from "./views/shared/http-code-mensagem/htt
     CommonModule,
     BrowserAnimationsModule,
     NgxSpinnerModule,
-    SocialLoginModule,
     ReactiveFormsModule,
     BrowserModule,
     QRCodeModule,
@@ -69,7 +66,9 @@ import { HttpCodeMensagemComponent } from "./views/shared/http-code-mensagem/htt
     ZXingScannerModule,
     TableModule,
     ToastrModule.forRoot({
-      timeOut: 4000,
+      timeOut: 5000,
+      closeButton: true,
+      tapToDismiss: true,
       positionClass: "toast-bottom-right",
       preventDuplicates: true,
       progressBar: true,
@@ -79,39 +78,21 @@ import { HttpCodeMensagemComponent } from "./views/shared/http-code-mensagem/htt
     MatIconModule,
     MatButtonModule,
     MatSlideToggleModule,
-    MatExpansionModule
+    MatExpansionModule,
+    ErrorHandlerModule.forRoot()
+
   ],
   providers: [
+
     {
       provide: LocationStrategy,
       useClass: HashLocationStrategy,
     },
+
     ApiService,
     JwtHelperService,
     CustomPreloader,
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
-    // {
-    //   provide: 'SocialAuthServiceConfig',
-    //   useValue: {
-    //     autoLogin: false,
-    //     providers: [
-    //       {
-    //         id: GoogleLoginProvider.PROVIDER_ID,
-    //         provider: new GoogleLoginProvider(
-    //           environment.googleProvider
-    //         )
-    //       },
-    //       ,
-    //       {
-    //         id: FacebookLoginProvider.PROVIDER_ID,
-    //         provider: new FacebookLoginProvider(environment.facebookProvider)
-    //       }
-    //     ],
-    //     onError: (err) => {
-    //       console.error(err);
-    //     }
-    //   } as SocialAuthServiceConfig
-    // },
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent],

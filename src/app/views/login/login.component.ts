@@ -1,6 +1,3 @@
-import {
-  SocialUser
-} from "@abacritt/angularx-social-login";
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
@@ -25,7 +22,6 @@ export class LoginComponent extends Componente implements OnInit {
   public lembrarMe: boolean;
 
   public ehAutenticacaoAuth: boolean;
-  public usuarioAuth: SocialUser | undefined;
 
   get f(): any {
     return this.form.controls;
@@ -92,7 +88,6 @@ export class LoginComponent extends Componente implements OnInit {
         },
         error: (error: unknown) => {
           if (error["status"] == 400 && this.ehAutenticacaoAuth) {
-            this.router.navigate(["register"], { queryParams: { email: this.usuarioAuth.email } });
             this.mostrarAvisoInfo('Para continuar, é necessário preencher o formulário.');
           } else {
             this.mostrarAvisoErro(error, "Houve um erro ao fazer login.")
