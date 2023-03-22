@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Categoria } from '@nvs-models/Categoria';
-import { DadosRequisicao } from '@nvs-models/DadosRequisicao';
 import { ApiService } from '@nvs-services/api/api.service';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
+import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
+import Paginacao from "@nvs-models/dtos/Paginacao";
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +20,8 @@ export class CategoriaService {
     return this.api.post<DadosRequisicao>(this.baseUrl, {categoria}).pipe(take(1));
   }
 
-  public obterTodasCategorias(): Observable<DadosRequisicao> {
-    return this.api.get<DadosRequisicao>(this.baseUrl).pipe(take(1));
+  public obterTodasCategorias(paginacao: Paginacao): Observable<DadosRequisicao> {
+    return this.api.get<DadosRequisicao>(`${this.baseUrl}?paginaAtual=${paginacao.paginaAtual}&quantidadePorPagina=${paginacao.quantidadePorPagina}`).pipe(take(1));
   }
 
   public deletarCategoria(codigoCategoria: number): Observable<DadosRequisicao>{

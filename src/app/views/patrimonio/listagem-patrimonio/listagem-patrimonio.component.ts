@@ -10,7 +10,7 @@ import {
 import { Router } from "@angular/router";
 import { SituacaoEquipamento } from "@nvs-enum/situacao-equipamento.enum";
 import Componente from "@nvs-models/Componente";
-import { DadosRequisicao } from "@nvs-models/DadosRequisicao";
+import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { Patrimonio } from "@nvs-models/Patrimonio";
 import { CriptografiaService } from "@nvs-services/criptografia/criptografia.service";
 import { PatrimonioService } from "@nvs-services/patrimonio/patrimonio.service";

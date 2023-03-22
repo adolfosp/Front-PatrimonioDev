@@ -1,5 +1,5 @@
 import { TipoMensagem } from '@nvs-enum/tipo-mensagem.enum';
-import { TemplateMensagemRequisicao } from "@nvs-models/TemplateMensagemRequisicao";
+import { TemplateMensagemRequisicao } from "@nvs-models/requisicoes/TemplateMensagemRequisicao";
 
 export abstract class MensagemRequisicao {
 //TODO: VALIDAR PARA CORTAR MENSAGEM MUITO GRANDE QUE RETORNA DO SERVIDOR

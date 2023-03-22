@@ -1,27 +1,44 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  HostListener,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+  ViewEncapsulation
+} from "@angular/core";
+import { PageEvent } from "@angular/material/paginator";
+import {ConfiguracaoSpinner} from "@nvs-utils/configuracao-spinner";
+import {ConfiguracaoIcone} from "@nvs-utils/configuracao-icone";
+import configuracaoTabela from '@nvs-utils/configuracao-tabela';
 import { Router } from '@angular/router';
 import { Categoria } from '@nvs-models/Categoria';
+import Paginacao from "@nvs-models/dtos/Paginacao";
 import Componente from '@nvs-models/Componente';
-import { DadosRequisicao } from '@nvs-models/DadosRequisicao';
+import { DadosRequisicao } from '@nvs-models/requisicoes/DadosRequisicao';
 import { CategoriaService } from '@nvs-services/categoria/categoria.service';
 import { TokenService } from '@nvs-services/token/token.service';
-import configuracaoTabela from '@nvs-utils/configuracao-tabela';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { API, APIDefinition, Columns, Config } from 'ngx-easy-table';
+import { API, APIDefinition, Columns, Config, Pagination } from "ngx-easy-table";
 import { NgxSpinnerService } from 'ngx-spinner';
 import * as XLSX from 'xlsx';
-
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: 'app-listagem-categoria',
   templateUrl: './listagem-categoria.component.html',
   styleUrls: ['./listagem-categoria.component.sass'],
+  encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 
 })
-export class ListagemCategoriaComponent extends Componente implements OnInit {
+export class ListagemCategoriaComponent extends Componente implements OnInit, AfterViewInit  {
   @ViewChild('table', { static: true }) table: APIDefinition;
 
+  public confSpinner = ConfiguracaoSpinner;
+  public confIcone = ConfiguracaoIcone;
   public configuracao: Config;
   public colunas: Columns[];
   public data: Categoria[] = [];
@@ -34,8 +51,10 @@ export class ListagemCategoriaComponent extends Componente implements OnInit {
   public linhas = 0;
   public innerWidth: number;
   public toggledRows = new Set<number>();
-
-  modalRef?: BsModalRef;
+  public totalItensPaginacao: number;
+  public paginacao: Pagination;
+  public modalRef?: BsModalRef;
+  public readonly rotaCadastro = "/dashboard/categoria";
 
   constructor(
     private categoriaService: CategoriaService,
@@ -43,8 +62,11 @@ export class ListagemCategoriaComponent extends Componente implements OnInit {
     private modalService: BsModalService,
     private router: Router,
     private token: TokenService,
-    private detectorAlteracao: ChangeDetectorRef
+    private detectorAlteracao: ChangeDetectorRef,
+    private title: Title
+
   ) {
+    title.setTitle("Listagem de categoria")
     super();
 
   }
@@ -52,11 +74,35 @@ export class ListagemCategoriaComponent extends Componente implements OnInit {
   ngOnInit(): void {
 
     this.configuracao = configuracaoTabela();
+    this.configuracao.paginationRangeEnabled = false;
+    this.configuracao.paginationEnabled = false;
     this.colunas = this.obterColunasDaTabela();
-
+    this.paginacao = {
+      limit: 5,
+      offset: 1,
+      count: 0
+    }
     this.obterCategorias();
     this.ehAdministrador = this.token.ehUsuarioAdministrador();
     this.checkView();
+
+  }
+
+  ngAfterViewInit(): void {
+    this.totalItensPaginacao = this.table.apiEvent({
+      type: API.getPaginationTotalItems,
+    });
+    this.detectorAlteracao.detectChanges();
+  }
+
+  paginationEvent($event: PageEvent): void {
+    this.paginacao = {
+      ...this.paginacao,
+      limit: $event.pageSize,
+      offset: $event.pageIndex + 1,
+      count: $event.length,
+    };
+    this.obterCategorias();
   }
 
   get isMobile(): boolean {
@@ -65,10 +111,16 @@ export class ListagemCategoriaComponent extends Componente implements OnInit {
 
   public obterCategorias(): void {
     this.spinner.show("buscando");
-    this.categoriaService.obterTodasCategorias().subscribe({
+    const paginacao = new Paginacao(this.paginacao.offset, this.paginacao.limit);
+    console.log(paginacao);
+    this.categoriaService.obterTodasCategorias(paginacao).subscribe({
       next: (dados: DadosRequisicao) => {
-        this.data = dados.data as Categoria[];
-        this.dataFiltradaExcel = dados.data as Categoria[];
+        console.log(dados);
+        const categorias = dados.data.registros as Categoria[];
+        this.data = categorias
+        this.dataFiltradaExcel = categorias;
+        this.totalItensPaginacao = dados.data.quantidadePagina * this.paginacao.limit;
+
       },
       error: (error: unknown) => {
         this.mostrarAvisoErro(error, "Houve um erro ao buscar pelas categorias");

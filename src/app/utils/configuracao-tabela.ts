@@ -8,6 +8,7 @@ export default function(){
   configuracao.fixedColumnWidth = false;
   configuracao.resizeColumn = true;
   configuracao.detailsTemplate = true;
+  configuracao.tableLayout.borderless = true;
   configuracao.rows = 5;
 
   return configuracao
