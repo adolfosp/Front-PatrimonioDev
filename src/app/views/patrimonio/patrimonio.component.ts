@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SituacaoEquipamento } from '@nvs-enum/situacao-equipamento.enum';
 import { MensagemRequisicao } from '@nvs-helpers/MensagemRequisicaoHelper';
 import Componente from '@nvs-models/Componente';
-import { DadosRequisicao } from '@nvs-models/DadosRequisicao';
+import { DadosRequisicao } from '@nvs-models/requisicoes/DadosRequisicao';
 import { Equipamento } from '@nvs-models/Equipamento';
 import { Funcionario } from '@nvs-models/Funcionario';
 import { InformacaoAdicional } from '@nvs-models/InformacaoAdicional';

@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { MensagemRequisicao } from "@nvs-helpers/MensagemRequisicaoHelper";
 import { ValidacaoCampoSenha } from "@nvs-helpers/ValidacaoSenhaHelper";
 import Componente from "@nvs-models/Componente";
-import { DadosRequisicao } from "@nvs-models/DadosRequisicao";
+import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { Empresa } from "@nvs-models/Empresa";
 import { Setor } from "@nvs-models/Setor";
 import { Usuario } from "@nvs-models/Usuario";

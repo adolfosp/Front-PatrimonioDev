@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import Componente from '@nvs-models/Componente';
-import { DadosRequisicao } from '@nvs-models/DadosRequisicao';
+import { DadosRequisicao } from '@nvs-models/requisicoes/DadosRequisicao';
 import { Empresa } from '@nvs-models/Empresa';
 import { EmpresaService } from '@nvs-services/empresa/empresa.service';
 import { TokenService } from '@nvs-services/token/token.service';

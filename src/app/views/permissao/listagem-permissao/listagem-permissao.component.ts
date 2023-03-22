@@ -9,7 +9,7 @@ import {
 } from "@angular/core";
 import { Router } from "@angular/router";
 import Componente from "@nvs-models/Componente";
-import { DadosRequisicao } from "@nvs-models/DadosRequisicao";
+import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { UsuarioPermissao } from "@nvs-models/UsuarioPermissao";
 import { PermissaoService } from "@nvs-services/permissao/permissao.service";
 import { TokenService } from "@nvs-services/token/token.service";

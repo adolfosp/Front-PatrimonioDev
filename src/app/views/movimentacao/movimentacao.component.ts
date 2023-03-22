@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { MovimentacaoEquipamento } from "@nvs-enum/movimentacao-equipamento.enum";
 import { MensagemRequisicao } from "@nvs-helpers/MensagemRequisicaoHelper";
 import Componente from "@nvs-models/Componente";
-import { DadosRequisicao } from "@nvs-models/DadosRequisicao";
+import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { Movimentacao } from "@nvs-models/Movimentacao";
 import { CriptografiaService } from "@nvs-services/criptografia/criptografia.service";
 import { MovimentacaoService } from "@nvs-services/movimentacao/movimentacao.service";

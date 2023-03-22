@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DadosRequisicao } from '@nvs-models/DadosRequisicao';
+import { DadosRequisicao } from '@nvs-models/requisicoes/DadosRequisicao';
 import { InformacaoAdicional } from '@nvs-models/InformacaoAdicional';
 import { Patrimonio } from '@nvs-models/Patrimonio';
 import { ApiService } from '@nvs-services/api/api.service';

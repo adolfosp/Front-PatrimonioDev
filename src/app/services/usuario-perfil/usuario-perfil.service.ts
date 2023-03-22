@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DadosRequisicao } from '@nvs-models/DadosRequisicao';
+import { DadosRequisicao } from '@nvs-models/requisicoes/DadosRequisicao';
 import { UsuarioPerfil } from '@nvs-models/UsuarioPerfil';
 import { ApiService } from '@nvs-services/api/api.service';
 import { Observable } from 'rxjs';

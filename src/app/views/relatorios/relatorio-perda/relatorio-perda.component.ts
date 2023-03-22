@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from "@angular/core";
 import Componente from "@nvs-models/Componente";
-import { DadosRequisicao } from "@nvs-models/DadosRequisicao";
+import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { PerdaRelatorio } from "@nvs-models/relatorios/PerdaRelatorio";
 import { PerdaService } from "@nvs-services/perda/perda.service";
 import { TokenService } from "@nvs-services/token/token.service";

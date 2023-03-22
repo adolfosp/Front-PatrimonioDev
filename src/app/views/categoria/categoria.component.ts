@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MensagemRequisicao } from '@nvs-helpers/MensagemRequisicaoHelper';
 import { Categoria } from '@nvs-models/Categoria';
 import Componente from '@nvs-models/Componente';
-import { DadosRequisicao } from '@nvs-models/DadosRequisicao';
+import { DadosRequisicao } from '@nvs-models/requisicoes/DadosRequisicao';
 import { CategoriaService } from '@nvs-services/categoria/categoria.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { CLASSE_BOTAO_LIMPAR } from 'src/app/utils/classes-sass.constant';

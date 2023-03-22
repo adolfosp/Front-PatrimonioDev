@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms"
 import { ActivatedRoute, Router } from "@angular/router";
 import { MensagemRequisicao } from "@nvs-helpers/MensagemRequisicaoHelper";
 import Componente from "@nvs-models/Componente";
-import { DadosRequisicao } from "@nvs-models/DadosRequisicao";
+import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { Fabricante } from "@nvs-models/Fabricante";
 import { FabricanteService } from "@nvs-services/fabricante/fabricante.service";
 import { CLASSE_BOTAO_LIMPAR } from "@nvs-utils/classes-sass.constant";

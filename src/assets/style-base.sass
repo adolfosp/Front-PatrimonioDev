@@ -1,57 +1,67 @@
 @import './fonts.sass'
 
 .texto-destaque
-	font-family: 'Roboto-Black'
-	border-bottom: #009AE0 solid
-	border-width: 3px
-	word-wrap: normal
-	padding-bottom: 3px
-	color: black
-	border-radius: 2px
-	line-height: 2
+    font-family: 'Roboto-Black'
+    border-bottom: #009AE0 solid
+    border-width: 3px
+    word-wrap: normal
+    padding-bottom: 3px
+    color: black
+    border-radius: 2px
+    line-height: 2
 
 .tamanho-fonte
-	font-size: 16px !important
+    font-size: 16px !important
 
 .botao-alterar
-	background-color: #FFC107
+    &:hover
+        background-color: #FFC107 !important
+        color: black
+    &:first-child
+        &:hover
+            color: black
 
 .botao-excluir
-	background-color: #F86C6B
+    &:hover
+        background-color: #F86C6B !important
+        color: black
+    &:first-child
+        &:hover
+            color: black
 
 .botao-expandir
-	background-color: #009AE0
+    background-color: #009AE0
 
 .base-alterar-excluir-expandir
-	border-radius: 5px
-	color: white !important
-	font-family: 'Roboto-Regular'
-	cursor: pointer
+    border-radius: 5px
+    color: white !important
+    font-family: 'Roboto-Regular'
+    cursor: pointer
 
 .limpar
-	background-color: #808080
-	color: white
+    background-color: #808080
+    color: white
 
-	&:hover
-		background-color: #7A7A7A
-		color: white
+    &:hover
+        background-color: #7A7A7A
+        color: white
 
 .cadastrar
-	border-radius: 4px
-	background-color: #009AE0
-	color: white
-	border: none
+    border-radius: 4px
+    background-color: #009AE0
+    color: white
+    border: none
 
-	&:disabled
-		background-color: #0099e0b6
+    &:disabled
+        background-color: #0099e0b6
 
 
-	&:hover
-		background-color: #0088C7
-		color: white
+    &:hover
+        background-color: #0088C7
+        color: white
 
 .card
-	min-width: 60vw
+    min-width: 60vw
 
 .full-width
-	width: 100%
+    width: 100%

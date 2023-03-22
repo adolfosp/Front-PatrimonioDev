@@ -33,6 +33,7 @@ import { GraficoComponent } from "./views/grafico/grafico.component";
 import { RegistrarComponent } from "./views/login/registrar/registrar.component";
 import { QrCodeComponent } from "./views/qr-code/qr-code.component";
 import { HttpCodeMensagemComponent } from "./views/shared/http-code-mensagem/http-code-mensagem.component";
+import { CustomPaginatorIntlModule } from "./views/shared/grid/custom-paginator-grid/custom-paginator-intl.component";
 
 @NgModule({
   declarations: [
@@ -55,7 +56,11 @@ import { HttpCodeMensagemComponent } from "./views/shared/http-code-mensagem/htt
     }),
     CommonModule,
     BrowserAnimationsModule,
-    NgxSpinnerModule,
+    NgxSpinnerModule.forRoot(
+      {
+        type: "square-jelly-box",
+      }
+    ),
     ReactiveFormsModule,
     BrowserModule,
     QRCodeModule,
@@ -79,8 +84,7 @@ import { HttpCodeMensagemComponent } from "./views/shared/http-code-mensagem/htt
     MatButtonModule,
     MatSlideToggleModule,
     MatExpansionModule,
-    ErrorHandlerModule.forRoot()
-
+    CustomPaginatorIntlModule
   ],
   providers: [
 

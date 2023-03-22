@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { AbstractControlOptions, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ValidacaoCampoSenha } from "@nvs-helpers/ValidacaoSenhaHelper";
 import Componente from "@nvs-models/Componente";
-import { DadosRequisicao } from '@nvs-models/DadosRequisicao';
+import { DadosRequisicao } from '@nvs-models/requisicoes/DadosRequisicao';
 import { UsuarioPerfil } from "@nvs-models/UsuarioPerfil";
 import { TokenService } from "@nvs-services/token/token.service";
 import { UsuarioPerfilService } from "@nvs-services/usuario-perfil/usuario-perfil.service";
