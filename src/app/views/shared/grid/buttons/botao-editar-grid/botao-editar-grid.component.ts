@@ -7,13 +7,13 @@ import { ConfiguracaoIcone } from "@nvs-utils/configuracao-icone";
   styleUrls: ['./botao-editar-grid.component.sass']
 })
 export class BotaoEditarGridComponent {
-  @Output() public detalheCategoria = new EventEmitter();
+  @Output() public detalhe = new EventEmitter();
 
   public confIcone = ConfiguracaoIcone;
 
-  public detalharCategoria(e: object): void{
+  public detalhar(e: object): void{
     console.log(e);
-    this.detalheCategoria.emit(e);
+    this.detalhe.emit(e);
   }
 
 }

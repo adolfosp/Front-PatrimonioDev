@@ -11,7 +11,6 @@ import {
 } from "@angular/core";
 import { PageEvent } from "@angular/material/paginator";
 import {ConfiguracaoSpinner} from "@nvs-utils/configuracao-spinner";
-import {ConfiguracaoIcone} from "@nvs-utils/configuracao-icone";
 import configuracaoTabela from '@nvs-utils/configuracao-tabela';
 import { Router } from '@angular/router';
 import { Categoria } from '@nvs-models/Categoria';
@@ -25,6 +24,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import * as XLSX from 'xlsx';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Title } from "@angular/platform-browser";
+import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
 
 @Component({
   selector: 'app-listagem-categoria',
@@ -38,7 +38,6 @@ export class ListagemCategoriaComponent extends Componente implements OnInit, Af
   @ViewChild('table', { static: true }) table: APIDefinition;
 
   public confSpinner = ConfiguracaoSpinner;
-  public confIcone = ConfiguracaoIcone;
   public configuracao: Config;
   public colunas: Columns[];
   public data: Categoria[] = [];
@@ -74,14 +73,9 @@ export class ListagemCategoriaComponent extends Componente implements OnInit, Af
   ngOnInit(): void {
 
     this.configuracao = configuracaoTabela();
-    this.configuracao.paginationRangeEnabled = false;
-    this.configuracao.paginationEnabled = false;
+
     this.colunas = this.obterColunasDaTabela();
-    this.paginacao = {
-      limit: 5,
-      offset: 1,
-      count: 0
-    }
+    this.paginacao = configuracaoPaginacao
     this.obterCategorias();
     this.ehAdministrador = this.token.ehUsuarioAdministrador();
     this.checkView();
@@ -112,10 +106,9 @@ export class ListagemCategoriaComponent extends Componente implements OnInit, Af
   public obterCategorias(): void {
     this.spinner.show("buscando");
     const paginacao = new Paginacao(this.paginacao.offset, this.paginacao.limit);
-    console.log(paginacao);
+
     this.categoriaService.obterTodasCategorias(paginacao).subscribe({
       next: (dados: DadosRequisicao) => {
-        console.log(dados);
         const categorias = dados.data.registros as Categoria[];
         this.data = categorias
         this.dataFiltradaExcel = categorias;

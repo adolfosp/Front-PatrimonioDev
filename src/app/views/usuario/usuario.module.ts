@@ -17,6 +17,7 @@ import { PerfilComponent } from './perfil/perfil.component';
 import { UsuarioRoutingModule } from './usuario-routing.module';
 import { UsuarioComponent } from './usuario.component';
 import { SharedComponentModule } from '../shared/shared-component.module';
+import { SelectService } from "@nvs-services/componente/select-service";
 
 @NgModule({
   imports: [
@@ -31,7 +32,7 @@ import { SharedComponentModule } from '../shared/shared-component.module';
     MatSelectModule,
     SharedComponentModule
   ],
-  providers: [UsuarioService, BsModalService, TokenService, SetorService, EmpresaService,PermissaoService ],
+  providers: [UsuarioService, BsModalService, TokenService, SetorService, EmpresaService,PermissaoService, SelectService ],
   declarations: [UsuarioComponent, ListagemUsuarioComponent, PerfilComponent ]
 
 })
