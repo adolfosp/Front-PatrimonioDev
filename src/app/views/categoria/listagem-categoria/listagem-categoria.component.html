@@ -18,7 +18,7 @@
         </button>
       </td>
       <td *ngIf="!isMobile">
-        <app-botao-editar-grid (detalheCategoria)="detalheCategoria(row.codigoCategoria)" ></app-botao-editar-grid>
+        <app-botao-editar-grid (detalhe)="detalheCategoria(row.codigoCategoria)" ></app-botao-editar-grid>
       </td>
       <td *ngIf="!isMobile">
         <app-botao-remover-grid (abrirModal)="abrirModal($event, template, row.codigoCategoria)"></app-botao-remover-grid>
@@ -51,7 +51,7 @@
 </ng-template>
 
 <ng-template #detailsTemplate let-row>
-  <app-botao-editar-grid (detalheCategoria)="detalheCategoria(row.codigoCategoria)" ></app-botao-editar-grid>
+  <app-botao-editar-grid (detalhe)="detalheCategoria(row.codigoCategoria)" ></app-botao-editar-grid>
   <app-botao-remover-grid (abrirModal)="abrirModal($event, template, row.codigoCategoria)"></app-botao-remover-grid>
 </ng-template>
 

@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import {
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    HostListener,
+    OnInit,
+    TemplateRef,
+    ViewChild, ViewEncapsulation
+} from "@angular/core";
 import { Router } from '@angular/router';
 import Componente from '@nvs-models/Componente';
 import { DadosRequisicao } from '@nvs-models/requisicoes/DadosRequisicao';
@@ -7,20 +16,26 @@ import { EmpresaService } from '@nvs-services/empresa/empresa.service';
 import { TokenService } from '@nvs-services/token/token.service';
 import configuracaoTabela from '@nvs-utils/configuracao-tabela';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { API, APIDefinition, Columns, Config } from 'ngx-easy-table';
+import { API, APIDefinition, Columns, Config, Pagination } from "ngx-easy-table";
 import { NgxSpinnerService } from 'ngx-spinner';
 import * as XLSX from 'xlsx';
+import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
+import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
+import Paginacao from "@nvs-models/dtos/Paginacao";
+import { Categoria } from "@nvs-models/Categoria";
+import { PageEvent } from "@angular/material/paginator";
 
 @Component({
   selector: 'app-listarempresa',
   templateUrl: './listagem-empresa.component.html',
   styleUrls: ['./listagem-empresa.component.sass'],
+  encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ListagemEmpresaComponent extends Componente implements OnInit {
+export class ListagemEmpresaComponent extends Componente implements OnInit, AfterViewInit {
 
   @ViewChild('table', { static: true }) table: APIDefinition;
-
+  public confSpinner = ConfiguracaoSpinner;
   public configuracao: Config;
   public colunas: Columns[];
   public linhas = 0;
@@ -31,6 +46,9 @@ export class ListagemEmpresaComponent extends Componente implements OnInit {
   public dataFiltradaExcel: Empresa[] = [];
   public empresaId = 0;
   public ehAdministrador = false;
+  public readonly rotaCadastro = "/dashboard/empresa";
+  public paginacao: Pagination;
+  public totalItensPaginacao: number;
 
   modalRef?: BsModalRef;
 
@@ -47,6 +65,7 @@ export class ListagemEmpresaComponent extends Componente implements OnInit {
 
   ngOnInit(): void {
 
+    this.paginacao = configuracaoPaginacao;
     this.obterEmpresas();
     this.ehAdministrador = this.token.ehUsuarioAdministrador()
 
@@ -57,6 +76,23 @@ export class ListagemEmpresaComponent extends Componente implements OnInit {
     this.checkView();
 
   }
+
+    ngAfterViewInit(): void {
+        this.totalItensPaginacao = this.table.apiEvent({
+            type: API.getPaginationTotalItems,
+        });
+        this.detectorAlteracao.detectChanges();
+    }
+
+    paginationEvent($event: PageEvent): void {
+        this.paginacao = {
+            ...this.paginacao,
+            limit: $event.pageSize,
+            offset: $event.pageIndex + 1,
+            count: $event.length,
+        };
+        this.obterEmpresas();
+    }
 
   get isMobile(): boolean {
     return this.innerWidth <= 768;
@@ -70,12 +106,16 @@ export class ListagemEmpresaComponent extends Componente implements OnInit {
 
   private obterEmpresas(): void {
 
-    this.spinner.show("buscando")
+    this.spinner.show("buscando");
+    const paginacao = new Paginacao(this.paginacao.offset, this.paginacao.limit);
 
-    this.empresaService.obterEmpresas().subscribe({
+    this.empresaService.obterEmpresas(paginacao).subscribe({
       next: (dados: DadosRequisicao) => {
-        this.data = dados.data as Empresa[];
-        this.dataFiltradaExcel = dados.data as Empresa[];
+
+          const empresa = dados.data.registros as Empresa[];
+          this.data = empresa
+          this.dataFiltradaExcel = empresa;
+          this.totalItensPaginacao = dados.data.quantidadePagina * this.paginacao.limit;
 
       },
       error: (error: unknown) => {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { AbstractControlOptions, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MensagemRequisicao } from "@nvs-helpers/MensagemRequisicaoHelper";
@@ -15,6 +15,13 @@ import { SetorService } from "@nvs-services/setor/setor.service";
 import { UsuarioService } from "@nvs-services/usuario/usuario.service";
 import { CLASSE_BOTAO_LIMPAR } from "@nvs-utils/classes-sass.constant";
 import { NgxSpinnerService } from "ngx-spinner";
+import { MatSelect } from "@angular/material/select";
+import { Pagination } from "ngx-easy-table";
+import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
+import { quantidadeBuscaPorVezSelect } from "@nvs-utils/configuracao-paginacao";
+
+import Paginacao from "@nvs-models/dtos/Paginacao";
+import { SelectService } from "@nvs-services/componente/select-service";
 
 @Component({
   selector: "app-usuario",
@@ -22,8 +29,11 @@ import { NgxSpinnerService } from "ngx-spinner";
   styleUrls: ["./usuario.component.sass", "../../../assets/style-base.sass"],
 })
 export class UsuarioComponent extends Componente implements OnInit {
+  @ViewChild("selectEmpresa", { read: MatSelect }) selectEmpresa: MatSelect;
+
   private _codigoUsuario: number;
   private _usuario = {} as Usuario;
+  private _paginacaoSelectEmpresa: Pagination;
 
   public form!: FormGroup;
   public estadoSalvar = "cadastrarUsuario";
@@ -32,6 +42,7 @@ export class UsuarioComponent extends Componente implements OnInit {
   public permissoes: UsuarioPermissao[] = [];
   public limpandoCampo = false;
   public readonly classeBotaoLimpar = CLASSE_BOTAO_LIMPAR;
+  public readonly metodoCarregarEmpresa = "carregarEmpresa";
 
   get f(): any {
     return this.form.controls;
@@ -46,18 +57,32 @@ export class UsuarioComponent extends Componente implements OnInit {
     private router: Router,
     private usuarioService: UsuarioService,
     private activateRouter: ActivatedRoute,
+    private selectService: SelectService,
   ) {
     super();
+    this._paginacaoSelectEmpresa = configuracaoPaginacao;
   }
 
   ngOnInit(): void {
     this.validacao();
     this.carregarUsuario();
     this.carregarSetor();
-    this.carregarEmpresa();
+    this[this.metodoCarregarEmpresa]();
     this.carregarPermissao();
     this.controlarVisibilidadeCampoAtivo();
   }
+
+  onSelectAberto(event: any, select: string, nomeMetodo: string) {
+    if (!event) return;
+
+    this[select].panel.nativeElement.addEventListener("scroll", () => {
+      if (!this.selectService.deveObterMaisRegistros(event, this[select])) return;
+
+      const paginacao = this.selectService.ObterPaginacao(this._paginacaoSelectEmpresa);
+      this[nomeMetodo](paginacao);
+    });
+  }
+
   private controlarVisibilidadeCampoAtivo(): void {
     if (this.estadoSalvar == "cadastrarUsuario") this.form.controls["ativo"].disable();
     else this.form.controls["ativo"].enable();
@@ -74,10 +99,14 @@ export class UsuarioComponent extends Componente implements OnInit {
     });
   }
 
-  private carregarEmpresa(): void {
-    this.empresaService.obterEmpresas().subscribe({
+  private carregarEmpresa(paginacaoBase: Paginacao = null): void {
+    let paginacaoEmpresa = new Paginacao(this._paginacaoSelectEmpresa.offset, this._paginacaoSelectEmpresa.limit);
+
+    if (paginacaoBase !== null) paginacaoEmpresa = paginacaoBase;
+
+    this.empresaService.obterEmpresas(paginacaoEmpresa).subscribe({
       next: (dados: DadosRequisicao) => {
-        this.empresas = dados.data as Empresa[];
+        this.empresas = dados.data.registros as Empresa[];
       },
       error: (error: unknown) => {
         this.mostrarAvisoErro(error, "Houve um erro ao carregar a empresa.");
@@ -160,7 +189,7 @@ export class UsuarioComponent extends Componente implements OnInit {
         .obterApenasUmUsuario(this._codigoUsuario)
         .subscribe({
           next: (dados: DadosRequisicao) => {
-            this._usuario = { ...dados.data as Usuario };
+            this._usuario = { ...(dados.data as Usuario) };
             this.form.patchValue(this._usuario);
             this.form.controls["confirmeSenha"].setValue(dados.data.senha);
           },

@@ -10,6 +10,8 @@ export default function(){
   configuracao.detailsTemplate = true;
   configuracao.tableLayout.borderless = true;
   configuracao.rows = 5;
+  configuracao.paginationRangeEnabled = false;
+  configuracao.paginationEnabled = false;
 
   return configuracao
 }

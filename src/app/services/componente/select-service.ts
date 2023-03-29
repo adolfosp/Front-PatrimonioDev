@@ -1,0 +1,25 @@
+import { Injectable } from "@angular/core";
+import { MatSelect } from "@angular/material/select";
+import Paginacao from "@nvs-models/dtos/Paginacao";
+import { Pagination } from "ngx-easy-table";
+import { quantidadeBuscaPorVezSelect } from "@nvs-utils/configuracao-paginacao";
+
+@Injectable({
+  providedIn: "root",
+})
+export class SelectService {
+  public deveObterMaisRegistros(event: any, select: MatSelect): boolean {
+    if (
+      select.panel.nativeElement.scrollTop ===
+      select.panel.nativeElement.scrollHeight - select.panel.nativeElement.offsetHeight
+    )
+      return true;
+
+    return false;
+  }
+
+  public ObterPaginacao(paginacao: Pagination): Paginacao {
+    paginacao.limit += quantidadeBuscaPorVezSelect;
+    return new Paginacao(paginacao.offset, paginacao.limit);
+  }
+}
