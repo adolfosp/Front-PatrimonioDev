@@ -58,7 +58,7 @@ export class CategoriaComponent extends Componente implements OnInit, Componente
 
   public salvarAlteracao(): void {
 
-    const atualizando = this.estadoSalvar == 'atualizarCategoria';
+    const atualizando = this.estadoSalvar === 'atualizarCategoria';
     const nomeAcaoRealizada = atualizando ? 'atualizada' : 'cadastrada';
 
     this.spinner.show(nomeAcaoRealizada);

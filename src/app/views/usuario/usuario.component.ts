@@ -1,24 +1,23 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { AbstractControlOptions, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { MatSelect } from "@angular/material/select";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MensagemRequisicao } from "@nvs-helpers/MensagemRequisicaoHelper";
 import { ValidacaoCampoSenha } from "@nvs-helpers/ValidacaoSenhaHelper";
 import Componente from "@nvs-models/Componente";
-import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { Empresa } from "@nvs-models/Empresa";
 import { Setor } from "@nvs-models/Setor";
 import { Usuario } from "@nvs-models/Usuario";
 import { UsuarioPermissao } from "@nvs-models/UsuarioPermissao";
+import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { EmpresaService } from "@nvs-services/empresa/empresa.service";
 import { PermissaoService } from "@nvs-services/permissao/permissao.service";
 import { SetorService } from "@nvs-services/setor/setor.service";
 import { UsuarioService } from "@nvs-services/usuario/usuario.service";
 import { CLASSE_BOTAO_LIMPAR } from "@nvs-utils/classes-sass.constant";
-import { NgxSpinnerService } from "ngx-spinner";
-import { MatSelect } from "@angular/material/select";
-import { Pagination } from "ngx-easy-table";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
-import { quantidadeBuscaPorVezSelect } from "@nvs-utils/configuracao-paginacao";
+import { Pagination } from "ngx-easy-table";
+import { NgxSpinnerService } from "ngx-spinner";
 
 import Paginacao from "@nvs-models/dtos/Paginacao";
 import { SelectService } from "@nvs-services/componente/select-service";
