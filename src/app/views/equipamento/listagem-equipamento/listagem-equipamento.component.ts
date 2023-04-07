@@ -18,6 +18,7 @@ import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { EquipamentoService } from "@nvs-services/equipamento/equipamento.service";
 import { TokenService } from "@nvs-services/token/token.service";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
+import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
 import configuracaoTabela from "@nvs-utils/configuracao-tabela";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import {
@@ -42,6 +43,7 @@ export class ListagemEquipamentoComponent
 	implements OnInit, AfterViewInit
 {
 	@ViewChild('table', { static: true }) table: APIDefinition;
+	public confSpinner = ConfiguracaoSpinner;
 
 	public configuracao: Config;
 	public colunas: Columns[];
