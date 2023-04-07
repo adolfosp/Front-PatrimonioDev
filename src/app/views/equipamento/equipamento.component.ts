@@ -4,15 +4,15 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { MensagemRequisicao } from "@nvs-helpers/MensagemRequisicaoHelper";
 import { Categoria } from "@nvs-models/Categoria";
 import Componente from "@nvs-models/Componente";
-import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { Equipamento } from "@nvs-models/Equipamento";
 import { Fabricante } from "@nvs-models/Fabricante";
+import Paginacao from "@nvs-models/dtos/Paginacao";
+import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { CategoriaService } from "@nvs-services/categoria/categoria.service";
 import { EquipamentoService } from "@nvs-services/equipamento/equipamento.service";
 import { FabricanteService } from "@nvs-services/fabricante/fabricante.service";
 import { CLASSE_BOTAO_LIMPAR } from "@nvs-utils/classes-sass.constant";
 import { NgxSpinnerService } from "ngx-spinner";
-import Paginacao from "@nvs-models/dtos/Paginacao";
 
 @Component({
   selector: "app-equipamento",
@@ -77,7 +77,7 @@ export class EquipamentoComponent extends Componente implements OnInit {
   private carregarCategorias(): void {
     this.categoriaService.obterTodasCategorias(new Paginacao(1,1)).subscribe({
       next: (result: DadosRequisicao) => {
-        this.categorias = result.data as Categoria[];
+        this.categorias = result.data.registros as Categoria[];
       },
       error: (error: unknown) => {
         this.mostrarAvisoErro(error, "Houve um problema ao carregar as categorias.");

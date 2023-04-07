@@ -1,39 +1,48 @@
 <div class="card border-0 rounded shadow-sm p-3 m-5">
-    <app-header-grid [ehAdministrador]="ehAdministrador" [rotaNovoRegistro]="rotaCadastro" (exportar)="exportarParaExcel()" (changeValueInput)="onChange($event)" ></app-header-grid>
+    <app-header-grid [ehAdministrador]="ehAdministrador"
+        [rotaNovoRegistro]="rotaCadastro" (exportar)="exportarParaExcel()"
+        (changeValueInput)="onChange($event)"></app-header-grid>
 
-  <ngx-table [data]="data" [configuration]="configuracao" [pagination]="paginacao"  [columns]="colunas" [noResultsTemplate]="mensagemSemCadastro"  [detailsTemplate]="detailsTemplate" #table>
-    <ng-template let-row let-index="index">
-      <td *ngIf="!isMobile">
-        <div class="font-small">{{ row.codigoEmpresa }}</div>
-      </td>
-      <td>
-        <div class="font-small">{{ row.razaoSocial}}</div>
-      </td>
-      <td *ngIf="!isMobile">
-        <div class="font-small">{{ row.nomeFantasia}}</div>
-      </td>
-      <td *ngIf="!isMobile">
-        <div class="font-small">{{ row.empresaPadraoImpressao | booleano: false}} </div>
-      </td>
-      <td *ngIf="!isMobile">
-        <div class="font-small">{{ row.cnpj}}</div>
-      </td>
-      <td *ngIf="isMobile">
-        <button class="btn botao-expandir" id="expandButton-{{ index }}" (click)="onRowClickEvent($event, index)">
-          <i class="fa fa-arrow-left" *ngIf="!toggledRows.has(index)"></i>
-          <i class="fa fa-arrow-down" *ngIf="toggledRows.has(index)"></i>
-          Expandir
-        </button>
-      </td>
+    <ngx-table [data]="data" [configuration]="configuracao"
+        [pagination]="paginacao" [columns]="colunas"
+        [noResultsTemplate]="mensagemSemCadastro"
+        [detailsTemplate]="detailsTemplate" #table>
+        <ng-template let-row let-index="index">
+            <td *ngIf="!isMobile">
+                <div class="font-small">{{ row.codigoEmpresa }}</div>
+            </td>
+            <td>
+                <div class="font-small">{{ row.razaoSocial}}</div>
+            </td>
+            <td *ngIf="!isMobile">
+                <div class="font-small">{{ row.nomeFantasia}}</div>
+            </td>
+            <td *ngIf="!isMobile">
+                <div class="font-small">{{ row.empresaPadraoImpressao |
+                    booleano: false}} </div>
+            </td>
+            <td *ngIf="!isMobile">
+                <div class="font-small">{{ row.cnpj}}</div>
+            </td>
+            <td *ngIf="isMobile">
+                <button class="btn botao-expandir" id="expandButton-{{ index }}"
+                    (click)="onRowClickEvent($event, index)">
+                    <i class="fa fa-arrow-left" *ngIf="!toggledRows.has(index)"></i>
+                    <i class="fa fa-arrow-down" *ngIf="toggledRows.has(index)"></i>
+                    Expandir
+                </button>
+            </td>
 
-        <td *ngIf="!isMobile">
-            <app-botao-editar-grid (detalhe)="detalheEmpresa(row.codigoEmpresa)"></app-botao-editar-grid>
-        </td>
-        <td *ngIf="!isMobile">
-            <app-botao-remover-grid (abrirModal)="abrirModal($event, template, row.codigoEmpresa)"></app-botao-remover-grid>
-        </td>
-    </ng-template>
-  </ngx-table>
+            <td *ngIf="!isMobile">
+                <app-botao-editar-grid
+                    (detalhe)="detalheEmpresa(row.codigoEmpresa)"></app-botao-editar-grid>
+            </td>
+            <td *ngIf="!isMobile">
+                <app-botao-remover-grid (abrirModal)="abrirModal($event,
+                    template, row.codigoEmpresa)"></app-botao-remover-grid>
+            </td>
+        </ng-template>
+    </ngx-table>
     <div>
         <mat-paginator
             [length]="totalItensPaginacao"
@@ -44,35 +53,38 @@
         </mat-paginator>
     </div>
 </div>
-  <ng-template #template>
+<ng-template #template>
     <div class="modal-body text-center">
-      <p class="tamanho-fonte">Deseja confirmar a <strong>deleção</strong> da empresa de código {{empresaId}}?</p>
-      <button type="button" class="btn btn-default" (click)="confirmar()">Sim</button>
-      <button type="button" class="btn btn-primary" (click)="recusar()">Não</button>
+        <p class="tamanho-fonte">Deseja confirmar a <strong>deleção</strong> da
+            empresa de código {{empresaId}}?</p>
+        <button type="button" class="btn btn-default" (click)="confirmar()">Sim</button>
+        <button type="button" class="btn btn-primary" (click)="recusar()">Não</button>
     </div>
-  </ng-template>
-  <ng-template #mensagemSemCadastro>
+</ng-template>
+<ng-template #mensagemSemCadastro>
     <td [attr.colspan]="colunas.length" class="no-results text-center">
-      <h4>Não há nenhuma empresa cadastrada</h4>
+        <h4>Não há nenhuma empresa cadastrada</h4>
     </td>
-  </ng-template>
+</ng-template>
 
 
-  <ng-template #detailsTemplate let-row>
+<ng-template #detailsTemplate let-row>
     <p>Código: {{ row.codigoEmpresa }} </p>
     <p>Nome Fantasia: {{ row.nomeFantasia }}</p>
     <p>CNPJ: {{ row.cnpj }}</p>
 
-      <app-botao-editar-grid (detalhe)="detalheEmpresa(row.codigoEmpresa)"></app-botao-editar-grid>
+    <app-botao-editar-grid (detalhe)="detalheEmpresa(row.codigoEmpresa)"></app-botao-editar-grid>
+    <app-botao-remover-grid (abrirModal)="abrirModal($event, template,
+        row.codigoEmpresa)"></app-botao-remover-grid>
 
-      <app-botao-remover-grid (abrirModal)="abrirModal($event, template, row.codigoEmpresa)"></app-botao-remover-grid>
-
-  </ng-template>
-  <ngx-spinner name="buscando" [bdColor]="confSpinner.bdColor" [size]="confSpinner.tamanho" [color]="confSpinner.color"
-               [fullScreen]="confSpinner.fullScren">
+</ng-template>
+<ngx-spinner name="buscando" [bdColor]="confSpinner.bdColor"
+    [size]="confSpinner.tamanho" [color]="confSpinner.color"
+    [fullScreen]="confSpinner.fullScren">
     <p style="color: white"> Buscando</p>
-  </ngx-spinner>
-  <ngx-spinner name="excluindo" [bdColor]="confSpinner.bdColor" [size]="confSpinner.tamanho" [color]="confSpinner.color"
-               [fullScreen]="confSpinner.fullScren">
+</ngx-spinner>
+<ngx-spinner name="excluindo" [bdColor]="confSpinner.bdColor"
+    [size]="confSpinner.tamanho" [color]="confSpinner.color"
+    [fullScreen]="confSpinner.fullScren">
     <p style="color: white"> Excluindo... </p>
-  </ngx-spinner>
+</ngx-spinner>

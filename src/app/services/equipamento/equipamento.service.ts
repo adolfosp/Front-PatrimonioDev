@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { DadosRequisicao } from '@nvs-models/requisicoes/DadosRequisicao';
 import { Equipamento } from '@nvs-models/Equipamento';
+import { DadosRequisicao } from '@nvs-models/requisicoes/DadosRequisicao';
 import { ApiService } from '@nvs-services/api/api.service';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
+import Paginacao from '../../models/dtos/Paginacao';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +20,8 @@ export class EquipamentoService {
     return this.api.post<Equipamento>(this.baseUrl, {equipamento}).pipe(take(1));
   }
 
-  public obterTodosEquipamentos(): Observable<DadosRequisicao> {
-    return this.api.get<DadosRequisicao>(this.baseUrl).pipe(take(1));
+  public obterTodosEquipamentos(paginacao: Paginacao): Observable<DadosRequisicao> {
+    return this.api.get<DadosRequisicao>(`${this.baseUrl}?paginaAtual=${paginacao.paginaAtual}&quantidadePorPagina=${paginacao.quantidadePorPagina}`).pipe(take(1));
   }
 
   public deletarEquipamento(codigoEquipamento: number): Observable<any>{

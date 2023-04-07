@@ -4,7 +4,7 @@
       <div class="col-sm-12 col-md-8 col-lg-8">
         <h1><span class="texto-destaque">Patrimônio</span></h1>
       </div>
-      <div *ngIf="+form.controls['codigoPatrimonio'].value != 0" class="col-sm-12 col-md-4 col-lg-4">
+      <div *ngIf="+form.controls['codigoPatrimonio'].value !== 0" class="col-sm-12 col-md-4 col-lg-4">
         <app-canvas codigoPatrimonio="{{codigoPatrimonio}}" url="" serviceTag="{{serviceTag}}"
           nomeFantasia="{{nomeFantasiaEmpresaPadrao | uppercase | slice:0:18 }}"></app-canvas>
       </div>
@@ -34,7 +34,7 @@
         <div class="col-lg-6 col-sm-12">
           <mat-form-field class="full-width" appearance="fill">
             <mat-label>Equipamento</mat-label>
-            <mat-select [formControl]="f.codigoTipoEquipamento" name="codigoTipoEquipamento" required>
+            <mat-select [formControl]="f.codigoTipoEquipamento" #selectEquipamento (openedChange)="onSelectAberto($event, 'selectEmpresa', metodoCarregarEquipamento)" name="codigoTipoEquipamento" required>
               <mat-option value="" disabled>--Selecione um equipamento--</mat-option>
               <mat-option *ngFor="let equipamento of equipamentos" [value]="equipamento.codigoTipoEquipamento">
                 {{equipamento.codigoTipoEquipamento}} - {{ equipamento.tipoEquipamento }}
@@ -173,7 +173,7 @@
         <div class="row">
           <div class="col">
             <button type="button" class="btn btn-block cadastrar me-2" [disabled]="!form.valid || !formAdicional.valid"
-              (click)="salvarAlteracao()">{{this.estadoSalvar == 'cadastrarPatrimonio'?'Cadastrar':'Atualizar'}}</button>
+              (click)="salvarAlteracao()">{{this.estadoSalvar === 'cadastrarPatrimonio'?'Cadastrar':'Atualizar'}}</button>
             <app-button (click)="limparCampos()" [classeBotao]="classeBotaoLimpar">
               Limpar
             </app-button>
