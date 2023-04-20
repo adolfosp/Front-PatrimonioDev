@@ -18,8 +18,6 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { MatSelect } from "@angular/material/select";
 import { Pagination } from "ngx-easy-table";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
-import { quantidadeBuscaPorVezSelect } from "@nvs-utils/configuracao-paginacao";
-
 import Paginacao from "@nvs-models/dtos/Paginacao";
 import { SelectService } from "@nvs-services/componente/select-service";
 
@@ -84,7 +82,7 @@ export class UsuarioComponent extends Componente implements OnInit {
   }
 
   private controlarVisibilidadeCampoAtivo(): void {
-    if (this.estadoSalvar == "cadastrarUsuario") this.form.controls["ativo"].disable();
+    if (this.estadoSalvar === "cadastrarUsuario") this.form.controls["ativo"].disable();
     else this.form.controls["ativo"].enable();
   }
 
