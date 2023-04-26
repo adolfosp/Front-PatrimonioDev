@@ -116,7 +116,7 @@ export class EquipamentoComponent extends Componente implements OnInit {
 
         if (paginacaoBase !== null) paginacaoCategoria = paginacaoBase;
 
-		this.categoriaService.obterTodasCategorias(paginacaoCategoria).subscribe({
+		this.categoriaService.obterRegistros(paginacaoCategoria).subscribe({
 			next: (result: DadosRequisicao) => {
 				this.categorias = result.data.registros as Categoria[];
 			},

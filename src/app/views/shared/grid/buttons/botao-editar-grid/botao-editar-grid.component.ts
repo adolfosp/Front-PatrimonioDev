@@ -12,7 +12,6 @@ export class BotaoEditarGridComponent {
   public confIcone = ConfiguracaoIcone;
 
   public detalhar(e: object): void{
-    console.log(e);
     this.detalhe.emit(e);
   }
 

@@ -1,42 +1,47 @@
-import { Injectable } from '@angular/core';
-import { Categoria } from '@nvs-models/Categoria';
-import { ApiService } from '@nvs-services/api/api.service';
-import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
+import { Injectable } from "@angular/core";
+import { ApiService } from "@nvs-services/api/api.service";
+import { Observable } from "rxjs";
+import { take } from "rxjs/operators";
+import { environment } from "../../../environments/environment";
 import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import Paginacao from "@nvs-models/dtos/Paginacao";
+import { IService } from "@nvs-models/interfaces/IService";
 
 @Injectable({
   providedIn: 'root'
 })
-export class CategoriaService {
+export class CategoriaService implements IService {
+	baseUrl = `${environment.apiUrl}categorias`;
 
-  baseUrl = `${environment.apiUrl}categorias`;
+	constructor(private api: ApiService) {}
+	cadastrar<T>(categoria: T): Observable<DadosRequisicao> {
+		return this.api
+			.post<DadosRequisicao>(this.baseUrl, { categoria })
+			.pipe(take(1));
+	}
+	obterRegistros(paginacao: Paginacao): Observable<DadosRequisicao> {
+		return this.api
+			.get<DadosRequisicao>(
+				`${this.baseUrl}?paginaAtual=${paginacao.paginaAtual}&quantidadePorPagina=${paginacao.quantidadePorPagina}`,
+			)
+			.pipe(take(1));
+	}
+	remover(codigoCategoria: number): Observable<DadosRequisicao> {
+		return this.api
+			.delete<DadosRequisicao>(`${this.baseUrl}/${codigoCategoria}`)
+			.pipe(take(1));
+	}
+	obterRegistro(codigoCategoria: number): Observable<DadosRequisicao> {
+		return this.api
+			.get<DadosRequisicao>(`${this.baseUrl}/${codigoCategoria}`)
+			.pipe(take(1));
+	}
 
-  constructor(private api: ApiService) { }
-
-  public cadastrarCategoria(categoria: Categoria): Observable<DadosRequisicao> {
-    return this.api.post<DadosRequisicao>(this.baseUrl, {categoria}).pipe(take(1));
-  }
-
-  public obterTodasCategorias(paginacao: Paginacao): Observable<DadosRequisicao> {
-    return this.api.get<DadosRequisicao>(`${this.baseUrl}?paginaAtual=${paginacao.paginaAtual}&quantidadePorPagina=${paginacao.quantidadePorPagina}`).pipe(take(1));
-  }
-
-  public deletarCategoria(codigoCategoria: number): Observable<DadosRequisicao>{
-    return this.api
-    .delete<DadosRequisicao>(`${this.baseUrl}/${codigoCategoria}`)
-    .pipe(take(1));
-  }
-
-  public obterApenasUmaCategoria(codigoCategoria: number): Observable<DadosRequisicao> {
-    return this.api.get<DadosRequisicao>(`${this.baseUrl}/${codigoCategoria}`).pipe(take(1));
-  }
-
-  public atualizarCategoria(categoria: Categoria): Observable<DadosRequisicao>{
-    return this.api
-    .put<DadosRequisicao>(`${this.baseUrl}/${categoria.codigoCategoria}`, {categoria})
-    .pipe(take(1));
-  }
+	atualizar<T>(categoria: T): Observable<DadosRequisicao> {
+		return this.api
+			.put<DadosRequisicao>(`${this.baseUrl}/${categoria["codigoCategoria"]}`, {
+				categoria,
+			})
+			.pipe(take(1));
+	}
 }

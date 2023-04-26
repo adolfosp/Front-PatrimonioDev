@@ -20,6 +20,7 @@ import { Pagination } from "ngx-easy-table";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
 import Paginacao from "@nvs-models/dtos/Paginacao";
 import { SelectService } from "@nvs-services/componente/select-service";
+import { TipoService } from "@nvs-enum/tipo-service";
 
 @Component({
   selector: "app-usuario",
@@ -31,7 +32,7 @@ export class UsuarioComponent extends Componente implements OnInit {
 
   private _codigoUsuario: number;
   private _usuario = {} as Usuario;
-  private _paginacaoSelectEmpresa: Pagination;
+  public paginacaoSelectEmpresa: Pagination;
 
   public form!: FormGroup;
   public estadoSalvar = "cadastrarUsuario";
@@ -41,6 +42,7 @@ export class UsuarioComponent extends Componente implements OnInit {
   public limpandoCampo = false;
   public readonly classeBotaoLimpar = CLASSE_BOTAO_LIMPAR;
   public readonly metodoCarregarEmpresa = "carregarEmpresa";
+  public readonly tipoService = TipoService.categoria;
 
   get f(): any {
     return this.form.controls;
@@ -49,7 +51,7 @@ export class UsuarioComponent extends Componente implements OnInit {
   constructor(
     private fb: FormBuilder,
     private spinner: NgxSpinnerService,
-    private setorService: SetorService,
+    public setorService: SetorService,
     private empresaService: EmpresaService,
     private permissaoService: PermissaoService,
     private router: Router,
@@ -58,7 +60,7 @@ export class UsuarioComponent extends Componente implements OnInit {
     private selectService: SelectService,
   ) {
     super();
-    this._paginacaoSelectEmpresa = configuracaoPaginacao;
+    this.paginacaoSelectEmpresa = configuracaoPaginacao;
   }
 
   ngOnInit(): void {
@@ -76,7 +78,7 @@ export class UsuarioComponent extends Componente implements OnInit {
     this[select].panel.nativeElement.addEventListener("scroll", () => {
       if (!this.selectService.deveObterMaisRegistros(event, this[select])) return;
 
-      const paginacao = this.selectService.ObterPaginacao(this._paginacaoSelectEmpresa);
+      const paginacao = this.selectService.ObterPaginacao(this.paginacaoSelectEmpresa);
       this[nomeMetodo](paginacao);
     });
   }
@@ -98,7 +100,7 @@ export class UsuarioComponent extends Componente implements OnInit {
   }
 
   private carregarEmpresa(paginacaoBase: Paginacao = null): void {
-    let paginacaoEmpresa = new Paginacao(this._paginacaoSelectEmpresa.offset, this._paginacaoSelectEmpresa.limit);
+    let paginacaoEmpresa = new Paginacao(this.paginacaoSelectEmpresa.offset, this.paginacaoSelectEmpresa.limit);
 
     if (paginacaoBase !== null) paginacaoEmpresa = paginacaoBase;
 

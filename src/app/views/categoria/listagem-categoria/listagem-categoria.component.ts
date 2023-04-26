@@ -107,7 +107,7 @@ export class ListagemCategoriaComponent extends Componente implements OnInit, Af
     this.spinner.show("buscando");
     const paginacao = new Paginacao(this.paginacao.offset, this.paginacao.limit);
 
-    this.categoriaService.obterTodasCategorias(paginacao).subscribe({
+    this.categoriaService.obterRegistros(paginacao).subscribe({
       next: (dados: DadosRequisicao) => {
         const categorias = dados.data.registros as Categoria[];
         this.data = categorias
@@ -135,7 +135,7 @@ export class ListagemCategoriaComponent extends Componente implements OnInit, Af
     this.modalRef?.hide();
     this.spinner.show("excluindo");
 
-    this.categoriaService.deletarCategoria(this.codigoCategoria).subscribe({
+    this.categoriaService.remover(this.codigoCategoria).subscribe({
       next: () => {
         this.mostrarAvisoSucesso("Categoria removida com sucesso!")
         this.obterCategorias();

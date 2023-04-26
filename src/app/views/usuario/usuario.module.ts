@@ -30,7 +30,8 @@ import { SelectService } from "@nvs-services/componente/select-service";
     MatInputModule,
     MatIconModule,
     MatSelectModule,
-    SharedComponentModule
+    SharedComponentModule,
+
   ],
   providers: [UsuarioService, BsModalService, TokenService, SetorService, EmpresaService,PermissaoService, SelectService ],
   declarations: [UsuarioComponent, ListagemUsuarioComponent, PerfilComponent ]

@@ -25,7 +25,6 @@ import { NgxEchartsModule } from "ngx-echarts";
 import { NgxMaskModule } from "ngx-mask";
 import { ToastrModule } from "ngx-toastr";
 import { CustomPreloader } from "./core/configs/custom-preload-strategy";
-import { ErrorHandlerModule } from "./core/errors/error-handler.module";
 import { DashboardComponent } from "./views/dashboard/dashboard.component";
 import { P403Component } from "./views/error/403.component";
 import { P404Component } from "./views/error/404.component";
@@ -34,6 +33,7 @@ import { RegistrarComponent } from "./views/login/registrar/registrar.component"
 import { QrCodeComponent } from "./views/qr-code/qr-code.component";
 import { HttpCodeMensagemComponent } from "./views/shared/http-code-mensagem/http-code-mensagem.component";
 import { CustomPaginatorIntlModule } from "./views/shared/grid/custom-paginator-grid/custom-paginator-intl.component";
+import { ServiceInjectionFactory } from "@nvs-services/factories/service-injection-factory";
 
 @NgModule({
   declarations: [
@@ -95,6 +95,7 @@ import { CustomPaginatorIntlModule } from "./views/shared/grid/custom-paginator-
 
     ApiService,
     JwtHelperService,
+    ServiceInjectionFactory,
     CustomPreloader,
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
   ],

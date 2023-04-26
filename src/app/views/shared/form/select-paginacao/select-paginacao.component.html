@@ -1,0 +1,13 @@
+<!-- <mat-select [formControl]="f.codigoEmpresa" #selectEmpresa (openedChange)="onSelectAberto($event, 'selectEmpresa', metodoCarregarEmpresa)" name="codigoEmpresa"> -->
+    <mat-select
+    #select
+    name="codigoSetor"
+    (openedChange)="onSelectAberto($event)"
+    >
+    <mat-option value="" disabled>--Selecione um
+        setor--</mat-option>
+    <mat-option *ngFor="let valor of valores"
+        [value]="valor['codigoSetor']">
+        {{valor['codigoSetor']}} - {{ valor['nome']}}
+    </mat-option>
+</mat-select>

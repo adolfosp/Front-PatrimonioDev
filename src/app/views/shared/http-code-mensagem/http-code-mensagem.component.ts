@@ -26,8 +26,7 @@ export class HttpCodeMensagemComponent implements OnInit {
   }
 
   private atribuirImagemDeAcordoComOModo(): void {
-    debugger;
-    let darkMode = new DarkModeImagemHelper(this.caminhoImagemDark, this.caminhoImagemLight, "imagem-erro-http")
+    const darkMode = new DarkModeImagemHelper(this.caminhoImagemDark, this.caminhoImagemLight, "imagem-erro-http")
     darkMode.alternarImagemDeAcordoComOModo();
   }
 
