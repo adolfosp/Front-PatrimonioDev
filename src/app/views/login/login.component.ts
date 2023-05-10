@@ -6,7 +6,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { LocalStorageService } from "@nvs-services/local-storage/local-storage.service";
 import { UsuarioService } from "@nvs-services/usuario/usuario.service";
 
-import { LocalStorageChave } from "@nvs-enum/local-storage-chave.enum";
+import { LocalStorageChave } from "@nvs-models/enums/local-storage-chave.enum";
 
 import { atribuirModoDarkLightPadrao, atribuirTemaCorretoAoRecarregarPagina } from "@nvs-helpers/ModoDarkLightHelper";
 import Componente from "@nvs-models/Componente";

@@ -1,4 +1,4 @@
-import { HttpStatusCodes } from '@nvs-enum/http-status-code.enum';
+import { HttpStatusCodes } from '@nvs-models/enums/http-status-code.enum';
 
 export type DadosRequisicao = {
   mensagem: string;

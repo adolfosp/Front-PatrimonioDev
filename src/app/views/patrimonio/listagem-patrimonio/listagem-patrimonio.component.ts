@@ -8,7 +8,7 @@ import {
   ViewChild,
 } from "@angular/core";
 import { Router } from "@angular/router";
-import { SituacaoEquipamento } from "@nvs-enum/situacao-equipamento.enum";
+import { SituacaoEquipamento } from "@nvs-models/enums/situacao-equipamento.enum";
 import Componente from "@nvs-models/Componente";
 import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { Patrimonio } from "@nvs-models/Patrimonio";

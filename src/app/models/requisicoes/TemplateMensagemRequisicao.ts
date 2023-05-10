@@ -1,4 +1,4 @@
-import { TipoMensagem } from "@nvs-enum/tipo-mensagem.enum";
+import { TipoMensagem } from "@nvs-models/enums/tipo-mensagem.enum";
 
 export class TemplateMensagemRequisicao {
 

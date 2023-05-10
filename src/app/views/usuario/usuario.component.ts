@@ -20,7 +20,7 @@ import { Pagination } from "ngx-easy-table";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
 import Paginacao from "@nvs-models/dtos/Paginacao";
 import { SelectService } from "@nvs-services/componente/select-service";
-import { TipoService } from "@nvs-enum/tipo-service";
+import { TipoService } from "@nvs-models/enums/tipo-service.enum";
 
 @Component({
   selector: "app-usuario",
@@ -72,6 +72,7 @@ export class UsuarioComponent extends Componente implements OnInit {
     this.controlarVisibilidadeCampoAtivo();
   }
 
+  //REMOVER
   onSelectAberto(event: any, select: string, nomeMetodo: string) {
     if (!event) return;
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { LocalStorageChave } from '@nvs-enum//local-storage-chave.enum';
-import { Permissao } from '@nvs-enum/permissao.enum';
+import { LocalStorageChave } from '@nvs-models/enums/local-storage-chave.enum';
+import { Permissao } from '@nvs-models/enums/permissao.enum';
 import { CriptografiaService } from '@nvs-services/criptografia/criptografia.service';
 import { LocalStorageService } from '@nvs-services/local-storage/local-storage.service';
 import decode from 'jwt-decode';

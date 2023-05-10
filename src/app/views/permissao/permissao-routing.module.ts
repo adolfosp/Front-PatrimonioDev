@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
-import { Permissao } from "@nvs-enum/permissao.enum";
+import { Permissao } from "@nvs-models/enums/permissao.enum";
 import { AuthGuard } from "@nvs-guards/auth.guard";
 import { RoleGuard } from "@nvs-guards/role.guard";
 import { ListagemPermissaoComponent } from "./listagem-permissao/listagem-permissao.component";

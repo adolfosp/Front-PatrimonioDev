@@ -6,7 +6,7 @@ import {
 	Validators,
 } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { SituacaoEquipamento } from "@nvs-enum/situacao-equipamento.enum";
+import { SituacaoEquipamento } from "@nvs-models/enums/situacao-equipamento.enum";
 import { MensagemRequisicao } from "@nvs-helpers/MensagemRequisicaoHelper";
 import Componente from "@nvs-models/Componente";
 import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";

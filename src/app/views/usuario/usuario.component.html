@@ -1,195 +1,165 @@
 <div class="card border-0 rounded shadow-sm m-3 p-3">
-    <form [formGroup]="form">
-        <h1 class="col-2"><span class="texto-destaque">Usuário</span></h1>
-        <app-select-paginacao tipoService="categoria" [paginacao]="paginacaoSelectEmpresa" [formControl]="f.codigoSetor"></app-select-paginacao>
+  <form [formGroup]="form">
+    <h1 class="col-2"><span class="texto-destaque">Usuário</span></h1>
+    <app-select-paginacao
+      tipoService="categoria"
+      [paginacao]="paginacaoSelectEmpresa"
+      [formControl]="f.codigoSetor"
+    ></app-select-paginacao>
 
-<mat-error *ngIf="f.codigoSetor.errors?.required">Setor
-    do usuário é obrigatório
-</mat-error>
-        <br/>
+    <mat-error *ngIf="f.codigoSetor.errors?.required">Setor do usuário é obrigatório</mat-error>
+    <br />
 
-            <div class="p-3">
-                <div class="row">
-                    <div class="col-12">
-                        <mat-form-field class="full-width" appearance="fill">
-                            <mat-label>Código do usuário</mat-label>
-                            <input matInput readonly name="codigoUsuario"
-                                [formControl]="f.codigoUsuario"
-                                name="codigoUsuario" />
-                        </mat-form-field>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6 col-sm-12 col-md-6">
-                        <mat-form-field class="full-width" appearance="fill">
-                            <mat-label>Empresa</mat-label>
-                            <mat-select [formControl]="f.codigoEmpresa"
-                                #selectEmpresa
-                                (openedChange)="onSelectAberto($event,
-                                'selectEmpresa', metodoCarregarEmpresa)"
-                                name="codigoEmpresa">
-                                <mat-option value="" disabled>--Selecione uma
-                                    empresa--</mat-option>
-                                <mat-option *ngFor="let empresa of empresas"
-                                    selected [value]="empresa.codigoEmpresa">
-                                    {{empresa.codigoEmpresa}} - {{
-                                    empresa.razaoSocial }}
-                                </mat-option>
-                            </mat-select>
-                            <mat-error *ngIf="f.codigoEmpresa.errors?.required">
-                                Empresa do usuário é obrigatório
-                            </mat-error>
-                        </mat-form-field>
-                    </div>
-                    <div class="col-lg-6 col-sm-12 col-md-6">
-                        <mat-form-field class="full-width" appearance="fill">
-                            <mat-label>Setor</mat-label>
-                            <mat-select [formControl]="f.codigoSetor"
-                                name="codigoSetor">
-                                <mat-option value="" disabled>--Selecione um
-                                    setor--</mat-option>
-                                <mat-option *ngFor="let setor of setores"
-                                    [value]="setor.codigoSetor">
-                                    {{setor.codigoSetor}} - {{ setor.nome }}
-                                </mat-option>
-                            </mat-select>
-                            <mat-error *ngIf="f.codigoSetor.errors?.required">Setor
-                                do usuário é obrigatório
-                            </mat-error>
-                        </mat-form-field>
-                    </div>
-                    <div class="col-lg-6 col-sm-12 col-md-6">
-                        <mat-form-field class="full-width" appearance="fill">
-                            <mat-label>Situação</mat-label>
-                            <mat-select [formControl]="f.ativo" name="ativo">
-                                <mat-option selected [value]="true">Ativo</mat-option>
-                                <mat-option [value]="false">Inativo</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-                    <div class="col-lg-6 col-sm-12 col-md-6">
-                        <mat-form-field class="full-width" appearance="fill">
-                            <mat-label>Perfil</mat-label>
-                            <mat-select [formControl]="f.codigoPerfil"
-                                name="codigoPerfil">
-                                <mat-option value="" disabled>--Selecione um
-                                    perfil--</mat-option>
-                                <mat-option *ngFor="let permissao of permissoes"
-                                    [value]="permissao.codigoPerfil">
-                                    {{permissao.codigoPerfil}} - {{
-                                    permissao.descricaoPerfil }}
-                                </mat-option>
-                            </mat-select>
-                            <mat-error *ngIf="f.codigoPerfil.errors?.required">
-                                Perfil do usuário é obrigatório
-                            </mat-error>
-                        </mat-form-field>
-                    </div>
-                </div>
+    <div class="p-3">
+      <div class="row">
+        <div class="col-12">
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Código do usuário</mat-label>
+            <input matInput readonly name="codigoUsuario" [formControl]="f.codigoUsuario" name="codigoUsuario" />
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6 col-sm-12 col-md-6">
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Empresa</mat-label>
+            <mat-select
+              [formControl]="f.codigoEmpresa"
+              #selectEmpresa
+              (openedChange)="onSelectAberto($event, 'selectEmpresa', metodoCarregarEmpresa)"
+              name="codigoEmpresa"
+            >
+              <mat-option value="" disabled>--Selecione uma empresa--</mat-option>
+              <mat-option *ngFor="let empresa of empresas" selected [value]="empresa.codigoEmpresa">
+                {{ empresa.codigoEmpresa }} - {{ empresa.razaoSocial }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="f.codigoEmpresa.errors?.required">Empresa do usuário é obrigatório</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-6 col-sm-12 col-md-6">
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Setor</mat-label>
+            <mat-select [formControl]="f.codigoSetor" name="codigoSetor">
+              <mat-option value="" disabled>--Selecione um setor--</mat-option>
+              <mat-option *ngFor="let setor of setores" [value]="setor.codigoSetor">
+                {{ setor.codigoSetor }} - {{ setor.nome }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="f.codigoSetor.errors?.required">Setor do usuário é obrigatório</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-6 col-sm-12 col-md-6">
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Situação</mat-label>
+            <mat-select [formControl]="f.ativo" name="ativo">
+              <mat-option selected [value]="true">Ativo</mat-option>
+              <mat-option [value]="false">Inativo</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-6 col-sm-12 col-md-6">
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Perfil</mat-label>
+            <mat-select [formControl]="f.codigoPerfil" name="codigoPerfil">
+              <mat-option value="" disabled>--Selecione um perfil--</mat-option>
+              <mat-option *ngFor="let permissao of permissoes" [value]="permissao.codigoPerfil">
+                {{ permissao.codigoPerfil }} - {{ permissao.descricaoPerfil }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="f.codigoPerfil.errors?.required">Perfil do usuário é obrigatório</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
 
-                <hr />
-                <div class="row mt-5">
-                    <div class="col-sm-12 col-md-6">
-                        <mat-form-field class="full-width" appearance="fill">
-                            <mat-label>Nome</mat-label>
-                            <input matInput name="nome" [formControl]="f.nome"
-                                required />
-                            <mat-error *ngIf="f.nome.errors?.required">O nome é
-                                obrigatório</mat-error>
-                            <mat-error *ngIf="f.nome.errors?.maxlength">O nome
-                                pode ter no máximo 60 caracteres
-                            </mat-error>
-                            <mat-error *ngIf="f.nome.errors?.minlength">O nome
-                                pode ter no mínimo 4 caracteres
-                            </mat-error>
-                        </mat-form-field>
-                    </div>
-                    <div class="col-sm-12 col-md-6">
-                        <mat-form-field class="full-width" appearance="fill">
-                            <mat-label>E-mail</mat-label>
-                            <input matInput type="email" name="email"
-                                [formControl]="f.email" required />
-                            <mat-error *ngIf="f.email.errors?.required">O e-mail
-                                é obrigatório</mat-error>
-                            <mat-error *ngIf="f.email.errors?.email">O e-mail
-                                está inválido
-                            </mat-error>
-                            <mat-error *ngIf="f.email.errors?.minlength">O
-                                e-mail pode ter no mínimo 10 letras
-                            </mat-error>
-                        </mat-form-field>
-                    </div>
-                </div>
+      <hr />
+      <div class="row mt-5">
+        <div class="col-sm-12 col-md-6">
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Nome</mat-label>
+            <input matInput name="nome" [formControl]="f.nome" required />
+            <mat-error *ngIf="f.nome.errors?.required">O nome é obrigatório</mat-error>
+            <mat-error *ngIf="f.nome.errors?.maxlength">O nome pode ter no máximo 60 caracteres</mat-error>
+            <mat-error *ngIf="f.nome.errors?.minlength">O nome pode ter no mínimo 4 caracteres</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-12 col-md-6">
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>E-mail</mat-label>
+            <input matInput type="email" name="email" [formControl]="f.email" required />
+            <mat-error *ngIf="f.email.errors?.required">O e-mail é obrigatório</mat-error>
+            <mat-error *ngIf="f.email.errors?.email">O e-mail está inválido</mat-error>
+            <mat-error *ngIf="f.email.errors?.minlength">O e-mail pode ter no mínimo 10 letras</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
 
-                <div div class="row">
-                    <div class="col-sm-12 col-md-6">
-                        <mat-form-field class="full-width" appearance="fill">
-                            <mat-label>Senha</mat-label>
-                            <input matInput type="password" name="senha"
-                                [formControl]="f.senha" required />
-                            <mat-error *ngIf="f.senha.errors?.required">A senha
-                                é obrigatória</mat-error>
-                            <mat-error *ngIf="f.senha.errors?.maxlength">A senha
-                                pode ter no máximo 25 caracteres
-                            </mat-error>
-                            <mat-error *ngIf="f.senha.errors?.minlength">A senha
-                                pode ter no mínimo 5 caracteres
-                            </mat-error>
-                        </mat-form-field>
-                    </div>
-                    <div class="col-sm-12 col-md-6">
-
-                        <mat-form-field class="full-width" appearance="fill">
-                            <mat-label>Repita a senha</mat-label>
-                            <input matInput type="password" name="confirmeSenha"
-                                [formControl]="f.confirmeSenha" required />
-                            <mat-error *ngIf="f.confirmeSenha.errors?.required">A
-                                senha é obrigatória</mat-error>
-                            <mat-error
-                                *ngIf="f.confirmeSenha.errors?.maxlength">A
-                                senha pode ter no máximo 25 caracteres
-                            </mat-error>
-                            <mat-error
-                                *ngIf="f.confirmeSenha.errors?.minlength">A
-                                senha pode ter no mínimo 5 caracteres
-                            </mat-error>
-                            <mat-error
-                                *ngIf="f.confirmeSenha.errors?.mustMatch">A
-                                senha está incorreta
-                            </mat-error>
-                        </mat-form-field>
-                    </div>
-                </div>
-                <div class="form-row pt-3">
-                    <div class="row">
-                        <div class="col">
-                            <button type="button" class="btn btn-block cadastrar
-                                me-2" [disabled]="!form.valid"
-                                (click)="salvarAlteracao()">
-                                {{this.estadoSalvar.includes('cadastrar')?'Cadastrar':'Atualizar'}}
-                            </button>
-                            <button type="button" class="btn btn-block limpar"
-                                (click)="limparCampos()">
-                                Limpar
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
+      <div div class="row">
+        <div class="col-sm-12 col-md-6">
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Senha</mat-label>
+            <input matInput type="password" name="senha" [formControl]="f.senha" required />
+            <mat-error *ngIf="f.senha.errors?.required">A senha é obrigatória</mat-error>
+            <mat-error *ngIf="f.senha.errors?.maxlength">A senha pode ter no máximo 25 caracteres</mat-error>
+            <mat-error *ngIf="f.senha.errors?.minlength">A senha pode ter no mínimo 5 caracteres</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-12 col-md-6">
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Repita a senha</mat-label>
+            <input matInput type="password" name="confirmeSenha" [formControl]="f.confirmeSenha" required />
+            <mat-error *ngIf="f.confirmeSenha.errors?.required">A senha é obrigatória</mat-error>
+            <mat-error *ngIf="f.confirmeSenha.errors?.maxlength">A senha pode ter no máximo 25 caracteres</mat-error>
+            <mat-error *ngIf="f.confirmeSenha.errors?.minlength">A senha pode ter no mínimo 5 caracteres</mat-error>
+            <mat-error *ngIf="f.confirmeSenha.errors?.mustMatch">A senha está incorreta</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="form-row pt-3">
+        <div class="row">
+          <div class="col">
+            <button
+              type="button"
+              class="btn btn-block cadastrar me-2"
+              [disabled]="!form.valid"
+              (click)="salvarAlteracao()"
+            >
+              {{ this.estadoSalvar.includes("cadastrar") ? "Cadastrar" : "Atualizar" }}
+            </button>
+            <button type="button" class="btn btn-block limpar" (click)="limparCampos()">Limpar</button>
+          </div>
+        </div>
+      </div>
     </div>
-    <ngx-spinner name="cadastrado" bdColor="rgba(0, 0, 0, 0.8)" size="medium"
-        color="#fff" type="square-jelly-box"
-        [fullScreen]="true">
-        <p style="color: white"> Cadastrando... </p>
-    </ngx-spinner>
-    <ngx-spinner name="atualizado" bdColor="rgba(0, 0, 0, 0.8)" size="medium"
-        color="#fff" type="square-jelly-box"
-        [fullScreen]="true">
-        <p style="color: white"> Atualizando... </p>
-    </ngx-spinner>
-    <ngx-spinner name="carregando" bdColor="rgba(0, 0, 0, 0.8)" size="medium"
-        color="#fff" type="square-jelly-box"
-        [fullScreen]="true">
-        <p style="color: white"> Carregando... </p>
-    </ngx-spinner>
+  </form>
+</div>
+<ngx-spinner
+  name="cadastrado"
+  bdColor="rgba(0, 0, 0, 0.8)"
+  size="medium"
+  color="#fff"
+  type="square-jelly-box"
+  [fullScreen]="true"
+>
+  <p style="color: white">Cadastrando...</p>
+</ngx-spinner>
+<ngx-spinner
+  name="atualizado"
+  bdColor="rgba(0, 0, 0, 0.8)"
+  size="medium"
+  color="#fff"
+  type="square-jelly-box"
+  [fullScreen]="true"
+>
+  <p style="color: white">Atualizando...</p>
+</ngx-spinner>
+<ngx-spinner
+  name="carregando"
+  bdColor="rgba(0, 0, 0, 0.8)"
+  size="medium"
+  color="#fff"
+  type="square-jelly-box"
+  [fullScreen]="true"
+>
+  <p style="color: white">Carregando...</p>
+</ngx-spinner>
