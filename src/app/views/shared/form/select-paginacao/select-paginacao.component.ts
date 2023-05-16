@@ -1,4 +1,5 @@
 import { Attribute, Component, Input, OnInit, ViewChild } from "@angular/core";
+import { FormControl } from "@angular/forms";
 import { MatSelect } from "@angular/material/select";
 import { RegistroNeutroLabel } from "@nvs-enum/registro-neutro-label.enum";
 import { TipoService } from "@nvs-models/enums/tipo-service.enum";
@@ -16,6 +17,7 @@ import { Pagination } from "ngx-easy-table";
 export class SelectPaginacaoComponent implements OnInit {
   @ViewChild("select", { read: MatSelect }) select: MatSelect;
   @Input() paginacao: Pagination;
+  @Input() control: FormControl;
 
   private _service: any;
   private _tipoServico: TipoService;

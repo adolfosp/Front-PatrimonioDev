@@ -1,15 +1,6 @@
 <div class="card border-0 rounded shadow-sm m-3 p-3">
   <form [formGroup]="form">
     <h1 class="col-2"><span class="texto-destaque">Usuário</span></h1>
-    <app-select-paginacao
-      tipoService="categoria"
-      [paginacao]="paginacaoSelectEmpresa"
-      [formControl]="f.codigoSetor"
-    ></app-select-paginacao>
-
-    <mat-error *ngIf="f.codigoSetor.errors?.required">Setor do usuário é obrigatório</mat-error>
-    <br />
-
     <div class="p-3">
       <div class="row">
         <div class="col-12">
@@ -21,21 +12,14 @@
       </div>
       <div class="row">
         <div class="col-lg-6 col-sm-12 col-md-6">
-          <mat-form-field class="full-width" appearance="fill">
-            <mat-label>Empresa</mat-label>
-            <mat-select
-              [formControl]="f.codigoEmpresa"
-              #selectEmpresa
-              (openedChange)="onSelectAberto($event, 'selectEmpresa', metodoCarregarEmpresa)"
-              name="codigoEmpresa"
-            >
-              <mat-option value="" disabled>--Selecione uma empresa--</mat-option>
-              <mat-option *ngFor="let empresa of empresas" selected [value]="empresa.codigoEmpresa">
-                {{ empresa.codigoEmpresa }} - {{ empresa.razaoSocial }}
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="f.codigoEmpresa.errors?.required">Empresa do usuário é obrigatório</mat-error>
-          </mat-form-field>
+
+            <app-select-paginacao
+              tipoService="empresa"
+              [paginacao]="paginacaoSelectEmpresa"
+              [control]="control"></app-select-paginacao>
+
+          <mat-error *ngIf="f.codigoEmpresa.errors?.required">Empresa do usuário é obrigatório</mat-error>
+
         </div>
         <div class="col-lg-6 col-sm-12 col-md-6">
           <mat-form-field class="full-width" appearance="fill">

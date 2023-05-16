@@ -92,7 +92,7 @@ export class EmpresaComponent extends Componente implements OnInit {
       this.spinner.show("carregando");
 
       this.empresaService
-        .obterApenasUmaEmpresa(this._codigoEmpresa)
+        .obterRegistro(this._codigoEmpresa)
         .subscribe({
           next: (dados: DadosRequisicao) => {
             this._empresa = { ...dados.data };

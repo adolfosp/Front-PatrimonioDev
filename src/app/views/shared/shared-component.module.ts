@@ -8,16 +8,19 @@ import { BotaoEditarGridComponent } from './grid/buttons/botao-editar-grid/botao
 import { BotaoRemoverGridComponent } from './grid/buttons/botao-remover-grid/botao-remover-grid.component';
 import { SelectPaginacaoComponent } from './form/select-paginacao/select-paginacao.component';
 import { MatSelectModule } from '@angular/material/select';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-    providers: [],
-    declarations: [ButtonComponent, BotaoEditarGridComponent, BotaoRemoverGridComponent, SelectPaginacaoComponent],
+  providers: [],
+  declarations: [ButtonComponent, BotaoEditarGridComponent, BotaoRemoverGridComponent, SelectPaginacaoComponent],
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     MatInputModule,
     MatIconModule,
-    MatSelectModule
+    MatSelectModule,
   ],
-  exports: [ButtonComponent, BotaoEditarGridComponent, BotaoRemoverGridComponent, SelectPaginacaoComponent]
+  exports: [ButtonComponent, BotaoEditarGridComponent, BotaoRemoverGridComponent, SelectPaginacaoComponent],
 })
-export class SharedComponentModule { }
+export class SharedComponentModule {}

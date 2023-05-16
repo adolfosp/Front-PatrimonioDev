@@ -48,6 +48,10 @@ export class UsuarioComponent extends Componente implements OnInit {
     return this.form.controls;
   }
 
+  get control() {
+    return this.form.controls["codigoEmpresa"] as FormControl;
+  }
+
   constructor(
     private fb: FormBuilder,
     private spinner: NgxSpinnerService,
@@ -105,7 +109,7 @@ export class UsuarioComponent extends Componente implements OnInit {
 
     if (paginacaoBase !== null) paginacaoEmpresa = paginacaoBase;
 
-    this.empresaService.obterEmpresas(paginacaoEmpresa).subscribe({
+    this.empresaService.obterRegistros(paginacaoEmpresa).subscribe({
       next: (dados: DadosRequisicao) => {
         this.empresas = dados.data.registros as Empresa[];
       },

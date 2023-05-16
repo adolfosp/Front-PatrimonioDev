@@ -1,6 +1,6 @@
 <mat-form-field class="full-width" appearance="fill">
   <mat-label>{{ label | titlecase }}</mat-label>
-  <mat-select #select name="codigo" (openedChange)="onSelectAberto($event)">
+  <mat-select #select name="codigo" (openedChange)="onSelectAberto($event)" [formControl]="control">
     <mat-option value="" disabled>--Selecione um registro--</mat-option>
     <mat-option *ngFor="let valor of valores" [value]="valor.codigo">
       {{ valor.codigo }} - {{  valor.descricao }}

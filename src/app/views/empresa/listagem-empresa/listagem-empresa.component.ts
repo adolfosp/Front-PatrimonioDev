@@ -109,7 +109,7 @@ export class ListagemEmpresaComponent extends Componente implements OnInit, Afte
     this.spinner.show("buscando");
     const paginacao = new Paginacao(this.paginacao.offset, this.paginacao.limit);
 
-    this.empresaService.obterEmpresas(paginacao).subscribe({
+    this.empresaService.obterRegistros(paginacao).subscribe({
       next: (dados: DadosRequisicao) => {
 
           const empresa = dados.data.registros as Empresa[];
@@ -132,7 +132,7 @@ export class ListagemEmpresaComponent extends Componente implements OnInit, Afte
     this.modalRef?.hide();
     this.spinner.show("excluindo");
 
-    this.empresaService.deletarEmpresa(this.empresaId).subscribe({
+    this.empresaService.remover(this.empresaId).subscribe({
       next: () =>{
         this.mostrarAvisoSucesso("Empresa excluída com sucesso!");
         this.obterEmpresas();
