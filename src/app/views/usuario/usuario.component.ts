@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { AbstractControlOptions, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MensagemRequisicao } from "@nvs-helpers/MensagemRequisicaoHelper";
@@ -15,7 +15,6 @@ import { SetorService } from "@nvs-services/setor/setor.service";
 import { UsuarioService } from "@nvs-services/usuario/usuario.service";
 import { CLASSE_BOTAO_LIMPAR } from "@nvs-utils/classes-sass.constant";
 import { NgxSpinnerService } from "ngx-spinner";
-import { MatSelect } from "@angular/material/select";
 import { Pagination } from "ngx-easy-table";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
 import Paginacao from "@nvs-models/dtos/Paginacao";
@@ -28,11 +27,10 @@ import { TipoService } from "@nvs-models/enums/tipo-service.enum";
   styleUrls: ["./usuario.component.sass", "../../../assets/style-base.sass"],
 })
 export class UsuarioComponent extends Componente implements OnInit {
-  @ViewChild("selectEmpresa", { read: MatSelect }) selectEmpresa: MatSelect;
-
   private _codigoUsuario: number;
   private _usuario = {} as Usuario;
   public paginacaoSelectEmpresa: Pagination;
+  public paginacaoSelectSetor: Pagination;
 
   public form!: FormGroup;
   public estadoSalvar = "cadastrarUsuario";
@@ -41,15 +39,18 @@ export class UsuarioComponent extends Componente implements OnInit {
   public permissoes: UsuarioPermissao[] = [];
   public limpandoCampo = false;
   public readonly classeBotaoLimpar = CLASSE_BOTAO_LIMPAR;
-  public readonly metodoCarregarEmpresa = "carregarEmpresa";
   public readonly tipoService = TipoService.categoria;
 
   get f(): any {
     return this.form.controls;
   }
 
-  get control() {
+  get controlEmpresa() {
     return this.form.controls["codigoEmpresa"] as FormControl;
+  }
+
+  get controlSetor() {
+    return this.form.controls["codigoSetor"] as FormControl;
   }
 
   constructor(
@@ -65,27 +66,16 @@ export class UsuarioComponent extends Componente implements OnInit {
   ) {
     super();
     this.paginacaoSelectEmpresa = configuracaoPaginacao;
+    this.paginacaoSelectEmpresa = configuracaoPaginacao;
   }
 
   ngOnInit(): void {
     this.validacao();
     this.carregarUsuario();
     this.carregarSetor();
-    this[this.metodoCarregarEmpresa]();
+    this.carregarEmpresa();
     this.carregarPermissao();
     this.controlarVisibilidadeCampoAtivo();
-  }
-
-  //REMOVER
-  onSelectAberto(event: any, select: string, nomeMetodo: string) {
-    if (!event) return;
-
-    this[select].panel.nativeElement.addEventListener("scroll", () => {
-      if (!this.selectService.deveObterMaisRegistros(event, this[select])) return;
-
-      const paginacao = this.selectService.ObterPaginacao(this.paginacaoSelectEmpresa);
-      this[nomeMetodo](paginacao);
-    });
   }
 
   private controlarVisibilidadeCampoAtivo(): void {
@@ -93,10 +83,14 @@ export class UsuarioComponent extends Componente implements OnInit {
     else this.form.controls["ativo"].enable();
   }
 
-  private carregarSetor(): void {
-    this.setorService.obterSetor().subscribe({
+  private carregarSetor(paginacaoBase: Paginacao = null): void {
+    let paginacaoSetor = new Paginacao(this.paginacaoSelectSetor.offset, this.paginacaoSelectSetor.limit);
+
+    if (paginacaoBase !== null) paginacaoSetor = paginacaoBase;
+
+    this.setorService.obterRegistros(paginacaoSetor).subscribe({
       next: (dados: DadosRequisicao) => {
-        this.setores = dados.data as Setor[];
+        this.setores = dados.data.registros as Setor[];
       },
       error: (error: unknown) => {
         this.mostrarAvisoErro(error, "Houve um erro ao carregar o setor.");

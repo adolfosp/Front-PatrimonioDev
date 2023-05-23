@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -6,16 +7,21 @@ import {
   OnInit,
   TemplateRef,
   ViewChild,
+  ViewEncapsulation,
 } from "@angular/core";
+import { PageEvent } from "@angular/material/paginator";
 import { Router } from "@angular/router";
 import Componente from "@nvs-models/Componente";
+import Paginacao from "@nvs-models/dtos/Paginacao";
 import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { Setor } from "@nvs-models/Setor";
 import { SetorService } from "@nvs-services/setor/setor.service";
 import { TokenService } from "@nvs-services/token/token.service";
+import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
+import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
 import configuracaoTabela from "@nvs-utils/configuracao-tabela";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
-import { API, APIDefinition, Columns, Config } from "ngx-easy-table";
+import { API, APIDefinition, Columns, Config, Pagination } from "ngx-easy-table";
 import { NgxSpinnerService } from "ngx-spinner";
 import * as XLSX from "xlsx";
 
@@ -23,22 +29,26 @@ import * as XLSX from "xlsx";
   selector: "app-listagem-setor",
   templateUrl: "./listagem-setor.component.html",
   styleUrls: ["./listagem-setor.component.sass"],
+  encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ListagemSetorComponent extends Componente implements OnInit {
+export class ListagemSetorComponent extends Componente implements OnInit, AfterViewInit {
   @ViewChild("table", { static: true }) table: APIDefinition;
 
   public configuracao: Config;
   public colunas: Columns[];
   public data: Setor[] = [];
-  public linhas = 0;
   public innerWidth: number;
   public toggledRows = new Set<number>();
+  public readonly rotaCadastro = "/dashboard/setor";
+  public totalItensPaginacao: number;
+  public confSpinner = ConfiguracaoSpinner;
 
   public dataFiltradaExcel: Setor[] = [];
   public setores: Setor[] = [];
   public setorId = 0;
   public ehAdministrador = false;
+  public paginacao: Pagination;
 
   modalRef?: BsModalRef;
 
@@ -54,14 +64,32 @@ export class ListagemSetorComponent extends Componente implements OnInit {
   }
 
   ngOnInit(): void {
+    this.paginacao = configuracaoPaginacao;
+
     this.ehAdministrador = this.token.ehUsuarioAdministrador();
     this.obterSetores();
 
     this.configuracao = configuracaoTabela();
-    this.linhas = this.data.map((_) => _.codigoSetor).reduce((acc, cur) => cur + acc, 0);
 
     this.colunas = this.obterColunasDaTabela();
     this.checkView();
+  }
+
+  ngAfterViewInit(): void {
+    this.totalItensPaginacao = this.table.apiEvent({
+      type: API.getPaginationTotalItems,
+    });
+    this.detectorAlteracao.detectChanges();
+  }
+
+  paginationEvent($event: PageEvent): void {
+    this.paginacao = {
+      ...this.paginacao,
+      limit: $event.pageSize,
+      offset: $event.pageIndex + 1,
+      count: $event.length,
+    };
+    this.obterSetores();
   }
 
   get isMobile(): boolean {
@@ -77,13 +105,16 @@ export class ListagemSetorComponent extends Componente implements OnInit {
   private obterSetores(): void {
     this.spinner.show("buscando");
 
+    const paginacao = new Paginacao(this.paginacao.offset, this.paginacao.limit);
+
     this.setorService
-      .obterSetor()
+      .obterRegistros(paginacao)
       .subscribe({
         next: (dados: DadosRequisicao) => {
           const setor = dados.data as Setor[];
-          this.dataFiltradaExcel = setor
+          this.dataFiltradaExcel = setor;
           this.data = setor;
+          this.totalItensPaginacao = dados.data.quantidadePagina * this.paginacao.limit;
         },
         error: (error: unknown) => {
           this.mostrarAvisoErro(error, "Houve um erro ao buscar pelo setores.");
@@ -100,7 +131,7 @@ export class ListagemSetorComponent extends Componente implements OnInit {
     this.spinner.show("excluindo");
 
     this.setorService
-      .deletarSetor(this.setorId)
+      .remover(this.setorId)
       .subscribe({
         next: () => {
           this.mostrarAvisoSucesso("Setor removido com sucesso!");

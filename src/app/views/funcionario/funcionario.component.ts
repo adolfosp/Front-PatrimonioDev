@@ -54,14 +54,14 @@ export class FuncionarioComponent extends Componente implements OnInit {
   }
 
   private carregarSetor(): void {
-    this.setorService.obterSetor().subscribe({
-      next: (dados: DadosRequisicao) => {
-        this.setores = dados.data as Setor[];
-      },
-      error: (error: unknown) => {
-        this.mostrarAvisoErro(error, "Houve um erro ao carregar o setor.");
-      },
-    });
+    // this.setorService.obte().subscribe({
+    //   next: (dados: DadosRequisicao) => {
+    //     this.setores = dados.data as Setor[];
+    //   },
+    //   error: (error: unknown) => {
+    //     this.mostrarAvisoErro(error, "Houve um erro ao carregar o setor.");
+    //   },
+    // });
   }
 
   private controlarVisibilidadeCampoAtivo(): void {

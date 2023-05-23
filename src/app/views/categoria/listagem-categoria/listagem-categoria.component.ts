@@ -47,7 +47,6 @@ export class ListagemCategoriaComponent extends Componente implements OnInit, Af
   public ehAdministrador = false;
 
   public dataFiltradaExcel: Categoria[] = [];
-  public linhas = 0;
   public innerWidth: number;
   public toggledRows = new Set<number>();
   public totalItensPaginacao: number;

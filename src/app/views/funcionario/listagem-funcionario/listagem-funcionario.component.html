@@ -28,7 +28,7 @@
       </td>
       <td *ngIf="!isMobile">
         <span class="font-small"
-          [ngClass]="{'ativo': row.ativo == true,'inativo': row.ativo == false }">{{ row.ativo | booleano: true}}</span>
+          [ngClass]="{'ativo': row.ativo === true,'inativo': row.ativo === false }">{{ row.ativo | booleano: true}}</span>
       </td>
       <td *ngIf="!isMobile">
         <span class="font-small">{{ row.observacao }}</span>
