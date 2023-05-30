@@ -66,7 +66,7 @@ export class UsuarioComponent extends Componente implements OnInit {
   ) {
     super();
     this.paginacaoSelectEmpresa = configuracaoPaginacao;
-    this.paginacaoSelectEmpresa = configuracaoPaginacao;
+    this.paginacaoSelectSetor = configuracaoPaginacao;
   }
 
   ngOnInit(): void {

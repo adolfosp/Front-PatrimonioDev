@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { DadosRequisicao } from '@nvs-models/requisicoes/DadosRequisicao';
-import { Setor } from '@nvs-models/Setor';
 import { ApiService } from '@nvs-services/api/api.service';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';

@@ -10,6 +10,9 @@ import { FuncionarioService } from "@nvs-services/funcionario/funcionario.servic
 import { SetorService } from "@nvs-services/setor/setor.service";
 import { CLASSE_BOTAO_LIMPAR } from "@nvs-utils/classes-sass.constant";
 import { NgxSpinnerService } from "ngx-spinner";
+import { Pagination } from "ngx-easy-table";
+import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
+import Paginacao from "@nvs-models/dtos/Paginacao";
 
 @Component({
   selector: "app-funcionario",
@@ -25,9 +28,14 @@ export class FuncionarioComponent extends Componente implements OnInit {
   public setores: Setor[];
   public readonly classeBotaoLimpar = CLASSE_BOTAO_LIMPAR;
   public form!: FormGroup;
+  public paginacaoSelectSetor: Pagination;
 
   get f(): any {
     return this.form.controls;
+  }
+
+  get controlSetor() {
+    return this.form.controls["codigoSetor"] as FormControl;
   }
 
   constructor(
@@ -39,6 +47,7 @@ export class FuncionarioComponent extends Componente implements OnInit {
     private activateRouter: ActivatedRoute,
   ) {
     super();
+    this.paginacaoSelectSetor = configuracaoPaginacao;
   }
 
   ngOnInit(): void {
@@ -53,15 +62,19 @@ export class FuncionarioComponent extends Componente implements OnInit {
     this.validacao();
   }
 
-  private carregarSetor(): void {
-    // this.setorService.obte().subscribe({
-    //   next: (dados: DadosRequisicao) => {
-    //     this.setores = dados.data as Setor[];
-    //   },
-    //   error: (error: unknown) => {
-    //     this.mostrarAvisoErro(error, "Houve um erro ao carregar o setor.");
-    //   },
-    // });
+  private carregarSetor(paginacaoBase: Paginacao = null): void {
+    let paginacaoSetor = new Paginacao(this.paginacaoSelectSetor.offset, this.paginacaoSelectSetor.limit);
+
+    if (paginacaoBase !== null) paginacaoSetor = paginacaoBase;
+
+    this.setorService.obterRegistros(paginacaoSetor).subscribe({
+      next: (dados: DadosRequisicao) => {
+        this.setores = dados.data.registros as Setor[];
+      },
+      error: (error: unknown) => {
+        this.mostrarAvisoErro(error, "Houve um erro ao carregar o setor.");
+      },
+    });
   }
 
   private controlarVisibilidadeCampoAtivo(): void {

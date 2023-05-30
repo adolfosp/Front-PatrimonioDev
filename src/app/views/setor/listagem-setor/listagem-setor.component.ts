@@ -111,7 +111,7 @@ export class ListagemSetorComponent extends Componente implements OnInit, AfterV
       .obterRegistros(paginacao)
       .subscribe({
         next: (dados: DadosRequisicao) => {
-          const setor = dados.data as Setor[];
+          const setor = dados.data.registros as Setor[];
           this.dataFiltradaExcel = setor;
           this.data = setor;
           this.totalItensPaginacao = dados.data.quantidadePagina * this.paginacao.limit;

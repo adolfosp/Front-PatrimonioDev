@@ -179,6 +179,9 @@
     </nav>
 
     <main>
+      <div *ngIf="isOffline$ | async" class="alert alert-dark" role="alert">
+        Você está offline! Verifique sua conexão com a internet.
+      </div>
       <router-outlet></router-outlet>
     </main>
   </body>

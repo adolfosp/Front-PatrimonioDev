@@ -1,6 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { TokenService } from "@nvs-services/token/token.service";
+import { Observable } from "rxjs";
+import { isOffline$ } from "src/app/core/events/is-offline";
 
 @Component({
   selector: "app-dashboard",
@@ -11,6 +13,7 @@ export class DashboardComponent implements OnInit {
   public estaLogadoAuth: boolean;
   public nomeUsuario: string;
   public descricaoPerfil: string;
+  public isOffline$: Observable<boolean> = isOffline$;
 
   constructor(private token: TokenService, private router: Router) {}
 
