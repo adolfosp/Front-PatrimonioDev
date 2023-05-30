@@ -18,6 +18,7 @@ import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { API, APIDefinition, Columns, Config } from "ngx-easy-table";
 import { NgxSpinnerService } from "ngx-spinner";
 import * as XLSX from "xlsx";
+import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
 
 @Component({
   templateUrl: "./listagem-funcionario.component.html",
@@ -33,6 +34,7 @@ export class ListagemFuncionarioComponent extends Componente implements OnInit {
   public linhas = 0;
   public innerWidth: number;
   public toggledRows = new Set<number>();
+  public confSpinner = ConfiguracaoSpinner;
 
   public dataFiltradaExcel: Funcionario[] = [];
   public funcionarios: Funcionario[] = [];

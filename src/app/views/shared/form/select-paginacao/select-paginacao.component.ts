@@ -5,7 +5,7 @@ import { RegistroNeutroLabel } from "@nvs-enum/registro-neutro-label.enum";
 import { TipoService } from "@nvs-models/enums/tipo-service.enum";
 import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { RegistroNeutro } from "@nvs-models/types/registro-neutro.type";
-import { SelectService } from "@nvs-services/componente/select-service";
+import { SelectService } from "@nvs-services/componente/select.service";
 import { ServiceInjectionFactory } from "@nvs-services/factories/service-injection-factory";
 import { Pagination } from "ngx-easy-table";
 

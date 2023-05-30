@@ -18,7 +18,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { Pagination } from "ngx-easy-table";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
 import Paginacao from "@nvs-models/dtos/Paginacao";
-import { SelectService } from "@nvs-services/componente/select-service";
+import { SelectService } from "@nvs-services/componente/select.service";
 import { TipoService } from "@nvs-models/enums/tipo-service.enum";
 
 @Component({

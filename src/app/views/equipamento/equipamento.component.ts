@@ -20,7 +20,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import Paginacao from "@nvs-models/dtos/Paginacao";
 import { Pagination } from "ngx-easy-table";
 import { MatSelect } from "@angular/material/select";
-import { SelectService } from "@nvs-services/componente/select-service";
+import { SelectService } from "@nvs-services/componente/select.service";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
 
 @Component({

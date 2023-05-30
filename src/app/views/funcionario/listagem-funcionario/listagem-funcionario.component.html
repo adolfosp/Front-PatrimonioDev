@@ -84,11 +84,12 @@
     <i class="fa fa-ban" aria-hidden="true"></i>
   </button>
 </ng-template>
-<ngx-spinner name="buscando" bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="ball-clip-rotate"
-  [fullScreen]="true">
+<ngx-spinner name="buscando" [bdColor]="confSpinner.bdColor" [size]="confSpinner.tamanho" [color]="confSpinner.color"
+             [fullScreen]="confSpinner.fullScren">
   <p style="color: white"> Buscando... </p>
 </ngx-spinner>
-<ngx-spinner name="desativando" bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="ball-clip-rotate"
-  [fullScreen]="true">
+<ngx-spinner name="excluindo" [bdColor]="confSpinner.bdColor" [size]="confSpinner.tamanho" [color]="confSpinner.color"
+             [fullScreen]="confSpinner.fullScren">
   <p style="color: white"> Desativando... </p>
 </ngx-spinner>
+

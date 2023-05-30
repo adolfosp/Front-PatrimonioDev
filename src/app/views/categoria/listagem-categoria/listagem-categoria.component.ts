@@ -25,6 +25,7 @@ import * as XLSX from 'xlsx';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Title } from "@angular/platform-browser";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
+import { needConfirmation } from "@nvs-models/componentes/dialog.decorator";
 
 @Component({
   selector: 'app-listagem-categoria',
