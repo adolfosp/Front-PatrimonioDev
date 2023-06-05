@@ -21,7 +21,7 @@ platformBrowserDynamic()
   .bootstrapModule(AppModule, {
     ngZoneEventCoalescing: true,
     providers: [
-    //   importProvidersFrom(MatDialogModule),
+    importProvidersFrom(MatDialogModule),
       {
         provide: ENVIRONMENT_INITIALIZER,
         useFactory: initializeDialogService,
