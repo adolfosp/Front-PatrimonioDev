@@ -24,7 +24,7 @@ export class FuncionarioComponent extends Componente implements OnInit {
   private _codigoFuncionario: number;
   private _limpandoCampo = false;
 
-  public estadoSalvar = "cadastrarFuncionario";
+  public estadoSalvar = "cadastrar";
   public setores: Setor[];
   public readonly classeBotaoLimpar = CLASSE_BOTAO_LIMPAR;
   public form!: FormGroup;
@@ -78,7 +78,7 @@ export class FuncionarioComponent extends Componente implements OnInit {
   }
 
   private controlarVisibilidadeCampoAtivo(): void {
-    if (this.estadoSalvar == "cadastrarFuncionario") this.form.controls["ativo"].disable();
+    if (this.estadoSalvar == "cadastrar") this.form.controls["ativo"].disable();
     else this.form.controls["ativo"].enable();
   }
 
@@ -93,13 +93,13 @@ export class FuncionarioComponent extends Componente implements OnInit {
   }
 
   public salvarAlteracao(): void {
-    const atualizando = this.estadoSalvar == "atualizarFuncionario";
+    const atualizando = this.estadoSalvar == "atualizar";
     const nomeAcaoRealizada = atualizando ? "atualizado" : "cadastrado";
 
     this.spinner.show(nomeAcaoRealizada);
 
     this._funcionario =
-      this.estadoSalvar === "cadastrarFuncionario"
+      this.estadoSalvar === "cadastrar"
         ? { ...this.form.value }
         : { codigoFuncionario: this._funcionario.codigoFuncionario, ...this.form.value };
 
@@ -128,11 +128,11 @@ export class FuncionarioComponent extends Componente implements OnInit {
     this._codigoFuncionario = +this.activateRouter.snapshot.paramMap.get("codigoFuncionario");
 
     if (this._codigoFuncionario !== null && this._codigoFuncionario !== 0) {
-      this.estadoSalvar = "atualizarFuncionario";
+      this.estadoSalvar = "atualizar";
       this.spinner.show("carregando");
 
       this.funcionarioService
-        .obterApenasUmFuncionario(this._codigoFuncionario)
+        .obterRegistro(this._codigoFuncionario)
         .subscribe({
           next: (dados: DadosRequisicao) => {
             this._funcionario = { ...(dados.data as Funcionario) };

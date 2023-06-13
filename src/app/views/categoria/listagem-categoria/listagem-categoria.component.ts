@@ -7,36 +7,35 @@ import {
   OnInit,
   TemplateRef,
   ViewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from "@angular/core";
 import { PageEvent } from "@angular/material/paginator";
-import {ConfiguracaoSpinner} from "@nvs-utils/configuracao-spinner";
-import configuracaoTabela from '@nvs-utils/configuracao-tabela';
-import { Router } from '@angular/router';
-import { Categoria } from '@nvs-models/Categoria';
+import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
+import configuracaoTabela from "@nvs-utils/configuracao-tabela";
+import { Router } from "@angular/router";
+import { Categoria } from "@nvs-models/Categoria";
 import Paginacao from "@nvs-models/dtos/Paginacao";
-import Componente from '@nvs-models/Componente';
-import { DadosRequisicao } from '@nvs-models/requisicoes/DadosRequisicao';
-import { CategoriaService } from '@nvs-services/categoria/categoria.service';
-import { TokenService } from '@nvs-services/token/token.service';
+import Componente from "@nvs-models/Componente";
+import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
+import { CategoriaService } from "@nvs-services/categoria/categoria.service";
+import { TokenService } from "@nvs-services/token/token.service";
 import { API, APIDefinition, Columns, Config, Pagination } from "ngx-easy-table";
-import { NgxSpinnerService } from 'ngx-spinner';
-import * as XLSX from 'xlsx';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { NgxSpinnerService } from "ngx-spinner";
+import * as XLSX from "xlsx";
+import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { Title } from "@angular/platform-browser";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
-import { needConfirmation } from "@nvs-models/componentes/dialog.decorator";
+import { Confirmable } from "src/app/core/decorators/confirm.decorator";
 
 @Component({
-  selector: 'app-listagem-categoria',
-  templateUrl: './listagem-categoria.component.html',
-  styleUrls: ['./listagem-categoria.component.sass'],
+  selector: "app-listagem-categoria",
+  templateUrl: "./listagem-categoria.component.html",
+  styleUrls: ["./listagem-categoria.component.sass"],
   encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush
-
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ListagemCategoriaComponent extends Componente implements OnInit, AfterViewInit  {
-  @ViewChild('table', { static: true }) table: APIDefinition;
+export class ListagemCategoriaComponent extends Componente implements OnInit, AfterViewInit {
+  @ViewChild("table", { static: true }) table: APIDefinition;
 
   public confSpinner = ConfiguracaoSpinner;
   public configuracao: Config;
@@ -62,24 +61,20 @@ export class ListagemCategoriaComponent extends Componente implements OnInit, Af
     private router: Router,
     private token: TokenService,
     private detectorAlteracao: ChangeDetectorRef,
-    private title: Title
-
+    private title: Title,
   ) {
-    title.setTitle("Listagem de categoria")
+    title.setTitle("Listagem de categoria");
     super();
-
   }
 
   ngOnInit(): void {
-
     this.configuracao = configuracaoTabela();
 
     this.colunas = this.obterColunasDaTabela();
-    this.paginacao = configuracaoPaginacao
+    this.paginacao = configuracaoPaginacao;
     this.obterCategorias();
     this.ehAdministrador = this.token.ehUsuarioAdministrador();
     this.checkView();
-
   }
 
   ngAfterViewInit(): void {
@@ -107,43 +102,49 @@ export class ListagemCategoriaComponent extends Componente implements OnInit, Af
     this.spinner.show("buscando");
     const paginacao = new Paginacao(this.paginacao.offset, this.paginacao.limit);
 
-    this.categoriaService.obterRegistros(paginacao).subscribe({
-      next: (dados: DadosRequisicao) => {
-        const categorias = dados.data.registros as Categoria[];
-        this.data = categorias
-        this.dataFiltradaExcel = categorias;
-        this.totalItensPaginacao = dados.data.quantidadePagina * this.paginacao.limit;
-
-      },
-      error: (error: unknown) => {
-        this.mostrarAvisoErro(error, "Houve um erro ao buscar pelas categorias");
-      },
-      complete: () => {
-        this.detectorAlteracao.markForCheck();
-      }
-    }).add(() => this.spinner.hide("buscando"));
+    this.categoriaService
+      .obterRegistros(paginacao)
+      .subscribe({
+        next: (dados: DadosRequisicao) => {
+          const categorias = dados.data.registros as Categoria[];
+          this.data = categorias;
+          this.dataFiltradaExcel = categorias;
+          this.totalItensPaginacao = dados.data.quantidadePagina * this.paginacao.limit;
+        },
+        error: (error: unknown) => {
+          this.mostrarAvisoErro(error, "Houve um erro ao buscar pelas categorias");
+        },
+        complete: () => {
+          this.detectorAlteracao.markForCheck();
+        },
+      })
+      .add(() => this.spinner.hide("buscando"));
   }
 
   public abrirModal(event: any, template: TemplateRef<any>, codigoCategoria: number): void {
-    event.stopPropagation();
     this.codigoCategoria = codigoCategoria;
-    this.modalRef = this.modalService.show(template, { class: 'modal-sm' });
+
+    event.stopPropagation();
+    this.modalRef = this.modalService.show(template, { class: "modal-sm" });
   }
 
-  public confirmar(): void {
-
+  @Confirmable()
+  public confirmar(codigoCategoria: number): void {
     this.modalRef?.hide();
     this.spinner.show("excluindo");
 
-    this.categoriaService.remover(this.codigoCategoria).subscribe({
-      next: () => {
-        this.mostrarAvisoSucesso("Categoria removida com sucesso!")
-        this.obterCategorias();
-      },
-      error: (error: unknown) => {
-        this.mostrarAvisoErro(error, "Houve um erro ao excluir a categoria");
-      }
-    }).add(() => this.spinner.hide("excluindo"));
+    this.categoriaService
+      .remover(codigoCategoria)
+      .subscribe({
+        next: () => {
+          this.mostrarAvisoSucesso("Categoria removida com sucesso!");
+          this.obterCategorias();
+        },
+        error: (error: unknown) => {
+          this.mostrarAvisoErro(error, "Houve um erro ao excluir a categoria");
+        },
+      })
+      .add(() => this.spinner.hide("excluindo"));
   }
 
   public recusar(): void {
@@ -164,12 +165,12 @@ export class ListagemCategoriaComponent extends Componente implements OnInit, Af
     this.dataFiltradaExcel = this.data.filter(
       (categoria: Categoria) =>
         categoria.codigoCategoria.toString().indexOf(valor) !== -1 ||
-        categoria.descricao.toLocaleLowerCase().indexOf(valor) !== -1
+        categoria.descricao.toLocaleLowerCase().indexOf(valor) !== -1,
     );
   }
 
   public detalheCategoria(codigoCategoria: number): void {
-    this.router.navigate([`dashboard/categoria/${codigoCategoria}`])
+    this.router.navigate([`dashboard/categoria/${codigoCategoria}`]);
   }
 
   public exportarParaExcel(): void {
@@ -177,9 +178,9 @@ export class ListagemCategoriaComponent extends Componente implements OnInit, Af
       const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataFiltradaExcel);
 
       const wb: XLSX.WorkBook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, 'categorias');
+      XLSX.utils.book_append_sheet(wb, ws, "categorias");
 
-      XLSX.writeFile(wb, 'categorias.xlsx');
+      XLSX.writeFile(wb, "categorias.xlsx");
     } catch (err) {
       this.mostrarAvisoXLS(`Não foi possível exportar a planilha. Mensagem: ${err}`);
     }
@@ -187,25 +188,25 @@ export class ListagemCategoriaComponent extends Componente implements OnInit, Af
 
   private obterColunasDaTabela(): any {
     return [
-      { key: 'codigoCategoria', title: 'Código', width: '3%' },
-      { key: 'descricao', title: 'Descrição' },
-      { key: '', title: 'Editar' },
-      { key: '', title: 'Excluir' },
+      { key: "codigoCategoria", title: "Código", width: "3%" },
+      { key: "descricao", title: "Descrição" },
+      { key: "", title: "Editar" },
+      { key: "", title: "Excluir" },
     ];
   }
   private checkView(): void {
     this.innerWidth = window.innerWidth;
     if (this.isMobile) {
       this.colunas = [
-        { key: 'descricao', title: 'Descrição' },
-        { key: '', title: 'Expandir' },
+        { key: "descricao", title: "Descrição" },
+        { key: "", title: "Expandir" },
       ];
     } else {
       this.colunas = this.obterColunasDaTabela();
     }
   }
 
-  @HostListener('window:resize', [])
+  @HostListener("window:resize", [])
   onResize(): void {
     this.checkView();
   }

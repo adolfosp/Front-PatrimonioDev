@@ -79,7 +79,7 @@ export class RegistrarComponent extends Componente implements OnInit {
     this.spinner.show();
 
     this.usuarioService
-      .cadastrarUsuario(this.usuario)
+      .cadastrar(this.usuario)
       .subscribe({
         next: () => this.mostrarAvisoSucesso("Usuário cadastrado com sucesso. Redirecionando para a tela de login"),
         error: (error: unknown) => {

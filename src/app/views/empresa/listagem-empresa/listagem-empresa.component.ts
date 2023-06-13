@@ -186,7 +186,7 @@ export class ListagemEmpresaComponent extends Componente implements OnInit, Afte
 
   private obterColunasDaTabela(): any {
     return [
-      { key: 'codigoEmpresa', title: 'Código', width: '3%' },
+      { key: 'codigoEmpresa', title: 'Código', width: '10%' },
       { key: 'razaoSocial', title: 'Razão Social' },
       { key: 'nomeFantasia', title: 'Nome Fantasia' },
       { key: 'empresaoPadraoImpressao', title: 'Empresa Impressão' },

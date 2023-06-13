@@ -9,16 +9,12 @@ import { Empresa } from "@nvs-models/Empresa";
 import { Setor } from "@nvs-models/Setor";
 import { Usuario } from "@nvs-models/Usuario";
 import { UsuarioPermissao } from "@nvs-models/UsuarioPermissao";
-import { EmpresaService } from "@nvs-services/empresa/empresa.service";
 import { PermissaoService } from "@nvs-services/permissao/permissao.service";
-import { SetorService } from "@nvs-services/setor/setor.service";
 import { UsuarioService } from "@nvs-services/usuario/usuario.service";
 import { CLASSE_BOTAO_LIMPAR } from "@nvs-utils/classes-sass.constant";
 import { NgxSpinnerService } from "ngx-spinner";
 import { Pagination } from "ngx-easy-table";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
-import Paginacao from "@nvs-models/dtos/Paginacao";
-import { SelectService } from "@nvs-services/componente/select.service";
 import { TipoService } from "@nvs-models/enums/tipo-service.enum";
 
 @Component({
@@ -29,17 +25,18 @@ import { TipoService } from "@nvs-models/enums/tipo-service.enum";
 export class UsuarioComponent extends Componente implements OnInit {
   private _codigoUsuario: number;
   private _usuario = {} as Usuario;
+
   public paginacaoSelectEmpresa: Pagination;
   public paginacaoSelectSetor: Pagination;
-
   public form!: FormGroup;
-  public estadoSalvar = "cadastrarUsuario";
+  public estadoSalvar = "cadastrar";
   public setores: Setor[] = [];
   public empresas: Empresa[] = [];
   public permissoes: UsuarioPermissao[] = [];
   public limpandoCampo = false;
   public readonly classeBotaoLimpar = CLASSE_BOTAO_LIMPAR;
   public readonly tipoService = TipoService.categoria;
+  campo: any;
 
   get f(): any {
     return this.form.controls;
@@ -56,13 +53,10 @@ export class UsuarioComponent extends Componente implements OnInit {
   constructor(
     private fb: FormBuilder,
     private spinner: NgxSpinnerService,
-    public setorService: SetorService,
-    private empresaService: EmpresaService,
     private permissaoService: PermissaoService,
     private router: Router,
     private usuarioService: UsuarioService,
     private activateRouter: ActivatedRoute,
-    private selectService: SelectService,
   ) {
     super();
     this.paginacaoSelectEmpresa = configuracaoPaginacao;
@@ -72,45 +66,13 @@ export class UsuarioComponent extends Componente implements OnInit {
   ngOnInit(): void {
     this.validacao();
     this.carregarUsuario();
-    this.carregarSetor();
-    this.carregarEmpresa();
     this.carregarPermissao();
     this.controlarVisibilidadeCampoAtivo();
   }
 
   private controlarVisibilidadeCampoAtivo(): void {
-    if (this.estadoSalvar === "cadastrarUsuario") this.form.controls["ativo"].disable();
+    if (this.estadoSalvar === "cadastrar") this.form.controls["ativo"].disable();
     else this.form.controls["ativo"].enable();
-  }
-
-  private carregarSetor(paginacaoBase: Paginacao = null): void {
-    let paginacaoSetor = new Paginacao(this.paginacaoSelectSetor.offset, this.paginacaoSelectSetor.limit);
-
-    if (paginacaoBase !== null) paginacaoSetor = paginacaoBase;
-
-    this.setorService.obterRegistros(paginacaoSetor).subscribe({
-      next: (dados: DadosRequisicao) => {
-        this.setores = dados.data.registros as Setor[];
-      },
-      error: (error: unknown) => {
-        this.mostrarAvisoErro(error, "Houve um erro ao carregar o setor.");
-      },
-    });
-  }
-
-  private carregarEmpresa(paginacaoBase: Paginacao = null): void {
-    let paginacaoEmpresa = new Paginacao(this.paginacaoSelectEmpresa.offset, this.paginacaoSelectEmpresa.limit);
-
-    if (paginacaoBase !== null) paginacaoEmpresa = paginacaoBase;
-
-    this.empresaService.obterRegistros(paginacaoEmpresa).subscribe({
-      next: (dados: DadosRequisicao) => {
-        this.empresas = dados.data.registros as Empresa[];
-      },
-      error: (error: unknown) => {
-        this.mostrarAvisoErro(error, "Houve um erro ao carregar a empresa.");
-      },
-    });
   }
 
   public limparCampos(): void {
@@ -151,13 +113,13 @@ export class UsuarioComponent extends Componente implements OnInit {
   }
 
   public salvarAlteracao(): void {
-    const atualizando = this.estadoSalvar == "atualizarUsuario";
+    const atualizando = this.estadoSalvar == "atualizar";
     const nomeAcaoRealizada = atualizando ? "atualizado" : "cadastrado";
 
     this.spinner.show(nomeAcaoRealizada);
 
     this._usuario =
-      this.estadoSalvar === "cadastrarUsuario"
+      this.estadoSalvar === "cadastrar"
         ? { ...this.form.value }
         : { codigoUsuario: this._usuario.codigoUsuario, ...this.form.value };
     this.usuarioService[this.estadoSalvar](this._usuario)
@@ -179,13 +141,14 @@ export class UsuarioComponent extends Componente implements OnInit {
   }
 
   public carregarUsuario(): void {
+    //TODO: atualizar angular para usar a função nova de pegar parâmetro
     this._codigoUsuario = +this.activateRouter.snapshot.paramMap.get("codigoUsuario");
     if (this._codigoUsuario !== null && this._codigoUsuario !== 0) {
-      this.estadoSalvar = "atualizarUsuario";
+      this.estadoSalvar = "atualizar";
       this.spinner.show("carregando");
 
       this.usuarioService
-        .obterApenasUmUsuario(this._codigoUsuario)
+        .obterRegistro(this._codigoUsuario)
         .subscribe({
           next: (dados: DadosRequisicao) => {
             this._usuario = { ...(dados.data as Usuario) };

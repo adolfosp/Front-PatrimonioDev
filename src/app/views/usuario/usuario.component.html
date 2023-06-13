@@ -17,18 +17,16 @@
             [paginacao]="paginacaoSelectEmpresa"
             [control]="controlEmpresa"
           ></app-select-paginacao>
-
           <mat-error *ngIf="f.codigoEmpresa.errors?.required">Empresa do usuário é obrigatório</mat-error>
         </div>
         <div class="col-lg-6 col-sm-12 col-md-6">
-            <app-select-paginacao
+          <app-select-paginacao
             tipoService="setor"
             [paginacao]="paginacaoSelectSetor"
             [control]="controlSetor"
           ></app-select-paginacao>
 
-        <mat-error *ngIf="f.codigoSetor.errors?.required">Setor do usuário é obrigatório</mat-error>
-
+          <mat-error *ngIf="f.codigoSetor.errors?.required">Setor do usuário é obrigatório</mat-error>
         </div>
         <div class="col-lg-6 col-sm-12 col-md-6">
           <mat-form-field class="full-width" appearance="fill">
@@ -67,7 +65,7 @@
         <div class="col-sm-12 col-md-6">
           <mat-form-field class="full-width" appearance="fill">
             <mat-label>E-mail</mat-label>
-            <input matInput type="email" name="email" [formControl]="f.email" required />
+            <input matInput type="email" name="email" [formControl]="f.email" required aria-label="campo de e-mail do usuário" />
             <mat-error *ngIf="f.email.errors?.required">O e-mail é obrigatório</mat-error>
             <mat-error *ngIf="f.email.errors?.email">O e-mail está inválido</mat-error>
             <mat-error *ngIf="f.email.errors?.minlength">O e-mail pode ter no mínimo 10 letras</mat-error>

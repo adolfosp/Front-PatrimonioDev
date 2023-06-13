@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -6,6 +7,7 @@ import {
   OnInit,
   TemplateRef,
   ViewChild,
+  ViewEncapsulation,
 } from "@angular/core";
 import { Router } from "@angular/router";
 import Componente from "@nvs-models/Componente";
@@ -15,17 +17,21 @@ import { FuncionarioService } from "@nvs-services/funcionario/funcionario.servic
 import { TokenService } from "@nvs-services/token/token.service";
 import configuracaoTabela from "@nvs-utils/configuracao-tabela";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
-import { API, APIDefinition, Columns, Config } from "ngx-easy-table";
+import { API, APIDefinition, Columns, Config, Pagination } from "ngx-easy-table";
 import { NgxSpinnerService } from "ngx-spinner";
 import * as XLSX from "xlsx";
 import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
+import { PageEvent } from "@angular/material/paginator";
+import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
+import Paginacao from "@nvs-models/dtos/Paginacao";
 
 @Component({
   templateUrl: "./listagem-funcionario.component.html",
   styleUrls: ["./listagem-funcionario.component.sass"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
-export class ListagemFuncionarioComponent extends Componente implements OnInit {
+export class ListagemFuncionarioComponent extends Componente implements OnInit, AfterViewInit {
   @ViewChild("table", { static: true }) table: APIDefinition;
 
   public configuracao: Config;
@@ -35,11 +41,14 @@ export class ListagemFuncionarioComponent extends Componente implements OnInit {
   public innerWidth: number;
   public toggledRows = new Set<number>();
   public confSpinner = ConfiguracaoSpinner;
+  public rotaCadastro = "/dashboard/funcionario";
 
   public dataFiltradaExcel: Funcionario[] = [];
   public funcionarios: Funcionario[] = [];
   public funcionarioId = 0;
   public ehAdministrador = false;
+  public paginacao: Pagination;
+  public totalItensPaginacao: number;
 
   modalRef?: BsModalRef;
 
@@ -55,6 +64,7 @@ export class ListagemFuncionarioComponent extends Componente implements OnInit {
   }
 
   ngOnInit(): void {
+    this.paginacao = configuracaoPaginacao;
     this.ehAdministrador = this.token.ehUsuarioAdministrador();
     this.obterFuncionarios();
 
@@ -63,6 +73,24 @@ export class ListagemFuncionarioComponent extends Componente implements OnInit {
 
     this.colunas = this.obterColunasDaTabela();
     this.checkView();
+
+  }
+
+  ngAfterViewInit(): void {
+    this.totalItensPaginacao = this.table.apiEvent({
+      type: API.getPaginationTotalItems,
+    });
+    this.detectorAlteracao.detectChanges();
+  }
+
+  paginationEvent($event: PageEvent): void {
+    this.paginacao = {
+      ...this.paginacao,
+      limit: $event.pageSize,
+      offset: $event.pageIndex + 1,
+      count: $event.length,
+    };
+    this.obterFuncionarios();
   }
 
   get isMobile(): boolean {
@@ -76,15 +104,18 @@ export class ListagemFuncionarioComponent extends Componente implements OnInit {
   }
 
   private obterFuncionarios(): void {
+    const paginacao = new Paginacao(this.paginacao.offset, this.paginacao.limit);
+
     this.spinner.show("buscando");
 
     this.funcionarioService
-      .obterTodosFuncionarios()
+      .obterRegistros(paginacao)
       .subscribe({
         next: (dados: DadosRequisicao) => {
-          const funcionarios = dados.data as Funcionario[];
+          const funcionarios = dados.data.registros as Funcionario[];
           this.dataFiltradaExcel = funcionarios;
           this.data = funcionarios;
+          this.totalItensPaginacao = dados.data.quantidadePagina * this.paginacao.limit;
         },
         error: (error: unknown) => {
           this.mostrarAvisoErro(error, "Houve um erro ao buscar pelos funcionários.");
@@ -101,7 +132,7 @@ export class ListagemFuncionarioComponent extends Componente implements OnInit {
     this.spinner.show("desativando");
 
     this.funcionarioService
-      .desativarFuncionario(this.funcionarioId)
+      .remover(this.funcionarioId)
       .subscribe({
         next: () => {
           this.mostrarAvisoSucesso("Funcionário desativado com sucesso!");

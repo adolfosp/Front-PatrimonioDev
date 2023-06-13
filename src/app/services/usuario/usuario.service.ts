@@ -1,41 +1,43 @@
-import { Injectable } from '@angular/core';
-import { DadosRequisicao } from '@nvs-models/requisicoes/DadosRequisicao';
-import { Usuario } from '@nvs-models/Usuario';
-import { ApiService } from '@nvs-services/api/api.service';
-import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
+import { Injectable } from "@angular/core";
+import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
+import { ApiService } from "@nvs-services/api/api.service";
+import { Observable } from "rxjs";
+import { take } from "rxjs/operators";
+import { environment } from "../../../environments/environment";
+import { IService } from "@nvs-models/interfaces/IService";
+import Paginacao from "@nvs-models/dtos/Paginacao";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
-export class UsuarioService {
+export class UsuarioService implements IService {
+  baseUrl = `${environment.apiUrl}usuarios`;
 
-  baseUrl = `${environment.apiUrl}usuarios`
-
-  constructor(private api: ApiService) { }
-
-  public cadastrarUsuario(usuario: Usuario): Observable<Usuario>{
-    return this.api.post<Usuario>(this.baseUrl, {usuario}).pipe(take(1));
+  constructor(private api: ApiService) {}
+  cadastrar<T>(usuario: T): Observable<DadosRequisicao> {
+    return this.api.post<DadosRequisicao>(this.baseUrl, { usuario }).pipe(take(1));
+  }
+  obterRegistros(paginacao: Paginacao): Observable<DadosRequisicao> {
+    return this.api
+      .get<DadosRequisicao>(
+        `${this.baseUrl}?paginaAtual=${paginacao.paginaAtual}&quantidadePorPagina=${paginacao.quantidadePorPagina}`,
+      )
+      .pipe(take(1));
   }
 
-  public obterTodosUsuarios(): Observable<DadosRequisicao>{
-    return this.api.get<DadosRequisicao>(this.baseUrl).pipe(take(1));
+  remover(codigoUsuario: number): Observable<DadosRequisicao> {
+    return this.api.delete<DadosRequisicao>(`${this.baseUrl}/${codigoUsuario}`).pipe(take(1));
   }
 
-  public obterApenasUmUsuario(codigoUsuario: number): Observable<DadosRequisicao>{
+  obterRegistro(codigoUsuario: number): Observable<DadosRequisicao> {
     return this.api.get<DadosRequisicao>(`${this.baseUrl}/${codigoUsuario}`).pipe(take(1));
   }
 
-  public obterUsuarioPorEmailESenha(email: string, senha: string, autenticacaoAuth: boolean){
+  atualizar<T>(usuario: T): Observable<DadosRequisicao> {
+    return this.api.put<DadosRequisicao>(`${this.baseUrl}/${usuario["codigoUsuario"]}`, { usuario }).pipe(take(1));
+  }
+
+  public obterUsuarioPorEmailESenha(email: string, senha: string, autenticacaoAuth: boolean) {
     return this.api.post<string>(`${this.baseUrl}/${email}/${senha}`, autenticacaoAuth).pipe(take(1));
-  }
-
-  public desativarUsuario(codigoUsuario: number){
-    return this.api.delete<number>(`${this.baseUrl}/${codigoUsuario}`).pipe(take(1));
-  }
-
-  public atualizarUsuario(usuario: Usuario){
-    return this.api.put(`${this.baseUrl}/${usuario.codigoUsuario}`,{usuario}).pipe(take(1));
   }
 }

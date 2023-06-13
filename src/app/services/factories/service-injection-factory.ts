@@ -4,6 +4,7 @@ import { IService } from "@nvs-models/interfaces/IService";
 import { IServiceInjectionFactory } from "@nvs-models/interfaces/IServiceInjectionFactory";
 import { CategoriaService } from "@nvs-services/categoria/categoria.service";
 import { EmpresaService } from "@nvs-services/empresa/empresa.service";
+import { FuncionarioService } from "@nvs-services/funcionario/funcionario.service";
 import { SetorService } from "@nvs-services/setor/setor.service";
 
 @Injectable()
@@ -18,6 +19,8 @@ export class ServiceInjectionFactory implements IServiceInjectionFactory{
            return inject(EmpresaService);
          case TipoService.setor:
            return inject(SetorService);
+         case TipoService.funcionario:
+           return inject(FuncionarioService);
 
          default:
            throw new Error("Serviço não implementado.");

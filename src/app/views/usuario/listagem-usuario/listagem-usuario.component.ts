@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -7,25 +8,29 @@ import {
   TemplateRef,
   ViewChild,
 } from "@angular/core";
+import { PageEvent } from "@angular/material/paginator";
 import { Router } from "@angular/router";
 import Componente from "@nvs-models/Componente";
+import Paginacao from "@nvs-models/dtos/Paginacao";
 import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { Usuario } from "@nvs-models/Usuario";
 import { TokenService } from "@nvs-services/token/token.service";
 import { UsuarioService } from "@nvs-services/usuario/usuario.service";
+import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
+import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
 import configuracaoTabela from "@nvs-utils/configuracao-tabela";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
-import { API, APIDefinition, Columns, Config } from "ngx-easy-table";
+import { API, APIDefinition, Columns, Config, Pagination } from "ngx-easy-table";
 import { NgxSpinnerService } from "ngx-spinner";
 import * as XLSX from "xlsx";
 
 @Component({
   selector: "app-listagem-usuario",
   templateUrl: "./listagem-usuario.component.html",
-  styleUrls: ["./listagem-usuario.component.sass", "../../../../assets/style-listagem.sass"],
+  styleUrls: ["./listagem-usuario.component.sass"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ListagemUsuarioComponent extends Componente implements OnInit {
+export class ListagemUsuarioComponent extends Componente implements OnInit, AfterViewInit {
   @ViewChild("table", { static: true }) table: APIDefinition;
 
   public configuracao: Config;
@@ -33,6 +38,10 @@ export class ListagemUsuarioComponent extends Componente implements OnInit {
   public linhas = 0;
   public innerWidth: number;
   public toggledRows = new Set<number>();
+  public readonly rotaCadastro = "/dashboard/usuario";
+  public confSpinner = ConfiguracaoSpinner;
+  public totalItensPaginacao: number;
+  public paginacao: Pagination;
 
   public data: Usuario[] = [];
   public dataFiltradaExcel: Usuario[] = [];
@@ -54,7 +63,8 @@ export class ListagemUsuarioComponent extends Componente implements OnInit {
   }
 
   ngOnInit(): void {
-    this.obterUsuario();
+    this.paginacao = configuracaoPaginacao;
+    this.obterUsuarios();
     this.configuracao = configuracaoTabela();
 
     this.linhas = this.data.map((_) => _.codigoSetor).reduce((acc, cur) => cur + acc, 0);
@@ -62,6 +72,23 @@ export class ListagemUsuarioComponent extends Componente implements OnInit {
 
     this.colunas = this.obterColunasDaTabela();
     this.checkView();
+  }
+
+  ngAfterViewInit(): void {
+    this.totalItensPaginacao = this.table.apiEvent({
+      type: API.getPaginationTotalItems,
+    });
+    this.detectorAlteracao.detectChanges();
+  }
+
+  paginationEvent($event: PageEvent): void {
+    this.paginacao = {
+      ...this.paginacao,
+      limit: $event.pageSize,
+      offset: $event.pageIndex + 1,
+      count: $event.length,
+    };
+    this.obterUsuarios();
   }
 
   private checkView(): void {
@@ -90,16 +117,19 @@ export class ListagemUsuarioComponent extends Componente implements OnInit {
     return this.innerWidth <= 768;
   }
 
-  private obterUsuario(): void {
+  private obterUsuarios(): void {
+    const paginacao = new Paginacao(this.paginacao.offset, this.paginacao.limit);
+
     this.spinner.show("buscando");
 
     this.usuarioService
-      .obterTodosUsuarios()
+      .obterRegistros(paginacao)
       .subscribe({
         next: (dados: DadosRequisicao) => {
-          const usuarios = dados.data as Usuario[];
+          const usuarios = dados.data.registros as Usuario[];
           this.data = usuarios;
           this.dataFiltradaExcel = usuarios;
+          this.totalItensPaginacao = dados.data.quantidadePagina * this.paginacao.limit;
         },
         error: (error: unknown) => {
           this.mostrarAvisoErro(error, "Houve um erro ao buscar pelos usuários.");
@@ -148,11 +178,11 @@ export class ListagemUsuarioComponent extends Componente implements OnInit {
     this.spinner.show("desativando");
 
     this.usuarioService
-      .desativarUsuario(this.codigoUsuario)
+      .remover(this.codigoUsuario)
       .subscribe({
         next: () => {
           this.mostrarAvisoSucesso("Usuário desativado com sucesso!");
-          this.obterUsuario();
+          this.obterUsuarios();
         },
         error: (error: unknown) => {
           this.mostrarAvisoErro(error, "Houve um erro ao desativar o usuário.");

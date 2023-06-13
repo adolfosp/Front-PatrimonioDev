@@ -1,5 +1,5 @@
 import { HttpClientModule } from "@angular/common/http";
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from "@angular/core";
+import { CUSTOM_ELEMENTS_SCHEMA, Injector, NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
 import { NgxSpinnerModule } from "ngx-spinner";
@@ -14,7 +14,7 @@ import { LoginComponent } from "./views/login/login.component";
 import { CommonModule, HashLocationStrategy, LocationStrategy } from "@angular/common";
 import { MatButtonModule } from "@angular/material/button";
 import { MatExpansionModule } from "@angular/material/expansion";
-import { MatFormFieldModule } from "@angular/material/form-field";
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
@@ -34,6 +34,8 @@ import { QrCodeComponent } from "./views/qr-code/qr-code.component";
 import { HttpCodeMensagemComponent } from "./views/shared/http-code-mensagem/http-code-mensagem.component";
 import { CustomPaginatorIntlModule } from "./views/shared/grid/custom-paginator-grid/custom-paginator-intl.component";
 import { ServiceInjectionFactory } from "@nvs-services/factories/service-injection-factory";
+import { MatDialogModule } from "@angular/material/dialog";
+import { ConfirmDialogComponent } from "./views/shared/confirm-dialog/confirm-dialog.component";
 
 @NgModule({
   declarations: [
@@ -46,6 +48,7 @@ import { ServiceInjectionFactory } from "@nvs-services/factories/service-injecti
     RegistrarComponent,
     DashboardComponent,
     GraficoComponent,
+    ConfirmDialogComponent,
   ],
   imports: [
     NgxMaskModule.forRoot({
@@ -56,11 +59,9 @@ import { ServiceInjectionFactory } from "@nvs-services/factories/service-injecti
     }),
     CommonModule,
     BrowserAnimationsModule,
-    NgxSpinnerModule.forRoot(
-      {
-        type: "square-jelly-box",
-      }
-    ),
+    NgxSpinnerModule.forRoot({
+      type: "square-jelly-box",
+    }),
     ReactiveFormsModule,
     BrowserModule,
     QRCodeModule,
@@ -84,15 +85,16 @@ import { ServiceInjectionFactory } from "@nvs-services/factories/service-injecti
     MatButtonModule,
     MatSlideToggleModule,
     MatExpansionModule,
-    CustomPaginatorIntlModule
+    CustomPaginatorIntlModule,
+    MatDialogModule
+
   ],
   providers: [
-
     {
       provide: LocationStrategy,
       useClass: HashLocationStrategy,
     },
-
+    {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'outline'}},
     ApiService,
     JwtHelperService,
     ServiceInjectionFactory,
@@ -102,4 +104,9 @@ import { ServiceInjectionFactory } from "@nvs-services/factories/service-injecti
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+  static injector: Injector = null;
+  constructor(public injector: Injector) {
+    AppModule.injector = injector;
+  }
+}
