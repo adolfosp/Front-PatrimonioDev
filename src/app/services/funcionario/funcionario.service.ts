@@ -5,7 +5,7 @@ import { Observable } from "rxjs";
 import { take } from "rxjs/operators";
 import { environment } from "../../../environments/environment";
 import { IService } from "@nvs-models/interfaces/IService";
-import Paginacao from "@nvs-models/dtos/Paginacao";
+import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
 
 @Injectable({
   providedIn: "root",
@@ -18,7 +18,7 @@ export class FuncionarioService implements IService {
     return this.api.post<DadosRequisicao>(this.baseUrl, { funcionario }).pipe(take(1));
   }
 
-  obterRegistros(paginacao: Paginacao): Observable<DadosRequisicao> {
+  obterRegistros(paginacao: PaginacaoDto): Observable<DadosRequisicao> {
     return this.api
       .get<DadosRequisicao>(
         `${this.baseUrl}?paginaAtual=${paginacao.paginaAtual}&quantidadePorPagina=${paginacao.quantidadePorPagina}`,
@@ -39,23 +39,4 @@ export class FuncionarioService implements IService {
       .put<DadosRequisicao>(`${this.baseUrl}/${funcionario["codigoFuncionario"]}`, { funcionario })
       .pipe(take(1));
   }
-
-  //   public cadastrarFuncionario(funcionario: Funcionario): Observable<Funcionario> {
-  //   }
-
-  //   public obterTodosFuncionarios(): Observable<DadosRequisicao> {
-  //     return this.api.get<DadosRequisicao>(this.baseUrl).pipe(take(1));
-  //   }
-
-  //   public desativarFuncionario(codigoFuncionario: number): Observable<any> {
-  //     return this.api.delete(`${this.baseUrl}/${codigoFuncionario}`).pipe(take(1));
-  //   }
-
-  //   public obterApenasUmFuncionario(codigoFuncionario: number): Observable<DadosRequisicao> {
-  //     return this.api.get<DadosRequisicao>(`${this.baseUrl}/${codigoFuncionario}`).pipe(take(1));
-  //   }
-
-//   public atualizarFuncionario(funcionario: Funcionario): Observable<Funcionario> {
-//     return this.api.put<Funcionario>(`${this.baseUrl}/${funcionario.codigoFuncionario}`, { funcionario }).pipe(take(1));
-//   }
 }

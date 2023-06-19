@@ -17,7 +17,7 @@ import { EquipamentoService } from "@nvs-services/equipamento/equipamento.servic
 import { FabricanteService } from "@nvs-services/fabricante/fabricante.service";
 import { CLASSE_BOTAO_LIMPAR } from "@nvs-utils/classes-sass.constant";
 import { NgxSpinnerService } from "ngx-spinner";
-import Paginacao from "@nvs-models/dtos/Paginacao";
+import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
 import { Pagination } from "ngx-easy-table";
 import { MatSelect } from "@angular/material/select";
 import { SelectService } from "@nvs-services/componente/select.service";
@@ -93,8 +93,8 @@ export class EquipamentoComponent extends Componente implements OnInit {
 		this.validacao();
 	}
 
-	private carregarFabricantes(paginacaoBase: Paginacao = null): void {
-        let paginacaoFabricante = new Paginacao(this._paginacaoSelectGenerico.offset, this._paginacaoSelectGenerico.limit);
+	private carregarFabricantes(paginacaoBase: PaginacaoDto = null): void {
+        let paginacaoFabricante = new PaginacaoDto(this._paginacaoSelectGenerico.offset, this._paginacaoSelectGenerico.limit);
 
         if (paginacaoBase !== null) paginacaoFabricante = paginacaoBase;
 
@@ -111,8 +111,8 @@ export class EquipamentoComponent extends Componente implements OnInit {
 		});
 	}
 
-	private carregarCategorias(paginacaoBase: Paginacao = null): void {
-        let paginacaoCategoria = new Paginacao(this._paginacaoSelectGenerico.offset, this._paginacaoSelectGenerico.limit);
+	private carregarCategorias(paginacaoBase: PaginacaoDto = null): void {
+        let paginacaoCategoria = new PaginacaoDto(this._paginacaoSelectGenerico.offset, this._paginacaoSelectGenerico.limit);
 
         if (paginacaoBase !== null) paginacaoCategoria = paginacaoBase;
 

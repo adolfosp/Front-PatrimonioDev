@@ -4,7 +4,7 @@ import { Observable } from "rxjs";
 import { take } from "rxjs/operators";
 import { environment } from "../../../environments/environment";
 import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
-import Paginacao from "@nvs-models/dtos/Paginacao";
+import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
 import { IService } from "@nvs-models/interfaces/IService";
 
 @Injectable({
@@ -19,7 +19,7 @@ export class CategoriaService implements IService {
 			.post<DadosRequisicao>(this.baseUrl, { categoria })
 			.pipe(take(1));
 	}
-	obterRegistros(paginacao: Paginacao): Observable<DadosRequisicao> {
+	obterRegistros(paginacao: PaginacaoDto): Observable<DadosRequisicao> {
 		return this.api
 			.get<DadosRequisicao>(
 				`${this.baseUrl}?paginaAtual=${paginacao.paginaAtual}&quantidadePorPagina=${paginacao.quantidadePorPagina}`,

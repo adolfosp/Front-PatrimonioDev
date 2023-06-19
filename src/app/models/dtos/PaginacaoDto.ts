@@ -1,4 +1,4 @@
-export default class Paginacao{
+export default class PaginacaoDto{
 
   constructor(paginaAtual: number, quantidadePorPagina: number) {
     this.paginaAtual = paginaAtual;

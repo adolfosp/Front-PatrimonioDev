@@ -14,7 +14,7 @@ import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
 import configuracaoTabela from "@nvs-utils/configuracao-tabela";
 import { Router } from "@angular/router";
 import { Categoria } from "@nvs-models/Categoria";
-import Paginacao from "@nvs-models/dtos/Paginacao";
+import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
 import Componente from "@nvs-models/Componente";
 import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { CategoriaService } from "@nvs-services/categoria/categoria.service";
@@ -100,7 +100,7 @@ export class ListagemCategoriaComponent extends Componente implements OnInit, Af
 
   public obterCategorias(): void {
     this.spinner.show("buscando");
-    const paginacao = new Paginacao(this.paginacao.offset, this.paginacao.limit);
+    const paginacao = new PaginacaoDto(this.paginacao.offset, this.paginacao.limit);
 
     this.categoriaService
       .obterRegistros(paginacao)

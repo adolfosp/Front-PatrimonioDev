@@ -1,11 +1,11 @@
-import Paginacao from "@nvs-models/dtos/Paginacao";
+import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
 import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { Observable } from "rxjs";
 
 export interface IService {
-	cadastrar<T>(classe: T): Observable<DadosRequisicao>;
-	obterRegistros(paginacao: Paginacao): Observable<DadosRequisicao>;
-	remover(codigo: number): Observable<DadosRequisicao>;
-	obterRegistro(codigoCategoria: number): Observable<DadosRequisicao>;
-	atualizar<T>(categoria: T): Observable<DadosRequisicao>;
+  cadastrar<T>(classe: T): Observable<DadosRequisicao>;
+  obterRegistros(paginacao: PaginacaoDto): Observable<DadosRequisicao>;
+  remover(codigo: number): Observable<DadosRequisicao>;
+  obterRegistro(codigo: number): Observable<DadosRequisicao>;
+  atualizar<T>(classe: T): Observable<DadosRequisicao>;
 }

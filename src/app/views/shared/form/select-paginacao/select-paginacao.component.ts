@@ -3,7 +3,7 @@ import { FormControl } from "@angular/forms";
 import { MatSelect } from "@angular/material/select";
 import { RegistroNeutroLabel } from "@nvs-enum/registro-neutro-label.enum";
 import Componente from "@nvs-models/Componente";
-import Paginacao from "@nvs-models/dtos/Paginacao";
+import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
 import { TipoService } from "@nvs-models/enums/tipo-service.enum";
 import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { RegistroNeutro } from "@nvs-models/types/registro-neutro.type";
@@ -63,8 +63,8 @@ export class SelectPaginacaoComponent extends Componente implements OnInit {
     });
   }
 
-  private processarPaginacao(selectInicial: boolean): Paginacao {
-    if (selectInicial) return new Paginacao(this.paginacao.offset, this.paginacao.limit);
+  private processarPaginacao(selectInicial: boolean): PaginacaoDto {
+    if (selectInicial) return new PaginacaoDto(this.paginacao.offset, this.paginacao.limit);
     else return this.selectService.ObterPaginacao(this.paginacao);
   }
 

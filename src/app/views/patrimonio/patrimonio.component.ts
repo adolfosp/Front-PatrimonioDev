@@ -19,7 +19,7 @@ import { MatSelect } from "@angular/material/select";
 import { Pagination } from "ngx-easy-table";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
 import { SelectService } from "@nvs-services/componente/select.service";
-import Paginacao from "@nvs-models/dtos/Paginacao";
+import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
 
 @Component({
   selector: "app-patrimonio",
@@ -137,7 +137,6 @@ export class PatrimonioComponent extends Componente implements OnInit {
   }
 
   onSelectAberto(event: any, select: string, nomeMetodo: string) {
-    debugger;
     if (!event) return;
 
     this[select].panel.nativeElement.addEventListener("scroll", () => {
@@ -175,8 +174,8 @@ export class PatrimonioComponent extends Componente implements OnInit {
     }
   }
 
-  private obterEquipamentos(paginacaoBase: Paginacao = null): void {
-    let paginacaoEquipamento = new Paginacao(
+  private obterEquipamentos(paginacaoBase: PaginacaoDto = null): void {
+    let paginacaoEquipamento = new PaginacaoDto(
       this.paginacaoSelectEquipamento.offset,
       this.paginacaoSelectEquipamento.limit,
     );

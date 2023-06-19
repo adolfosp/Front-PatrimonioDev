@@ -21,8 +21,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import * as XLSX from 'xlsx';
 import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
-import Paginacao from "@nvs-models/dtos/Paginacao";
-import { Categoria } from "@nvs-models/Categoria";
+import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
 import { PageEvent } from "@angular/material/paginator";
 
 @Component({
@@ -107,7 +106,7 @@ export class ListagemEmpresaComponent extends Componente implements OnInit, Afte
   private obterEmpresas(): void {
 
     this.spinner.show("buscando");
-    const paginacao = new Paginacao(this.paginacao.offset, this.paginacao.limit);
+    const paginacao = new PaginacaoDto(this.paginacao.offset, this.paginacao.limit);
 
     this.empresaService.obterRegistros(paginacao).subscribe({
       next: (dados: DadosRequisicao) => {

@@ -28,7 +28,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import * as XLSX from "xlsx";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
 import { PageEvent } from "@angular/material/paginator";
-import Paginacao from "@nvs-models/dtos/Paginacao";
+import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
 import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
 
 @Component({
@@ -57,7 +57,7 @@ export class ListagemFabricanteComponent
 	public linhas = 0;
 	public innerWidth: number;
 	public toggledRows = new Set<number>();
-	public rotaCadastro = "/dashboard/fabricante";
+	public readonly rotaCadastro = "/dashboard/fabricante";
 	public paginacao: Pagination;
 	public totalItensPaginacao: number;
 
@@ -106,7 +106,7 @@ export class ListagemFabricanteComponent
 	}
 
 	public obterFabricante(): void {
-		const paginacao = new Paginacao(
+		const paginacao = new PaginacaoDto(
 			this.paginacao.offset,
 			this.paginacao.limit,
 		);

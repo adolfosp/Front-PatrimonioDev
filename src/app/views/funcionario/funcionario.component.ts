@@ -12,7 +12,7 @@ import { CLASSE_BOTAO_LIMPAR } from "@nvs-utils/classes-sass.constant";
 import { NgxSpinnerService } from "ngx-spinner";
 import { Pagination } from "ngx-easy-table";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
-import Paginacao from "@nvs-models/dtos/Paginacao";
+import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
 
 @Component({
   selector: "app-funcionario",
@@ -62,8 +62,8 @@ export class FuncionarioComponent extends Componente implements OnInit {
     this.validacao();
   }
 
-  private carregarSetor(paginacaoBase: Paginacao = null): void {
-    let paginacaoSetor = new Paginacao(this.paginacaoSelectSetor.offset, this.paginacaoSelectSetor.limit);
+  private carregarSetor(paginacaoBase: PaginacaoDto = null): void {
+    let paginacaoSetor = new PaginacaoDto(this.paginacaoSelectSetor.offset, this.paginacaoSelectSetor.limit);
 
     if (paginacaoBase !== null) paginacaoSetor = paginacaoBase;
 

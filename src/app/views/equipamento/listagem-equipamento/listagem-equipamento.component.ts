@@ -28,7 +28,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import * as XLSX from "xlsx";
 import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
 import { PageEvent } from "@angular/material/paginator";
-import Paginacao from "@nvs-models/dtos/Paginacao";
+import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
 
 @Component({
@@ -54,7 +54,7 @@ export class ListagemEquipamentoComponent
 	public dataFiltradaExcel: Equipamento[] = [];
 	public equipamentoId = 0;
 	public ehAdministrador = false;
-	public rotaCadastro = "/dashboard/equipamento";
+	public readonly rotaCadastro = "/dashboard/equipamento";
 	public paginacao: Pagination;
 	public totalItensPaginacao: number;
 
@@ -118,7 +118,7 @@ export class ListagemEquipamentoComponent
 	}
 
 	private obterEquipamentos(): void {
-        const paginacao = new Paginacao(this.paginacao.offset, this.paginacao.limit);
+        const paginacao = new PaginacaoDto(this.paginacao.offset, this.paginacao.limit);
 
 		this.spinner.show("buscando");
 

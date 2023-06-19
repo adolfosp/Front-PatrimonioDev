@@ -11,7 +11,7 @@ import {
 import { PageEvent } from "@angular/material/paginator";
 import { Router } from "@angular/router";
 import Componente from "@nvs-models/Componente";
-import Paginacao from "@nvs-models/dtos/Paginacao";
+import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
 import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { Usuario } from "@nvs-models/Usuario";
 import { TokenService } from "@nvs-services/token/token.service";
@@ -118,7 +118,7 @@ export class ListagemUsuarioComponent extends Componente implements OnInit, Afte
   }
 
   private obterUsuarios(): void {
-    const paginacao = new Paginacao(this.paginacao.offset, this.paginacao.limit);
+    const paginacao = new PaginacaoDto(this.paginacao.offset, this.paginacao.limit);
 
     this.spinner.show("buscando");
 

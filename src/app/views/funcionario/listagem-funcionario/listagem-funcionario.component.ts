@@ -23,7 +23,7 @@ import * as XLSX from "xlsx";
 import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
 import { PageEvent } from "@angular/material/paginator";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
-import Paginacao from "@nvs-models/dtos/Paginacao";
+import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
 
 @Component({
   templateUrl: "./listagem-funcionario.component.html",
@@ -41,7 +41,7 @@ export class ListagemFuncionarioComponent extends Componente implements OnInit, 
   public innerWidth: number;
   public toggledRows = new Set<number>();
   public confSpinner = ConfiguracaoSpinner;
-  public rotaCadastro = "/dashboard/funcionario";
+  public readonly rotaCadastro = "/dashboard/funcionario";
 
   public dataFiltradaExcel: Funcionario[] = [];
   public funcionarios: Funcionario[] = [];
@@ -104,7 +104,7 @@ export class ListagemFuncionarioComponent extends Componente implements OnInit, 
   }
 
   private obterFuncionarios(): void {
-    const paginacao = new Paginacao(this.paginacao.offset, this.paginacao.limit);
+    const paginacao = new PaginacaoDto(this.paginacao.offset, this.paginacao.limit);
 
     this.spinner.show("buscando");
 

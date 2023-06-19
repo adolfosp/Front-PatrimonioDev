@@ -12,7 +12,7 @@ import {
 import { PageEvent } from "@angular/material/paginator";
 import { Router } from "@angular/router";
 import Componente from "@nvs-models/Componente";
-import Paginacao from "@nvs-models/dtos/Paginacao";
+import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
 import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { Setor } from "@nvs-models/Setor";
 import { SetorService } from "@nvs-services/setor/setor.service";
@@ -105,7 +105,7 @@ export class ListagemSetorComponent extends Componente implements OnInit, AfterV
   private obterSetores(): void {
     this.spinner.show("buscando");
 
-    const paginacao = new Paginacao(this.paginacao.offset, this.paginacao.limit);
+    const paginacao = new PaginacaoDto(this.paginacao.offset, this.paginacao.limit);
 
     this.setorService
       .obterRegistros(paginacao)

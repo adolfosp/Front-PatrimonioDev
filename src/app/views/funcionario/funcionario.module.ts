@@ -14,7 +14,7 @@ import { FuncionarioRoutingModule } from './funcionario-routing.module';
 import { FuncionarioComponent } from './funcionario.component';
 import { ListagemFuncionarioComponent } from './listagem-funcionario/listagem-funcionario.component';
 import { SharedComponentModule } from '../shared/shared-component.module';
-import { HeaderGridComponent } from "../shared/grid/header-grid/header-grid/header-grid.component";
+import { HeaderGridComponent } from "../shared/grid/header-grid/header-grid.component";
 import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({

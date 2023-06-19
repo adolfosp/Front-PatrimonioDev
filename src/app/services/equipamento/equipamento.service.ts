@@ -5,7 +5,7 @@ import { ApiService } from '@nvs-services/api/api.service';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import Paginacao from '@nvs-models/dtos/Paginacao';
+import PaginacaoDto from '@nvs-models/dtos/PaginacaoDto';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,7 @@ export class EquipamentoService {
     return this.api.post<Equipamento>(this.baseUrl, {equipamento}).pipe(take(1));
   }
 
-  public obterEquipamentos(paginacao: Paginacao): Observable<DadosRequisicao> {
+  public obterEquipamentos(paginacao: PaginacaoDto): Observable<DadosRequisicao> {
     return this.api.get<DadosRequisicao>(`${this.baseUrl}?paginaAtual=${paginacao.paginaAtual}&quantidadePorPagina=${paginacao.quantidadePorPagina}`).pipe(take(1))
   }
 

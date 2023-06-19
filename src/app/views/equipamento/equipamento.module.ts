@@ -14,7 +14,7 @@ import { EquipamentoComponent } from './equipamento.component';
 import { ListagemEquipamentoComponent } from './listagem-equipamento/listagem-equipamento.component';
 import { SharedComponentModule } from '../shared/shared-component.module';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { HeaderGridComponent } from '../shared/grid/header-grid/header-grid/header-grid.component';
+import { HeaderGridComponent } from '../shared/grid/header-grid/header-grid.component';
 
 
 @NgModule({

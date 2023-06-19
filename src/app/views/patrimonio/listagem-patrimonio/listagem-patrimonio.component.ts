@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -6,6 +7,7 @@ import {
   OnInit,
   TemplateRef,
   ViewChild,
+  ViewEncapsulation,
 } from "@angular/core";
 import { Router } from "@angular/router";
 import { SituacaoEquipamento } from "@nvs-models/enums/situacao-equipamento.enum";
@@ -17,16 +19,21 @@ import { PatrimonioService } from "@nvs-services/patrimonio/patrimonio.service";
 import { TokenService } from "@nvs-services/token/token.service";
 import configuracaoTabela from "@nvs-utils/configuracao-tabela";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
-import { API, APIDefinition, Columns, Config } from "ngx-easy-table";
+import { API, APIDefinition, Columns, Config, Pagination } from "ngx-easy-table";
 import { NgxSpinnerService } from "ngx-spinner";
 import * as XLSX from "xlsx";
+import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
+import { PageEvent } from "@angular/material/paginator";
+import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
+import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
 
 @Component({
   templateUrl: "./listagem-patrimonio.component.html",
   styleUrls: ["./listagem-patrimonio.component.sass"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
-export class ListagemPatrimonioComponent extends Componente implements OnInit {
+export class ListagemPatrimonioComponent extends Componente implements OnInit, AfterViewInit {
   @ViewChild("table", { static: true }) table: APIDefinition;
 
   public configuracao: Config;
@@ -35,11 +42,15 @@ export class ListagemPatrimonioComponent extends Componente implements OnInit {
   public linhas = 0;
   public innerWidth: number;
   public toggledRows = new Set<number>();
+  public readonly rotaCadastro = "/dashboard/patrimonio";
+  public confSpinner = ConfiguracaoSpinner;
 
   public dataFiltradaExcel: Patrimonio[] = [];
   public patrimonios: Patrimonio[] = [];
   public patrimonioId = 0;
   public ehAdministrador = false;
+  public paginacao: Pagination;
+  public totalItensPaginacao: number;
 
   modalRef?: BsModalRef;
 
@@ -53,6 +64,7 @@ export class ListagemPatrimonioComponent extends Componente implements OnInit {
     private detectorAlteracao: ChangeDetectorRef,
   ) {
     super();
+    this.paginacao = configuracaoPaginacao;
   }
 
   ngOnInit(): void {
@@ -66,6 +78,23 @@ export class ListagemPatrimonioComponent extends Componente implements OnInit {
     this.checkView();
   }
 
+  ngAfterViewInit(): void {
+    this.totalItensPaginacao = this.table.apiEvent({
+      type: API.getPaginationTotalItems,
+    });
+    this.detectorAlteracao.detectChanges();
+  }
+
+  paginationEvent($event: PageEvent): void {
+    this.paginacao = {
+      ...this.paginacao,
+      limit: $event.pageSize,
+      offset: $event.pageIndex + 1,
+      count: $event.length,
+    };
+    this.obterPatrimonios();
+  }
+
   get isMobile(): boolean {
     return this.innerWidth <= 1200;
   }
@@ -77,15 +106,18 @@ export class ListagemPatrimonioComponent extends Componente implements OnInit {
   }
 
   private obterPatrimonios(): void {
+    const paginacao = new PaginacaoDto(this.paginacao.offset, this.paginacao.limit);
+
     this.spinner.show("buscando");
 
     this.patrimonioService
-      .obterPatrimonios()
+      .obterRegistros(paginacao)
       .subscribe({
         next: (dados: DadosRequisicao) => {
-          const patrimonio = dados.data as Patrimonio[];
+          const patrimonio = dados.data.registros as Patrimonio[];
           this.dataFiltradaExcel = patrimonio;
           this.data = patrimonio;
+          this.totalItensPaginacao = dados.data.quantidadePagina * this.paginacao.limit;
         },
         error: (error: unknown) => {
           this.mostrarAvisoErro(error, "Houve um erro ao buscar pelos patrimônios.");
@@ -103,7 +135,7 @@ export class ListagemPatrimonioComponent extends Componente implements OnInit {
     this.spinner.show("excluindo");
 
     this.patrimonioService
-      .excluirPatrimonio(this.patrimonioId)
+      .remover(this.patrimonioId)
       .subscribe({
         next: () => {
           this.mostrarAvisoSucesso("Patrimônio excluído com sucesso!");
@@ -120,7 +152,7 @@ export class ListagemPatrimonioComponent extends Componente implements OnInit {
     this.modalRef?.hide();
   }
 
-  public fecharModalPerda(podeFechar: boolean) {
+  public fecharModalPerda() {
     const botaoFecharPerda = document.getElementById("botao-fechar-modal-perda");
     botaoFecharPerda.click();
     this.obterPatrimonios();

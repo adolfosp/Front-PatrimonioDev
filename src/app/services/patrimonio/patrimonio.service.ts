@@ -1,65 +1,70 @@
-import { Injectable } from '@angular/core';
-import { DadosRequisicao } from '@nvs-models/requisicoes/DadosRequisicao';
-import { InformacaoAdicional } from '@nvs-models/InformacaoAdicional';
-import { Patrimonio } from '@nvs-models/Patrimonio';
-import { ApiService } from '@nvs-services/api/api.service';
-import { Observable, forkJoin } from 'rxjs';
-import { take } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
+import { Injectable } from "@angular/core";
+import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
+import { InformacaoAdicional } from "@nvs-models/InformacaoAdicional";
+import { ApiService } from "@nvs-services/api/api.service";
+import { Observable, forkJoin } from "rxjs";
+import { take } from "rxjs/operators";
+import { environment } from "../../../environments/environment";
+import { IService } from "@nvs-models/interfaces/IService";
+import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
+import InserirPatrimonioDto from "@nvs-models/dtos/InserirPatrimonioDto";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
-export class PatrimonioService {
-
+export class PatrimonioService implements IService {
   baseUrl = `${environment.apiUrl}patrimonios`;
 
-  constructor(private api: ApiService) { }
-
-  public obterPatrimonios(): Observable<DadosRequisicao>{
-    return this.api.get<DadosRequisicao>(this.baseUrl).pipe(take(1));
-  }
-
-  public cadastrarPatrimonio(patrimonio: Patrimonio, informacaoAdicional: InformacaoAdicional): Observable<Patrimonio> {
+  constructor(private api: ApiService) {}
+  cadastrar<T>(classe: T): Observable<DadosRequisicao> {
+    const insercao = classe as InserirPatrimonioDto;
     return this.api
-    .post<Patrimonio>(this.baseUrl, {patrimonio: patrimonio, informacaoAdicional: informacaoAdicional})
-    .pipe(take(1));
+      .post<DadosRequisicao>(this.baseUrl, {
+        patrimonio: insercao.patrimonio,
+        informacaoAdicional: insercao.informacaoAdicional,
+      })
+      .pipe(take(1));
   }
 
-  public excluirPatrimonio(patrimonioId: number): Observable<any>{
+  obterRegistros(paginacao: PaginacaoDto): Observable<DadosRequisicao> {
     return this.api
-    .delete(`${this.baseUrl}/${patrimonioId}`)
-    .pipe(take(1));
+      .get<DadosRequisicao>(
+        `${this.baseUrl}?paginaAtual=${paginacao.paginaAtual}&quantidadePorPagina=${paginacao.quantidadePorPagina}`,
+      )
+      .pipe(take(1));
   }
 
-  public obterApenasUmPatrimonio(patrimonioId: number): Observable<any>{
+  remover(patrimonioId: number): Observable<DadosRequisicao> {
+    return this.api.delete<DadosRequisicao>(`${this.baseUrl}/${patrimonioId}`).pipe(take(1));
+  }
+
+  obterRegistro(patrimonioId: number): Observable<DadosRequisicao> {
+    return this.api.get<DadosRequisicao>(`${this.baseUrl}/${patrimonioId}`).pipe(take(1));
+  }
+
+  atualizar<T>(classe: T): Observable<DadosRequisicao> {
+    const insercao = classe as InserirPatrimonioDto;
     return this.api
-    .get(`${this.baseUrl}/${patrimonioId}`)
-    .pipe(take(1));
+      .put<DadosRequisicao>(`${this.baseUrl}/${insercao.patrimonio.codigoPatrimonio}`, {
+        patrimonio: insercao.patrimonio,
+        informacaoAdicional: insercao.informacaoAdicional,
+      })
+      .pipe(take(1));
   }
 
-  private obterInformacaoAdicional(codigoPatrimonio: number): Observable<InformacaoAdicional>{
+  private obterInformacaoAdicional(codigoPatrimonio: number): Observable<InformacaoAdicional> {
     return this.api.get<InformacaoAdicional>(`${environment.apiUrl}informacoes/${codigoPatrimonio}`).pipe(take(1));
   }
 
-  private obterEmpresaPadrao():  Observable<string>{
-    return this.api.get<string>(`${environment.apiUrl}empresas/empresaPadrao`, {responseType: 'text'}).pipe(take(1));
-  }
-
-  public atualizarPatrimonio(patrimonio: Patrimonio, informacaoAdicional: InformacaoAdicional): Observable<Patrimonio>{
-    return this.api
-    .put<Patrimonio>(`${this.baseUrl}/${patrimonio.codigoPatrimonio}`, {patrimonio: patrimonio, informacaoAdicional: informacaoAdicional})
-    .pipe(take(1));
+  private obterEmpresaPadrao(): Observable<string> {
+    return this.api.get<string>(`${environment.apiUrl}empresas/empresaPadrao`, { responseType: "text" }).pipe(take(1));
   }
 
   public obterPatrimonioEInformacaoAdicional(codigoPatrimonio: number): Observable<any[]> {
-
-    const respostaPatrimonio = this.obterApenasUmPatrimonio(codigoPatrimonio);
+    const respostaPatrimonio = this.obterRegistro(codigoPatrimonio);
     const respostaInformacaoAdicional = this.obterInformacaoAdicional(codigoPatrimonio);
     const respostaEmpresaPadrao = this.obterEmpresaPadrao();
 
     return forkJoin([respostaPatrimonio, respostaInformacaoAdicional, respostaEmpresaPadrao]);
-
   }
-
 }
