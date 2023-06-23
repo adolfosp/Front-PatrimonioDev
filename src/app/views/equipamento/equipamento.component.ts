@@ -159,7 +159,7 @@ export class EquipamentoComponent extends Componente implements OnInit {
 				: {
 						codigoTipoEquipamento: this._equipamento.codigoTipoEquipamento,
 						...this.form.value,
-				  };
+				};
 
 		this.equipamentoService[this.estadoSalvar](this._equipamento)
 			.subscribe(
@@ -195,7 +195,7 @@ export class EquipamentoComponent extends Componente implements OnInit {
 			this.spinner.show("carregando");
 
 			this.equipamentoService
-				.obterApenasUmEquipamento(this._codigoEquipamento)
+				.obterRegistro(this._codigoEquipamento)
 				.subscribe({
 					next: (dados: DadosRequisicao) => {
 						this._equipamento = dados.data as Equipamento;

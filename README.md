@@ -45,7 +45,8 @@
 
 - [ ] Trocar o select do funcionario e equipamento dentro do patrimônio
 - [ ] Verificar erro de largura da mensagem de nenhum patrimônio cadastrado
-
+- [ ] Validar se no construtor, as chamadas de alguns métodos foram removidos
+- [ ] Validar ngxSpinner
 
 
 ## Information about patterns of the code

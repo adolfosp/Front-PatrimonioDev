@@ -9,7 +9,9 @@ import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { RegistroNeutro } from "@nvs-models/types/registro-neutro.type";
 import { SelectService } from "@nvs-services/componente/select.service";
 import { ServiceInjectionFactory } from "@nvs-services/factories/service-injection-factory";
+import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
 import { Pagination } from "ngx-easy-table";
+import { NgxSpinnerService } from "ngx-spinner";
 
 @Component({
   selector: "app-select-paginacao",
@@ -25,11 +27,13 @@ export class SelectPaginacaoComponent extends Componente implements OnInit {
   private _tipoServico: TipoService;
   public valores: RegistroNeutro[];
   public label: string;
+  public confSpinner = ConfiguracaoSpinner;
 
   constructor(
     @Attribute("tipoService") public tipoService: string,
     private selectService: SelectService,
     private serviceFactory: ServiceInjectionFactory,
+    private spinner: NgxSpinnerService,
   ) {
     super();
     this._tipoServico = TipoService[tipoService];
@@ -52,15 +56,19 @@ export class SelectPaginacaoComponent extends Componente implements OnInit {
 
   private obterRegistros({ selectInicial }: { selectInicial: boolean }): void {
     const paginacao = this.processarPaginacao(selectInicial);
+    this.spinner.show("carregandoRegistro");
 
-    this._service.obterRegistros(paginacao).subscribe({
-      next: (value: DadosRequisicao) => {
-        this.valores = this.montarNovoTipo(value.data.registros);
-      },
-      error: (error: unknown) => {
-        this.mostrarAvisoErro(error, "Houve um erro ao carregar os registros.");
-      },
-    });
+    this._service
+      .obterRegistros(paginacao)
+      .subscribe({
+        next: (value: DadosRequisicao) => {
+          this.valores = this.montarNovoTipo(value.data.registros);
+        },
+        error: (error: unknown) => {
+          this.mostrarAvisoErro(error, "Houve um erro ao carregar os registros.");
+        },
+      })
+      .add(() => this.spinner.hide("carregandoRegistro"));
   }
 
   private processarPaginacao(selectInicial: boolean): PaginacaoDto {

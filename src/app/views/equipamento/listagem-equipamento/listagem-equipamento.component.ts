@@ -123,7 +123,7 @@ export class ListagemEquipamentoComponent
 		this.spinner.show("buscando");
 
 		this.equipamentoService
-			.obterEquipamentos(paginacao)
+			.obterRegistros(paginacao)
 			.subscribe({
 				next: (dados: DadosRequisicao) => {
                     const equipamentos = dados.data.registros as Equipamento[];
@@ -150,7 +150,7 @@ export class ListagemEquipamentoComponent
 		this.spinner.show("excluindo");
 
 		this.equipamentoService
-			.deletarEquipamento(this.equipamentoId)
+			.remover(this.equipamentoId)
 			.subscribe(
 				() => {
 					this.mostrarAvisoSucesso("Equipamento excluído com sucesso!");

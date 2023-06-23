@@ -1,25 +1,19 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { SituacaoEquipamento } from "@nvs-models/enums/situacao-equipamento.enum";
 import { MensagemRequisicao } from "@nvs-helpers/MensagemRequisicaoHelper";
 import Componente from "@nvs-models/Componente";
-import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { Equipamento } from "@nvs-models/Equipamento";
 import { Funcionario } from "@nvs-models/Funcionario";
 import { InformacaoAdicional } from "@nvs-models/InformacaoAdicional";
 import { Patrimonio } from "@nvs-models/Patrimonio";
-import { EquipamentoService } from "@nvs-services/equipamento/equipamento.service";
-import { FuncionarioService } from "@nvs-services/funcionario/funcionario.service";
 import { PatrimonioService } from "@nvs-services/patrimonio/patrimonio.service";
 import { TokenService } from "@nvs-services/token/token.service";
 import { CLASSE_BOTAO_LIMPAR } from "@nvs-utils/classes-sass.constant";
 import { NgxSpinnerService } from "ngx-spinner";
-import { MatSelect } from "@angular/material/select";
 import { Pagination } from "ngx-easy-table";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
-import { SelectService } from "@nvs-services/componente/select.service";
-import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
 
 @Component({
   selector: "app-patrimonio",
@@ -27,11 +21,11 @@ import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
   styleUrls: ["./patrimonio.component.sass", "../../../assets/style-base.sass"],
 })
 export class PatrimonioComponent extends Componente implements OnInit {
-  @ViewChild("selectEquipamento", { read: MatSelect }) selectEquipamento: MatSelect;
-  public paginacaoSelectEquipamento: Pagination;
+  //   @ViewChild("selectEquipamento", { read: MatSelect }) selectEquipamento: MatSelect;
+  //   public paginacaoSelectEquipamento: Pagination;
 
-  @ViewChild("selectFuncionario", { read: MatSelect }) selectFuncionario: MatSelect;
-  public paginacaoSelectFuncionario: Pagination;
+  //   @ViewChild("selectFuncionario", { read: MatSelect }) selectFuncionario: MatSelect;
+  //   public paginacaoSelectFuncionario: Pagination;
 
   public form = {} as FormGroup;
   public formAdicional = {} as FormGroup;
@@ -49,8 +43,10 @@ export class PatrimonioComponent extends Componente implements OnInit {
   public codigoPatrimonio: any;
   public serviceTag: any;
   public nomeFantasiaEmpresaPadrao: any;
-  public readonly metodoCarregarEquipamento = PatrimonioComponent.prototype.obterEquipamentos.name;
-  public readonly metodoCarregarFuncionario = PatrimonioComponent.prototype.obterFuncionarios.name;
+  //   public readonly metodoCarregarEquipamento = PatrimonioComponent.prototype.obterEquipamentos.name;
+  //   public readonly metodoCarregarFuncionario = PatrimonioComponent.prototype.obterFuncionarios.name;
+  public paginacaoSelectFuncionario: Pagination;
+  public paginacaoSelectEquipamento: Pagination;
 
   get f(): any {
     return this.form.controls;
@@ -60,21 +56,26 @@ export class PatrimonioComponent extends Componente implements OnInit {
     return this.formAdicional.controls;
   }
 
+  get controlFuncionario() {
+    return this.form.controls["codigoFuncionario"] as FormControl;
+  }
+
+  get controlEquipamento() {
+    return this.form.controls["codigoTipoEquipamento"] as FormControl;
+  }
+
   constructor(
     private fb: FormBuilder,
     private fbe: FormBuilder,
-    private funcionario: FuncionarioService,
-    private equipamento: EquipamentoService,
     private patrimonioService: PatrimonioService,
     private token: TokenService,
     private spinner: NgxSpinnerService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private selectService: SelectService,
   ) {
     super();
-    this.paginacaoSelectEquipamento = configuracaoPaginacao;
     this.paginacaoSelectFuncionario = configuracaoPaginacao;
+    this.paginacaoSelectEquipamento = configuracaoPaginacao;
 
     this.chaveSituacaoEquipamento = Object.keys(this.situacaoEquipamentoEnum).filter(Number);
   }
@@ -83,8 +84,6 @@ export class PatrimonioComponent extends Componente implements OnInit {
     this.validarCamposPatrimonio();
     this.validarCamposInformacaoAdicional();
     this.carregarPatrimonio();
-    this[this.metodoCarregarFuncionario]();
-    this[this.metodoCarregarEquipamento]();
   }
 
   public salvarAlteracao(): void {
@@ -136,16 +135,16 @@ export class PatrimonioComponent extends Componente implements OnInit {
     this.validarCamposInformacaoAdicional();
   }
 
-  onSelectAberto(event: any, select: string, nomeMetodo: string) {
-    if (!event) return;
+  //   onSelectAberto(event: any, select: string, nomeMetodo: string) {
+  //     if (!event) return;
 
-    this[select].panel.nativeElement.addEventListener("scroll", () => {
-      if (!this.selectService.deveObterMaisRegistros(event, this[select])) return;
+  //     this[select].panel.nativeElement.addEventListener("scroll", () => {
+  //       if (!this.selectService.deveObterMaisRegistros(event, this[select])) return;
 
-      const paginacao = this.selectService.ObterPaginacao(this.paginacaoSelectEquipamento);
-      this[nomeMetodo](paginacao);
-    });
-  }
+  //       const paginacao = this.selectService.ObterPaginacao(this.paginacaoSelectEquipamento);
+  //       this[nomeMetodo](paginacao);
+  //     });
+  //   }
 
   public carregarPatrimonio(): void {
     this.activatedRoute.queryParams.subscribe((parametro) => {
@@ -174,37 +173,37 @@ export class PatrimonioComponent extends Componente implements OnInit {
     }
   }
 
-  private obterEquipamentos(paginacaoBase: PaginacaoDto = null): void {
-    let paginacaoEquipamento = new PaginacaoDto(
-      this.paginacaoSelectEquipamento.offset,
-      this.paginacaoSelectEquipamento.limit,
-    );
+  //   private obterEquipamentos(paginacaoBase: PaginacaoDto = null): void {
+  //     let paginacaoEquipamento = new PaginacaoDto(
+  //       this.paginacaoSelectEquipamento.offset,
+  //       this.paginacaoSelectEquipamento.limit,
+  //     );
 
-    if (paginacaoBase !== null) paginacaoEquipamento = paginacaoBase;
+  //     if (paginacaoBase !== null) paginacaoEquipamento = paginacaoBase;
 
-    this.equipamento.obterEquipamentos(paginacaoEquipamento).subscribe({
-      next: (dados: DadosRequisicao) => {
-        this.equipamentos = dados.data.registros as Equipamento[];
-      },
-      error: (error: unknown) => {
-        this.mostrarAvisoErro(error, "Houve um problema ao carregar os equipamentos.");
-      },
-    });
-  }
+  //     this.equipamento.obterEquipamentos(paginacaoEquipamento).subscribe({
+  //       next: (dados: DadosRequisicao) => {
+  //         this.equipamentos = dados.data.registros as Equipamento[];
+  //       },
+  //       error: (error: unknown) => {
+  //         this.mostrarAvisoErro(error, "Houve um problema ao carregar os equipamentos.");
+  //       },
+  //     });
+  //   }
 
-  private obterFuncionarios(): void {
-    // this.funcionario.obterTodosFuncionarios().subscribe({
-    // 	next: (dados: DadosRequisicao) => {
-    // 		this.funcionarios = dados.data as Funcionario[];
-    // 	},
-    // 	error: (error: unknown) => {
-    // 		this.mostrarAvisoErro(
-    // 			error,
-    // 			"Houve um problema ao carregar os funcionários.",
-    // 		);
-    // 	},
-    // });
-  }
+  //   private obterFuncionarios(): void {
+  //     // this.funcionario.obterTodosFuncionarios().subscribe({
+  //     // 	next: (dados: DadosRequisicao) => {
+  //     // 		this.funcionarios = dados.data as Funcionario[];
+  //     // 	},
+  //     // 	error: (error: unknown) => {
+  //     // 		this.mostrarAvisoErro(
+  //     // 			error,
+  //     // 			"Houve um problema ao carregar os funcionários.",
+  //     // 		);
+  //     // 	},
+  //     // });
+  //   }
 
   private validarCamposPatrimonio(): void {
     this.form = this.fb.group({

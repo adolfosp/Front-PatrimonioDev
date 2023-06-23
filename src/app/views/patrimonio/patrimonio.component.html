@@ -5,8 +5,12 @@
         <h1><span class="texto-destaque">Patrimônio</span></h1>
       </div>
       <div *ngIf="+form.controls['codigoPatrimonio'].value !== 0" class="col-sm-12 col-md-4 col-lg-4">
-        <app-canvas codigoPatrimonio="{{codigoPatrimonio}}" url="" serviceTag="{{serviceTag}}"
-          nomeFantasia="{{nomeFantasiaEmpresaPadrao | uppercase | slice:0:18 }}"></app-canvas>
+        <app-canvas
+          codigoPatrimonio="{{ codigoPatrimonio }}"
+          url=""
+          serviceTag="{{ serviceTag }}"
+          nomeFantasia="{{ nomeFantasiaEmpresaPadrao | uppercase | slice : 0 : 18 }}"
+        ></app-canvas>
       </div>
     </div>
     <div class="p-3">
@@ -20,35 +24,27 @@
       </div>
       <div class="row">
         <div class="col-lg-6 col-sm-12">
-          <mat-form-field class="full-width" appearance="fill">
-            <mat-label>Funcionário</mat-label>
-            <mat-select [formControl]="f.codigoFuncionario" #selectFuncionario (openedChange)="onSelectAberto($event, 'selectFuncionario', metodoCarregarFuncionario)" name="codigoFuncionario" required>
-              <mat-option value="" disabled>--Selecione um funcionário--</mat-option>
-              <mat-option *ngFor="let funcionario of funcionarios" [value]="funcionario.codigoFuncionario">
-                {{funcionario.codigoFuncionario}} - {{ funcionario.nomeFuncionario }}
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="f.codigoFuncionario.errors?.required">O funcionário é obrigatório</mat-error>
-          </mat-form-field>
+          <app-select-paginacao
+            tipoService="funcionario"
+            [paginacao]="paginacaoSelectFuncionario"
+            [control]="controlFuncionario"
+          ></app-select-paginacao>
+          <mat-error *ngIf="f.codigoFuncionario.errors?.required">O funcionário é obrigatório</mat-error>
         </div>
         <div class="col-lg-6 col-sm-12">
-          <mat-form-field class="full-width" appearance="fill">
-            <mat-label>Equipamento</mat-label>
-            <mat-select [formControl]="f.codigoTipoEquipamento" #selectEquipamento (openedChange)="onSelectAberto($event, 'selectEquipamento', metodoCarregarEquipamento)" name="codigoTipoEquipamento" required>
-              <mat-option value="" disabled>--Selecione um equipamento--</mat-option>
-              <mat-option *ngFor="let equipamento of equipamentos" [value]="equipamento.codigoTipoEquipamento">
-                {{equipamento.codigoTipoEquipamento}} - {{ equipamento.tipoEquipamento }}
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="f.codigoTipoEquipamento.errors?.required">O equipamento é obrigatório</mat-error>
-          </mat-form-field>
+          <app-select-paginacao
+            tipoService="equipamento"
+            [paginacao]="paginacaoSelectEquipamento"
+            [control]="controlEquipamento"
+          ></app-select-paginacao>
+          <mat-error *ngIf="f.codigoTipoEquipamento.errors?.required">O equipamento é obrigatório</mat-error>
         </div>
       </div>
       <div class="row">
         <div class="col-lg-6 col-sm-12 mt-2">
           <mat-form-field class="full-width" appearance="fill">
             <mat-label>Usuário</mat-label>
-            <input type="hidden" class="form-control" name="codigoUsuario" formControlName="codigoUsuario" readonly>
+            <input type="hidden" class="form-control" name="codigoUsuario" formControlName="codigoUsuario" readonly />
             <input matInput readonly [formControl]="f.nomeUsuario" name="nomeUsuario" />
           </mat-form-field>
         </div>
@@ -80,12 +76,10 @@
 
       <div class="row">
         <div class="col-lg-6 col-sm-12">
-
           <mat-form-field class="full-width" appearance="fill">
             <mat-label>Armazenamento</mat-label>
             <input matInput [formControl]="f.armazenamento" placeholder="Ex: 500GB" name="armazenamento" />
           </mat-form-field>
-
         </div>
         <div class="col-lg-6 col-sm-12">
           <mat-form-field class="full-width" appearance="fill">
@@ -114,8 +108,15 @@
         <div class="col-lg-6 col-sm-12">
           <mat-form-field class="full-width" appearance="fill">
             <mat-label>Situação Equipamento</mat-label>
-            <mat-select [formControl]="f.situacaoEquipamento" [(ngModel)]="valorAtualSituacaoEquipamento" name="situacaoEquipamento" required>
-              <mat-option *ngFor="let name of chaveSituacaoEquipamento" [value]="name">{{situacaoEquipamentoEnum[name]}}</mat-option>
+            <mat-select
+              [formControl]="f.situacaoEquipamento"
+              [(ngModel)]="valorAtualSituacaoEquipamento"
+              name="situacaoEquipamento"
+              required
+            >
+              <mat-option *ngFor="let name of chaveSituacaoEquipamento" [value]="name">
+                {{ situacaoEquipamentoEnum[name] }}
+              </mat-option>
             </mat-select>
           </mat-form-field>
         </div>
@@ -125,18 +126,25 @@
 
       <form [formGroup]="formAdicional">
         <div class="row">
-          <input type="hidden" formControlName="codigoInformacaoAdicional" class="form-control">
+          <input type="hidden" formControlName="codigoInformacaoAdicional" class="form-control" />
           <div class="col-lg-6 col-sm-12">
             <mat-form-field class="full-width" appearance="fill">
               <mat-label>Valor Pago</mat-label>
-              <input matInput currencyMask [options]="{ prefix: 'R$ ', align: 'left', thousands: '.', decimal: ',' }" [formControl]="fa.valorPago" placeholder="R$ 0,00" name="valorPago" />
+              <input
+                matInput
+                currencyMask
+                [options]="{ prefix: 'R$ ', align: 'left', thousands: '.', decimal: ',' }"
+                [formControl]="fa.valorPago"
+                placeholder="R$ 0,00"
+                name="valorPago"
+              />
               <mat-error *ngIf="fa.valorPago.errors?.required">O valor pago é obrigatório</mat-error>
             </mat-form-field>
           </div>
           <div class="col-lg-6 col-sm-12">
             <mat-form-field class="full-width" appearance="fill">
               <mat-label>Data Compra</mat-label>
-              <input [formControl]="fa.dataCompra" matInput [matDatepicker]="picker" name="dataCompra">
+              <input [formControl]="fa.dataCompra" matInput [matDatepicker]="picker" name="dataCompra" />
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
@@ -147,15 +155,20 @@
           <div class="col-lg-6 col-sm-12">
             <mat-form-field class="full-width" appearance="fill">
               <mat-label>Data Expiração Garantia</mat-label>
-              <input [formControl]="fa.dataExpiracaoGarantia" matInput [matDatepicker]="pickerExpiracao" name="dataExpiracaoGarantia">
+              <input
+                [formControl]="fa.dataExpiracaoGarantia"
+                matInput
+                [matDatepicker]="pickerExpiracao"
+                name="dataExpiracaoGarantia"
+              />
               <mat-datepicker-toggle matSuffix [for]="pickerExpiracao"></mat-datepicker-toggle>
-              <mat-datepicker #pickerExpiracao ></mat-datepicker>
+              <mat-datepicker #pickerExpiracao></mat-datepicker>
             </mat-form-field>
           </div>
           <div class="col-lg-6 col-sm-12">
             <mat-form-field class="full-width" appearance="fill">
               <mat-label>Antivirus</mat-label>
-              <input matInput [formControl]="fa.antivirus"  placeholder="Ex: Avast" name="antivirus" />
+              <input matInput [formControl]="fa.antivirus" placeholder="Ex: Avast" name="antivirus" />
             </mat-form-field>
           </div>
         </div>
@@ -164,7 +177,7 @@
           <div class="col-lg-6 col-sm-12">
             <mat-form-field class="full-width" appearance="fill">
               <mat-label>Versão Windows</mat-label>
-              <input matInput [formControl]="fa.versaoWindows"  placeholder="Ex: Windows Server" name="versaoWindows" />
+              <input matInput [formControl]="fa.versaoWindows" placeholder="Ex: Windows Server" name="versaoWindows" />
             </mat-form-field>
           </div>
         </div>
@@ -172,26 +185,48 @@
       <div class="row pt-3">
         <div class="row">
           <div class="col">
-            <button type="button" class="btn btn-block cadastrar me-2" [disabled]="!form.valid || !formAdicional.valid"
-              (click)="salvarAlteracao()">{{this.estadoSalvar === 'cadastrarPatrimonio'?'Cadastrar':'Atualizar'}}</button>
-            <app-button (click)="limparCampos()" [classeBotao]="classeBotaoLimpar">
-              Limpar
-            </app-button>
+            <button
+              type="button"
+              class="btn btn-block cadastrar me-2"
+              [disabled]="!form.valid || !formAdicional.valid"
+              (click)="salvarAlteracao()"
+            >
+              {{ this.estadoSalvar === "cadastrarPatrimonio" ? "Cadastrar" : "Atualizar" }}
+            </button>
+            <app-button (click)="limparCampos()" [classeBotao]="classeBotaoLimpar">Limpar</app-button>
           </div>
         </div>
       </div>
     </div>
   </form>
 </div>
-<ngx-spinner name="cadastrado" bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box"
-  [fullScreen]="true">
-  <p style="color: white"> Cadastrando... </p>
+<ngx-spinner
+  name="cadastrado"
+  bdColor="rgba(0, 0, 0, 0.8)"
+  size="medium"
+  color="#fff"
+  type="square-jelly-box"
+  [fullScreen]="true"
+>
+  <p style="color: white">Cadastrando...</p>
 </ngx-spinner>
-<ngx-spinner name="atualizado" bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box"
-  [fullScreen]="true">
-  <p style="color: white"> Atualizando... </p>
+<ngx-spinner
+  name="atualizado"
+  bdColor="rgba(0, 0, 0, 0.8)"
+  size="medium"
+  color="#fff"
+  type="square-jelly-box"
+  [fullScreen]="true"
+>
+  <p style="color: white">Atualizando...</p>
 </ngx-spinner>
-<ngx-spinner name="carregando" bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box"
-  [fullScreen]="true">
-  <p style="color: white"> Carregando... </p>
+<ngx-spinner
+  name="carregando"
+  bdColor="rgba(0, 0, 0, 0.8)"
+  size="medium"
+  color="#fff"
+  type="square-jelly-box"
+  [fullScreen]="true"
+>
+  <p style="color: white">Carregando...</p>
 </ngx-spinner>

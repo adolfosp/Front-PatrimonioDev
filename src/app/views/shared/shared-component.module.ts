@@ -9,6 +9,7 @@ import { BotaoRemoverGridComponent } from './grid/buttons/botao-remover-grid/bot
 import { SelectPaginacaoComponent } from './form/select-paginacao/select-paginacao.component';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
   providers: [],
@@ -19,6 +20,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule,
     MatInputModule,
     MatIconModule,
+    NgxSpinnerModule,
     MatSelectModule,
   ],
   exports: [ButtonComponent, BotaoEditarGridComponent, BotaoRemoverGridComponent, SelectPaginacaoComponent],
