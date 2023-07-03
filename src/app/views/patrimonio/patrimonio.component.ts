@@ -21,11 +21,6 @@ import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
   styleUrls: ["./patrimonio.component.sass", "../../../assets/style-base.sass"],
 })
 export class PatrimonioComponent extends Componente implements OnInit {
-  //   @ViewChild("selectEquipamento", { read: MatSelect }) selectEquipamento: MatSelect;
-  //   public paginacaoSelectEquipamento: Pagination;
-
-  //   @ViewChild("selectFuncionario", { read: MatSelect }) selectFuncionario: MatSelect;
-  //   public paginacaoSelectFuncionario: Pagination;
 
   public form = {} as FormGroup;
   public formAdicional = {} as FormGroup;
@@ -36,15 +31,13 @@ export class PatrimonioComponent extends Componente implements OnInit {
   public informacaoAdicional = {} as InformacaoAdicional;
   public chaveSituacaoEquipamento: any;
   public situacaoEquipamentoEnum = SituacaoEquipamento;
-  public estadoSalvar = "cadastrarPatrimonio";
+  public estadoSalvar = "cadastrar";
   public valorAtualSituacaoEquipamento = "2";
   public readonly classeBotaoLimpar = CLASSE_BOTAO_LIMPAR;
 
   public codigoPatrimonio: any;
   public serviceTag: any;
   public nomeFantasiaEmpresaPadrao: any;
-  //   public readonly metodoCarregarEquipamento = PatrimonioComponent.prototype.obterEquipamentos.name;
-  //   public readonly metodoCarregarFuncionario = PatrimonioComponent.prototype.obterFuncionarios.name;
   public paginacaoSelectFuncionario: Pagination;
   public paginacaoSelectEquipamento: Pagination;
 
@@ -87,13 +80,13 @@ export class PatrimonioComponent extends Componente implements OnInit {
   }
 
   public salvarAlteracao(): void {
-    const atualizando = this.estadoSalvar == "atualizarPatrimonio";
+    const atualizando = this.estadoSalvar == "atualizar";
     const nomeAcaoRealizada = atualizando ? "atualizado" : "cadastrado";
 
     this.spinner.show(nomeAcaoRealizada);
 
     this.patrimonio =
-      this.estadoSalvar === "cadastrarPatrimonio"
+      this.estadoSalvar === "cadastrar"
         ? { ...this.form.value }
         : {
             codigoPatrimonio: this.patrimonio.codigoPatrimonio,
@@ -102,7 +95,7 @@ export class PatrimonioComponent extends Componente implements OnInit {
     this.patrimonio.situacaoEquipamento = +this.form.controls["situacaoEquipamento"].value;
 
     this.informacaoAdicional =
-      this.estadoSalvar === "cadastrarPatrimonio"
+      this.estadoSalvar === "cadastrar"
         ? { ...this.formAdicional.value }
         : {
             codigoInformacaoAdicional: this.informacaoAdicional.codigoInformacaoAdicional,
@@ -152,7 +145,7 @@ export class PatrimonioComponent extends Componente implements OnInit {
     });
 
     if (this.codigoPatrimonio !== null && this.codigoPatrimonio !== 0 && typeof this.codigoPatrimonio != "undefined") {
-      this.estadoSalvar = "atualizarPatrimonio";
+      this.estadoSalvar = "atualizar";
       this.spinner.show("carregando");
 
       this.patrimonioService

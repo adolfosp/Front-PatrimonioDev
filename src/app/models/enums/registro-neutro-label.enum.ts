@@ -6,4 +6,6 @@ export enum RegistroNeutroLabel {
   "nome" = TipoService.setor,
   "tipoEquipamento" = TipoService.equipamento,
   "nomeFuncionario" = TipoService.funcionario,
+  "nomeFabricante" = TipoService.fabricante,
+
 }

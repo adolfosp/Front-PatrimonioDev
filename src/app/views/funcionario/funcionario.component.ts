@@ -7,12 +7,10 @@ import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { Funcionario } from "@nvs-models/Funcionario";
 import { Setor } from "@nvs-models/Setor";
 import { FuncionarioService } from "@nvs-services/funcionario/funcionario.service";
-import { SetorService } from "@nvs-services/setor/setor.service";
 import { CLASSE_BOTAO_LIMPAR } from "@nvs-utils/classes-sass.constant";
 import { NgxSpinnerService } from "ngx-spinner";
 import { Pagination } from "ngx-easy-table";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
-import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
 
 @Component({
   selector: "app-funcionario",
@@ -41,7 +39,6 @@ export class FuncionarioComponent extends Componente implements OnInit {
   constructor(
     private fb: FormBuilder,
     private funcionarioService: FuncionarioService,
-    private setorService: SetorService,
     private spinner: NgxSpinnerService,
     private router: Router,
     private activateRouter: ActivatedRoute,
@@ -53,7 +50,6 @@ export class FuncionarioComponent extends Componente implements OnInit {
   ngOnInit(): void {
     this.validacao();
     this.carregarFuncionario();
-    this.carregarSetor();
     this.controlarVisibilidadeCampoAtivo();
   }
 
@@ -62,20 +58,6 @@ export class FuncionarioComponent extends Componente implements OnInit {
     this.validacao();
   }
 
-  private carregarSetor(paginacaoBase: PaginacaoDto = null): void {
-    let paginacaoSetor = new PaginacaoDto(this.paginacaoSelectSetor.offset, this.paginacaoSelectSetor.limit);
-
-    if (paginacaoBase !== null) paginacaoSetor = paginacaoBase;
-
-    this.setorService.obterRegistros(paginacaoSetor).subscribe({
-      next: (dados: DadosRequisicao) => {
-        this.setores = dados.data.registros as Setor[];
-      },
-      error: (error: unknown) => {
-        this.mostrarAvisoErro(error, "Houve um erro ao carregar o setor.");
-      },
-    });
-  }
 
   private controlarVisibilidadeCampoAtivo(): void {
     if (this.estadoSalvar == "cadastrar") this.form.controls["ativo"].disable();

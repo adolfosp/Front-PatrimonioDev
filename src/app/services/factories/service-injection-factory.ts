@@ -5,6 +5,7 @@ import { IServiceInjectionFactory } from "@nvs-models/interfaces/IServiceInjecti
 import { CategoriaService } from "@nvs-services/categoria/categoria.service";
 import { EmpresaService } from "@nvs-services/empresa/empresa.service";
 import { EquipamentoService } from "@nvs-services/equipamento/equipamento.service";
+import { FabricanteService } from "@nvs-services/fabricante/fabricante.service";
 import { FuncionarioService } from "@nvs-services/funcionario/funcionario.service";
 import { SetorService } from "@nvs-services/setor/setor.service";
 
@@ -24,6 +25,8 @@ export class ServiceInjectionFactory implements IServiceInjectionFactory{
            return inject(FuncionarioService);
          case TipoService.equipamento:
            return inject(EquipamentoService);
+        case TipoService.fabricante:
+            return inject(FabricanteService);
 
          default:
            throw new Error("Serviço não implementado.");

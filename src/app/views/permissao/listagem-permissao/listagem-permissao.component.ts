@@ -13,6 +13,7 @@ import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { UsuarioPermissao } from "@nvs-models/UsuarioPermissao";
 import { PermissaoService } from "@nvs-services/permissao/permissao.service";
 import { TokenService } from "@nvs-services/token/token.service";
+import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
 import configuracaoTabela from "@nvs-utils/configuracao-tabela";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { API, APIDefinition, Columns, Config } from "ngx-easy-table";
@@ -32,6 +33,7 @@ export class ListagemPermissaoComponent extends Componente implements OnInit {
   public linhas = 0;
   public innerWidth: number;
   public toggledRows = new Set<number>();
+  public confSpinner = ConfiguracaoSpinner;
 
   public data: UsuarioPermissao[] = [];
   public dataFiltradaExcel: UsuarioPermissao[] = [];

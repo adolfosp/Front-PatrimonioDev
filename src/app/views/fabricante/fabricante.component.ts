@@ -20,7 +20,7 @@ export class FabricanteComponent extends Componente implements OnInit {
   private _codigoFabricante: number;
 
   public form!: FormGroup;
-  public estadoSalvar = "cadastrarFabricante";
+  public estadoSalvar = "cadastrar";
   public readonly classeBotaoLimpar = CLASSE_BOTAO_LIMPAR;
 
   get f(): any {
@@ -55,13 +55,13 @@ export class FabricanteComponent extends Componente implements OnInit {
   }
 
   public salvarAlteracao(): void {
-    const atualizando = this.estadoSalvar == "atualizarFabricante";
+    const atualizando = this.estadoSalvar == "atualizar";
     const nomeAcaoRealizada = atualizando ? "atualizado" : "cadastrado";
 
     this.spinner.show(nomeAcaoRealizada);
 
     this._fabricante =
-      this.estadoSalvar === "cadastrarFabricante"
+      this.estadoSalvar === "cadastrar"
         ? { ...this.form.value }
         : { codigoFabricante: this._fabricante.codigoFabricante, ...this.form.value };
 
@@ -89,11 +89,11 @@ export class FabricanteComponent extends Componente implements OnInit {
   public carregarFabricante(): void {
     this._codigoFabricante = +this.activateRouter.snapshot.paramMap.get("codigoFabricante");
     if (this._codigoFabricante !== null && this._codigoFabricante !== 0) {
-      this.estadoSalvar = "atualizarFabricante";
+      this.estadoSalvar = "atualizar";
       this.spinner.show("carregando");
 
       this.fabricanteService
-        .obterApenasUmFabricante(this._codigoFabricante)
+        .obterRegistro(this._codigoFabricante)
         .subscribe({
           next: (dados: DadosRequisicao) => {
             this._fabricante = { ...(dados.data as Fabricante) };

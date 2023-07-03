@@ -113,7 +113,7 @@ export class ListagemFabricanteComponent
 
 		this.spinner.show("buscando");
 		this.fabricanteService
-			.obterFabricantes(paginacao)
+			.obterRegistros(paginacao)
 			.subscribe({
 				next: (dados: DadosRequisicao) => {
 					const fabricantes = dados.data.registros as Fabricante[];
@@ -150,7 +150,7 @@ export class ListagemFabricanteComponent
 		this.spinner.show("excluindo");
 
 		this.fabricanteService
-			.deletarFabricante(this.codigoFabricante)
+			.remover(this.codigoFabricante)
 			.subscribe({
 				next: () => {
 					this.mostrarAvisoSucesso("Fabricante removido com sucesso!");

@@ -28,7 +28,12 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   providers: [PatrimonioService, EquipamentoService, FuncionarioService, BsModalService],
-  declarations: [PatrimonioComponent, ListagemPatrimonioComponent, EtiquetaCanvasComponent, PerdaComponent],
+  declarations: [
+    PatrimonioComponent,
+    ListagemPatrimonioComponent,
+    EtiquetaCanvasComponent,
+    PerdaComponent
+  ],
   imports: [
     PatrimonioRoutingModule,
     NgxSpinnerModule,

@@ -1,41 +1,40 @@
-import { Injectable } from '@angular/core';
-import { DadosRequisicao } from '@nvs-models/requisicoes/DadosRequisicao';
-import { Fabricante } from '@nvs-models/Fabricante';
-import { ApiService } from '@nvs-services/api/api.service';
-import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
-import PaginacaoDto from '@nvs-models/dtos/PaginacaoDto';
+import { Injectable } from "@angular/core";
+import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
+import { ApiService } from "@nvs-services/api/api.service";
+import { Observable } from "rxjs";
+import { take } from "rxjs/operators";
+import { environment } from "../../../environments/environment";
+import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
+import { IService } from "@nvs-models/interfaces/IService";
 
 @Injectable()
-export class FabricanteService {
-
-  constructor(private api: ApiService) { }
-
+export class FabricanteService implements IService {
   baseUrl = `${environment.apiUrl}fabricantes`;
 
-  public cadastrarFabricante(fabricante: Fabricante): Observable<Fabricante> {
-    return this.api.post<Fabricante>(this.baseUrl, {fabricante}).pipe(take(1));
+  constructor(private api: ApiService) {}
+  cadastrar<T>(fabricante: T): Observable<DadosRequisicao> {
+    return this.api.post<DadosRequisicao>(this.baseUrl, { fabricante }).pipe(take(1));
   }
 
-  public obterFabricantes(paginacao: PaginacaoDto): Observable<DadosRequisicao> {
-    return this.api.get<DadosRequisicao>(`${this.baseUrl}?paginaAtual=${paginacao.paginaAtual}&quantidadePorPagina=${paginacao.quantidadePorPagina}`).pipe(take(1))
-  }
-
-  public deletarFabricante(codigoFabricante: number): Observable<any>{
+  obterRegistros(paginacao: PaginacaoDto): Observable<DadosRequisicao> {
     return this.api
-    .delete(`${this.baseUrl}/${codigoFabricante}`)
-    .pipe(take(1));
+      .get<DadosRequisicao>(
+        `${this.baseUrl}?paginaAtual=${paginacao.paginaAtual}&quantidadePorPagina=${paginacao.quantidadePorPagina}`,
+      )
+      .pipe(take(1));
   }
 
-  public obterApenasUmFabricante(codigoFabricante: number): Observable<DadosRequisicao> {
+  remover(codigoFabricante: number): Observable<DadosRequisicao> {
+    return this.api.delete<DadosRequisicao>(`${this.baseUrl}/${codigoFabricante}`).pipe(take(1));
+  }
+
+  obterRegistro(codigoFabricante: number): Observable<DadosRequisicao> {
     return this.api.get<DadosRequisicao>(`${this.baseUrl}/${codigoFabricante}`).pipe(take(1));
   }
 
-  public atualizarFabricante(fabricante: Fabricante): Observable<Fabricante>{
+  atualizar<T>(fabricante: T): Observable<DadosRequisicao> {
     return this.api
-    .put<Fabricante>(`${this.baseUrl}/${fabricante.codigoFabricante}`, {fabricante})
-    .pipe(take(1));
+      .put<DadosRequisicao>(`${this.baseUrl}/${fabricante["codigoFabricante"]}`, { fabricante })
+      .pipe(take(1));
   }
-
 }

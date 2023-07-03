@@ -218,13 +218,13 @@ export class ListagemPatrimonioComponent extends Componente implements OnInit, A
 
   private obterColunasDaTabela(): any {
     return [
-      { key: "codigoPatrimonio", title: "Código", width: "3%" },
+      { key: "codigoPatrimonio", title: "Código", width: "5%" },
       { key: "situacaoEquipamento", title: "Situação", width: "17%" },
       { key: "tipoEquipamento", title: "Equipamento", width: "5%" },
-      { key: "nomeFuncionario", title: "Funcionário" },
-      { key: "", title: "Editar" },
-      { key: "", title: "Excluir" },
-      { key: "", title: "Ações" },
+      { key: "nomeFuncionario", title: "Funcionário", width: "45%" },
+      { key: "", title: "Editar", width: "10%" },
+      { key: "", title: "Excluir", width: "10%" },
+      { key: "", title: "Ações", width: "10%" },
     ];
   }
 

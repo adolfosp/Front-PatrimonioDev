@@ -4,4 +4,6 @@ export enum TipoService {
   setor = 2,
   funcionario = 3,
   equipamento = 4,
+  fabricante = 5,
+
 }

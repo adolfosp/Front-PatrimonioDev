@@ -10,7 +10,7 @@
     [configuration]="configuracao"
     [columns]="colunas"
     [pagination]="paginacao"
-    [noResultsTemplate]="mensagemSemCadastro"
+    [noResultsTemplate]="noResults"
     [detailsTemplate]="detailsTemplate"
     #table
   >
@@ -95,14 +95,14 @@
     </ng-template>
   </ngx-table>
   <div>
-  <mat-paginator
-    [length]="totalItensPaginacao"
-    [pageSize]="5"
-    (page)="paginationEvent($event)"
-    [pageSizeOptions]="[5, 10, 25, 100]"
-    [showFirstLastButtons]="true"
-  ></mat-paginator>
-</div>
+    <mat-paginator
+      [length]="totalItensPaginacao"
+      [pageSize]="5"
+      (page)="paginationEvent($event)"
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      [showFirstLastButtons]="true"
+    ></mat-paginator>
+  </div>
 </div>
 <ng-template #template>
   <div class="modal-body text-center">
@@ -115,8 +115,10 @@
     <button type="button" class="btn btn-primary" (click)="recusar()">Não</button>
   </div>
 </ng-template>
-<ng-template #mensagemSemCadastro>
-  <td [attr.colspan]="colunas.length" class="no-results text-center">
+
+
+<ng-template #noResults>
+  <td [attr.colspan]="colunas.length + 1" class="no-results text-center">
     <h4>Não há nenhum patrimônio cadastrado</h4>
   </td>
 </ng-template>

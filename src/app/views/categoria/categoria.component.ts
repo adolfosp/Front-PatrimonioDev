@@ -80,7 +80,6 @@ export class CategoriaComponent extends Componente implements OnInit, Componente
   }
 
   private carregarCategoria(): void {
-
     this._codigoCategoria = +this.activateRouter.snapshot.paramMap?.get('codigoCategoria');
 
     if (this._codigoCategoria == null || this._codigoCategoria == 0) return;

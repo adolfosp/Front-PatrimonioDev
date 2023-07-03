@@ -43,10 +43,16 @@
 
   ## Todo
 
-- [ ] Trocar o select do funcionario e equipamento dentro do patrimônio
-- [ ] Verificar erro de largura da mensagem de nenhum patrimônio cadastrado
-- [ ] Validar se no construtor, as chamadas de alguns métodos foram removidos
-- [ ] Validar ngxSpinner
+- [ X ] Trocar o select do funcionario e equipamento dentro do patrimônio
+- [ X ] Verificar erro de largura da mensagem de nenhum patrimônio cadastrado
+- [ X ] Validar se no construtor, as chamadas de alguns métodos foram removidos
+- [ X ] Validar ngxSpinner
+- [ ] Corrigir hover do menu quando é atualizado a página
+- [ ] Validar token expirado
+- [ ] Centralizar obterColunas e criar uma prop para a regra colunas.length + 1
+- [ ] Finalizar USUÁRIO
+- [ ] Finalizar PERMISSÃO
+- [ ] Corrigir title das páginas
 
 
 ## Information about patterns of the code
