@@ -9,13 +9,11 @@ import { Empresa } from "@nvs-models/Empresa";
 import { Setor } from "@nvs-models/Setor";
 import { Usuario } from "@nvs-models/Usuario";
 import { UsuarioPermissao } from "@nvs-models/UsuarioPermissao";
-import { PermissaoService } from "@nvs-services/permissao/permissao.service";
 import { UsuarioService } from "@nvs-services/usuario/usuario.service";
 import { CLASSE_BOTAO_LIMPAR } from "@nvs-utils/classes-sass.constant";
 import { NgxSpinnerService } from "ngx-spinner";
 import { Pagination } from "ngx-easy-table";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
-import { TipoService } from "@nvs-models/enums/tipo-service.enum";
 
 @Component({
   selector: "app-usuario",
@@ -28,6 +26,8 @@ export class UsuarioComponent extends Componente implements OnInit {
 
   public paginacaoSelectEmpresa: Pagination;
   public paginacaoSelectSetor: Pagination;
+  public paginacaoSelectPerfil: Pagination;
+
   public form!: FormGroup;
   public estadoSalvar = "cadastrar";
   public setores: Setor[] = [];
@@ -35,7 +35,6 @@ export class UsuarioComponent extends Componente implements OnInit {
   public permissoes: UsuarioPermissao[] = [];
   public limpandoCampo = false;
   public readonly classeBotaoLimpar = CLASSE_BOTAO_LIMPAR;
-  public readonly tipoService = TipoService.categoria;
   campo: any;
 
   get f(): any {
@@ -50,10 +49,13 @@ export class UsuarioComponent extends Componente implements OnInit {
     return this.form.controls["codigoSetor"] as FormControl;
   }
 
+  get controlPerfil() {
+    return this.form.controls["codigoPerfil"] as FormControl;
+  }
+
   constructor(
     private fb: FormBuilder,
     private spinner: NgxSpinnerService,
-    private permissaoService: PermissaoService,
     private router: Router,
     private usuarioService: UsuarioService,
     private activateRouter: ActivatedRoute,
@@ -61,12 +63,13 @@ export class UsuarioComponent extends Componente implements OnInit {
     super();
     this.paginacaoSelectEmpresa = configuracaoPaginacao;
     this.paginacaoSelectSetor = configuracaoPaginacao;
+    this.paginacaoSelectPerfil = configuracaoPaginacao;
+
   }
 
   ngOnInit(): void {
     this.validacao();
     this.carregarUsuario();
-    this.carregarPermissao();
     this.controlarVisibilidadeCampoAtivo();
   }
 
@@ -78,17 +81,6 @@ export class UsuarioComponent extends Componente implements OnInit {
   public limparCampos(): void {
     this.limpandoCampo = true;
     this.validacao();
-  }
-
-  private carregarPermissao(): void {
-    this.permissaoService.obterPermissoes().subscribe({
-      next: (dados: DadosRequisicao) => {
-        this.permissoes = dados.data as UsuarioPermissao[];
-      },
-      error: (error: unknown) => {
-        this.mostrarAvisoErro(error, "Houve um erro ao carregar a permissão.");
-      },
-    });
   }
 
   private validacao(): void {

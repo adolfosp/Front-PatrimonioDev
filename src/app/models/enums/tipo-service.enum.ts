@@ -5,5 +5,6 @@ export enum TipoService {
   funcionario = 3,
   equipamento = 4,
   fabricante = 5,
+  perfil = 6,
 
 }

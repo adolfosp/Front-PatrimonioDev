@@ -128,17 +128,6 @@ export class PatrimonioComponent extends Componente implements OnInit {
     this.validarCamposInformacaoAdicional();
   }
 
-  //   onSelectAberto(event: any, select: string, nomeMetodo: string) {
-  //     if (!event) return;
-
-  //     this[select].panel.nativeElement.addEventListener("scroll", () => {
-  //       if (!this.selectService.deveObterMaisRegistros(event, this[select])) return;
-
-  //       const paginacao = this.selectService.ObterPaginacao(this.paginacaoSelectEquipamento);
-  //       this[nomeMetodo](paginacao);
-  //     });
-  //   }
-
   public carregarPatrimonio(): void {
     this.activatedRoute.queryParams.subscribe((parametro) => {
       (this.codigoPatrimonio = parametro["codigoPatrimonio"]), (this.serviceTag = parametro["serviceTag"]);
@@ -165,38 +154,6 @@ export class PatrimonioComponent extends Componente implements OnInit {
         .add(() => this.spinner.hide("carregando"));
     }
   }
-
-  //   private obterEquipamentos(paginacaoBase: PaginacaoDto = null): void {
-  //     let paginacaoEquipamento = new PaginacaoDto(
-  //       this.paginacaoSelectEquipamento.offset,
-  //       this.paginacaoSelectEquipamento.limit,
-  //     );
-
-  //     if (paginacaoBase !== null) paginacaoEquipamento = paginacaoBase;
-
-  //     this.equipamento.obterEquipamentos(paginacaoEquipamento).subscribe({
-  //       next: (dados: DadosRequisicao) => {
-  //         this.equipamentos = dados.data.registros as Equipamento[];
-  //       },
-  //       error: (error: unknown) => {
-  //         this.mostrarAvisoErro(error, "Houve um problema ao carregar os equipamentos.");
-  //       },
-  //     });
-  //   }
-
-  //   private obterFuncionarios(): void {
-  //     // this.funcionario.obterTodosFuncionarios().subscribe({
-  //     // 	next: (dados: DadosRequisicao) => {
-  //     // 		this.funcionarios = dados.data as Funcionario[];
-  //     // 	},
-  //     // 	error: (error: unknown) => {
-  //     // 		this.mostrarAvisoErro(
-  //     // 			error,
-  //     // 			"Houve um problema ao carregar os funcionários.",
-  //     // 		);
-  //     // 	},
-  //     // });
-  //   }
 
   private validarCamposPatrimonio(): void {
     this.form = this.fb.group({

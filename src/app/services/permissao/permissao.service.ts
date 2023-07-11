@@ -1,45 +1,43 @@
-import { Injectable } from '@angular/core';
-import { UsuarioPermissao } from '@nvs-models/UsuarioPermissao';
-import { ApiService } from '@nvs-services/api/api.service';
-import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
-import { DadosRequisicao } from '@nvs-models/requisicoes/DadosRequisicao';
+import { Injectable } from "@angular/core";
+import { ApiService } from "@nvs-services/api/api.service";
+import { Observable } from "rxjs";
+import { take } from "rxjs/operators";
+import { environment } from "../../../environments/environment";
+import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
+import { IService } from "@nvs-models/interfaces/IService";
+import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
-export class PermissaoService {
+export class PermissaoService implements IService {
   baseUrl = `${environment.apiUrl}permissoes`;
 
-  constructor(private api: ApiService) { }
+  constructor(private api: ApiService) {}
 
-  public obterPermissoes(): Observable<DadosRequisicao>{
-    return this.api.get<DadosRequisicao>(this.baseUrl).pipe(take(1));
+  cadastrar<T>(usuarioPermissao: T): Observable<DadosRequisicao> {
+    return this.api.post<DadosRequisicao>(this.baseUrl, { perfilDto: usuarioPermissao }).pipe(take(1));
   }
 
-  public cadastrarPermissao(usuarioPermissao: UsuarioPermissao): Observable<UsuarioPermissao> {
+  obterRegistros(paginacao: PaginacaoDto): Observable<DadosRequisicao> {
     return this.api
-    .post<UsuarioPermissao>(this.baseUrl, {perfilDto: usuarioPermissao})
-    .pipe(take(1));
+      .get<DadosRequisicao>(
+        `${this.baseUrl}?paginaAtual=${paginacao.paginaAtual}&quantidadePorPagina=${paginacao.quantidadePorPagina}`,
+      )
+      .pipe(take(1));
   }
 
-  public desativarPermissao(permissaoId: number): Observable<any>{
+  remover(permissaoId: number): Observable<DadosRequisicao> {
+    return this.api.delete<DadosRequisicao>(`${this.baseUrl}/${permissaoId}`).pipe(take(1));
+  }
+
+  obterRegistro(permissaoId: number): Observable<DadosRequisicao> {
+    return this.api.get<DadosRequisicao>(`${this.baseUrl}/${permissaoId}`).pipe(take(1));
+  }
+
+  atualizar<T>(usuarioPermissao: T): Observable<DadosRequisicao> {
     return this.api
-    .delete(`${this.baseUrl}/${permissaoId}`)
-    .pipe(take(1));
+      .put<DadosRequisicao>(`${this.baseUrl}/${usuarioPermissao["codigoPerfil"]}`, { usuarioPermissao })
+      .pipe(take(1));
   }
-
-  public obterApenasUmaPermissao(permissaoId: number): Observable<any>{
-    return this.api
-    .get(`${this.baseUrl}/${permissaoId}`)
-    .pipe(take(1));
-  }
-
-  public atualizarPermissao(usuarioPermissao: UsuarioPermissao): Observable<UsuarioPermissao>{
-    return this.api
-    .put<UsuarioPermissao>(`${this.baseUrl}/${usuarioPermissao.codigoPerfil}`, {usuarioPermissao})
-    .pipe(take(1));
-  }
-
 }

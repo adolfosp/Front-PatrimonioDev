@@ -179,7 +179,7 @@ export class PermissaoComponent extends Componente implements OnInit {
       this.spinner.show("carregando");
 
       this.permissaoService
-        .obterApenasUmaPermissao(this.codigoPerfil)
+        .obterRegistro(this.codigoPerfil)
         .subscribe({
           next: (dados: DadosRequisicao) => {
             this.usuarioPermissao = dados.data[0];

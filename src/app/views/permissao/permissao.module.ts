@@ -14,6 +14,8 @@ import { ListagemPermissaoComponent } from './listagem-permissao/listagem-permis
 import { PermissaoRoutingModule } from './permissao-routing.module';
 import { PermissaoComponent } from './permissao.component';
 import { SharedComponentModule } from '../shared/shared-component.module';
+import { HeaderGridComponent } from '../shared/grid/header-grid/header-grid.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   imports: [
@@ -28,7 +30,10 @@ import { SharedComponentModule } from '../shared/shared-component.module';
     MatIconModule,
     MatSelectModule,
     MatCheckboxModule,
-    SharedComponentModule
+    SharedComponentModule,
+    MatPaginatorModule,
+    HeaderGridComponent,
+
   ],
   providers: [PermissaoService, BsModalService],
   declarations: [PermissaoComponent , ListagemPermissaoComponent]
