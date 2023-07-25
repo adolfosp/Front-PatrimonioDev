@@ -11,6 +11,7 @@ import { LocalStorageChave } from "@nvs-models/enums/local-storage-chave.enum";
 import { atribuirModoDarkLightPadrao, atribuirTemaCorretoAoRecarregarPagina } from "@nvs-helpers/ModoDarkLightHelper";
 import Componente from "@nvs-models/Componente";
 import { CriptografiaService } from "@nvs-services/criptografia/criptografia.service";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: "app-dashboard",
@@ -41,8 +42,10 @@ export class LoginComponent extends Componente implements OnInit {
     private spinner: NgxSpinnerService,
     private encriptar: CriptografiaService,
     private localStorageService: LocalStorageService,
+    private title: Title
   ) {
     super();
+    this.title.setTitle("Login");
   }
 
   private atribuirTipoModoVisualizacaoPadrao(): void {

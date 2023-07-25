@@ -14,6 +14,9 @@ import { CLASSE_BOTAO_LIMPAR } from "@nvs-utils/classes-sass.constant";
 import { NgxSpinnerService } from "ngx-spinner";
 import { Pagination } from "ngx-easy-table";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
+import InserirPatrimonioDto from "@nvs-models/dtos/InserirPatrimonioDto";
+import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: "app-patrimonio",
@@ -21,7 +24,6 @@ import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
   styleUrls: ["./patrimonio.component.sass", "../../../assets/style-base.sass"],
 })
 export class PatrimonioComponent extends Componente implements OnInit {
-
   public form = {} as FormGroup;
   public formAdicional = {} as FormGroup;
   public limpandoCampo = false;
@@ -34,6 +36,7 @@ export class PatrimonioComponent extends Componente implements OnInit {
   public estadoSalvar = "cadastrar";
   public valorAtualSituacaoEquipamento = "2";
   public readonly classeBotaoLimpar = CLASSE_BOTAO_LIMPAR;
+  public confSpinner = ConfiguracaoSpinner;
 
   public codigoPatrimonio: any;
   public serviceTag: any;
@@ -65,8 +68,10 @@ export class PatrimonioComponent extends Componente implements OnInit {
     private spinner: NgxSpinnerService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
+    private title: Title
   ) {
     super();
+    this.title.setTitle("Patrimônio");
     this.paginacaoSelectFuncionario = configuracaoPaginacao;
     this.paginacaoSelectEquipamento = configuracaoPaginacao;
 
@@ -85,23 +90,14 @@ export class PatrimonioComponent extends Componente implements OnInit {
 
     this.spinner.show(nomeAcaoRealizada);
 
-    this.patrimonio =
-      this.estadoSalvar === "cadastrar"
-        ? { ...this.form.value }
-        : {
-            codigoPatrimonio: this.patrimonio.codigoPatrimonio,
-            ...this.form.value,
-          };
+    this.patrimonio = this.obterPatrimonio();
     this.patrimonio.situacaoEquipamento = +this.form.controls["situacaoEquipamento"].value;
 
-    this.informacaoAdicional =
-      this.estadoSalvar === "cadastrar"
-        ? { ...this.formAdicional.value }
-        : {
-            codigoInformacaoAdicional: this.informacaoAdicional.codigoInformacaoAdicional,
-            ...this.formAdicional.value,
-          };
-    this.patrimonioService[this.estadoSalvar](this.patrimonio, this.informacaoAdicional)
+    this.informacaoAdicional = this.obterInformacaoAdicional();
+
+    const inserirPatrimonioDto = new InserirPatrimonioDto(this.patrimonio, this.informacaoAdicional);
+
+    this.patrimonioService[this.estadoSalvar](inserirPatrimonioDto)
       .subscribe(
         () => this.mostrarAvisoSucesso(`Patrimônio ${nomeAcaoRealizada} com sucesso`),
         (error: unknown) => {
@@ -122,6 +118,23 @@ export class PatrimonioComponent extends Componente implements OnInit {
       .add(() => this.spinner.hide(nomeAcaoRealizada));
   }
 
+  private obterPatrimonio(): any {
+    return this.estadoSalvar === "cadastrar"
+      ? { ...this.form.value }
+      : {
+          codigoPatrimonio: this.patrimonio.codigoPatrimonio,
+          ...this.form.value,
+        };
+  }
+  private obterInformacaoAdicional(): any {
+    return this.estadoSalvar === "cadastrar"
+      ? { ...this.formAdicional.value }
+      : {
+          codigoInformacaoAdicional: this.informacaoAdicional.codigoInformacaoAdicional,
+          ...this.formAdicional.value,
+        };
+  }
+
   public limparCampos(): void {
     this.limpandoCampo = true;
     this.validarCamposPatrimonio();
@@ -139,18 +152,18 @@ export class PatrimonioComponent extends Componente implements OnInit {
 
       this.patrimonioService
         .obterPatrimonioEInformacaoAdicional(this.codigoPatrimonio)
-        .subscribe(
-          (listaDeResposta) => {
+        .subscribe({
+          next: (listaDeResposta) => {
             this.form.patchValue(listaDeResposta[0]);
             this.serviceTag = listaDeResposta[0].serviceTag;
             this.formAdicional.patchValue(listaDeResposta[1]);
             this.nomeFantasiaEmpresaPadrao = listaDeResposta[2];
             this.valorAtualSituacaoEquipamento = listaDeResposta[0].situacaoEquipamento.toString();
           },
-          (error: unknown) => {
+          error: (error: unknown) => {
             this.mostrarAvisoErro(error, "Houve um erro ao tentar carregar o patrimônio.");
           },
-        )
+        })
         .add(() => this.spinner.hide("carregando"));
     }
   }

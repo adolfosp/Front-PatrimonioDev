@@ -30,6 +30,7 @@ import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
 import { PageEvent } from "@angular/material/paginator";
 import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
 import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   templateUrl: "./listagem-fabricante.component.html",
@@ -70,8 +71,10 @@ export class ListagemFabricanteComponent
 		private router: Router,
 		private token: TokenService,
 		private detectorAlteracao: ChangeDetectorRef,
+        private title: Title
 	) {
 		super();
+        this.title.setTitle("Listagem de fabricantes");
 	}
 
 	ngOnInit(): void {

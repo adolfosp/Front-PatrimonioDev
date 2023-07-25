@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { Title } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import { TokenService } from "@nvs-services/token/token.service";
 import { Observable } from "rxjs";
@@ -15,7 +16,9 @@ export class DashboardComponent implements OnInit {
   public descricaoPerfil: string;
   public isOffline$: Observable<boolean> = isOffline$;
 
-  constructor(private token: TokenService, private router: Router) {}
+  constructor(private token: TokenService, private router: Router, private title: Title) {
+    title.setTitle("Dashboard");
+  }
 
   ngOnInit(): void {
     this.carregarArquivoJs("assets/js/app.js");

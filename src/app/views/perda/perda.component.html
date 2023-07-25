@@ -6,7 +6,7 @@
       <div class="form-row">
         <div class="form-group col-12 text-start">
           <label>Motivo da perda</label>
-          <textarea [ngClass]="cssValidator(f.motivoDaPerda)" formControlName="motivoDaPerda"
+          <textarea formControlName="motivoDaPerda"
             class="form-control" name="motivo" rows="5" cols="50" required></textarea>
           <div *ngIf="f.motivoDaPerda.errors?.required" class="invalid-feedback">O
             motivo é obrigatório</div>

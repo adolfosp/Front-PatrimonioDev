@@ -26,6 +26,7 @@ import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
 import { PageEvent } from "@angular/material/paginator";
 import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
 import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   templateUrl: "./listagem-patrimonio.component.html",
@@ -62,8 +63,10 @@ export class ListagemPatrimonioComponent extends Componente implements OnInit, A
     private token: TokenService,
     private encriptacao: CriptografiaService,
     private detectorAlteracao: ChangeDetectorRef,
+    private title: Title
   ) {
     super();
+    this.title.setTitle("Listagem de patrimônio");
     this.paginacao = configuracaoPaginacao;
   }
 
@@ -212,9 +215,9 @@ export class ListagemPatrimonioComponent extends Componente implements OnInit, A
       this.mostrarAvisoXLS(`Não foi possível exportar a planilha. Mensagem: ${err}`);
     }
   }
-  public atribuirCodigoPatrimonio(codigoPatrimonio: number): void {
-    this.patrimonioId = codigoPatrimonio;
-  }
+//   public atribuirCodigoPatrimonio(codigoPatrimonio: number): void {
+//     this.patrimonioId = codigoPatrimonio;
+//   }
 
   private obterColunasDaTabela(): any {
     return [

@@ -48,12 +48,17 @@
 - [ X ] Validar se no construtor, as chamadas de alguns métodos foram removidos
 - [ X ] Validar ngxSpinner
 - [ ] Corrigir hover do menu quando é atualizado a página. https://itnext.io/the-ultimate-sidenav-guide-with-angular-resizeable-dynamic-and-toggleable-c42dc057798d
-- [ ] Validar token expirado
+- [ X ] Validar token expirado
 - [ ] Centralizar obterColunas e criar uma prop para a regra colunas.length + 1
-- [ ] Finalizar USUÁRIO
+- [ X ] Finalizar USUÁRIO
 - [ X ] Finalizar PERMISSÃO
-- [ ] Corrigir title das páginas
+- [ X ] Corrigir title das páginas
 - [ ] Adicionar Directives Composition API NA dashboard login
+- [ ] Arrumar perdas
+- [ ] Ajustar permissões
+- [ ] Validar motivo de não aparecer erro dos campos
+
+
 
 
 ## Information about patterns of the code

@@ -35,25 +35,21 @@ export class TokenService {
 
   public obterPermissaoToken(): boolean {
     const token: string = this.localStorageService.obterChave(LocalStorageChave.Valor);
-    //@ts-ignore
     return decode(this.encriptar.decrypt(token))["descricaoPerfil"]?.toString().toLowerCase() == "administrador";
   }
 
   public obterNomeUsuarioToken(): string {
     const token: string = this.localStorageService.obterChave(LocalStorageChave.Valor);
-    //@ts-ignore
     return decode(this.encriptar.decrypt(token))['nomeUsuario']
   }
 
   public obterDescricaoPerfil(): string {
     const token: string = this.localStorageService.obterChave(LocalStorageChave.Valor);
-    //@ts-ignore
     return decode(this.encriptar.decrypt(token))['descricaoPerfil']
   }
 
   public obterCodigoUsuarioToken(): number {
     const token: string = this.localStorageService.obterChave(LocalStorageChave.Valor);
-    //@ts-ignore
     return +decode(this.encriptar.decrypt(token))['codigoUsuario']
   }
 

@@ -23,6 +23,7 @@ import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
 import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
 import { PageEvent } from "@angular/material/paginator";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: 'app-listarempresa',
@@ -57,10 +58,11 @@ export class ListagemEmpresaComponent extends Componente implements OnInit, Afte
     private spinner: NgxSpinnerService,
     private router: Router,
     private token: TokenService,
-    private detectorAlteracao: ChangeDetectorRef
-    ) {
-      super();
-    }
+    private detectorAlteracao: ChangeDetectorRef,
+    private title: Title) {
+    super();
+    title.setTitle("Listagem de empresas")
+  }
 
   ngOnInit(): void {
 

@@ -8,6 +8,7 @@ import { Fabricante } from "@nvs-models/Fabricante";
 import { FabricanteService } from "@nvs-services/fabricante/fabricante.service";
 import { CLASSE_BOTAO_LIMPAR } from "@nvs-utils/classes-sass.constant";
 import { NgxSpinnerService } from "ngx-spinner";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: "app-fabricante",
@@ -33,8 +34,10 @@ export class FabricanteComponent extends Componente implements OnInit {
     private spinner: NgxSpinnerService,
     private router: Router,
     private activateRouter: ActivatedRoute,
+    private title: Title
   ) {
     super();
+    this.title.setTitle("Fabricante");
   }
 
   ngOnInit(): void {

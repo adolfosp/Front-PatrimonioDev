@@ -69,7 +69,6 @@
               class="dropdown-item tamanho-fonte"
               role="button"
               data-toggle="modal"
-              (click)="atribuirCodigoPatrimonio(row.codigoPatrimonio)"
               data-target="#modalPerda"
             >
               Declarar Perda
@@ -138,7 +137,7 @@
         class="dropdown-item tamanho-fonte"
         role="button"
         data-toggle="modal"
-        (click)="atribuirCodigoPatrimonio(row.codigoPatrimonio)"
+
         data-target="#modalPerda"
       >
         Declarar Perda
@@ -157,7 +156,7 @@
     </div>
   </div>
 </ng-template>
-<div
+<!-- <div
   class="modal fade"
   id="modalPerda"
   data-backdrop="static"
@@ -176,7 +175,7 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 <ngx-spinner
   name="buscando"
   [bdColor]="confSpinner.bdColor"

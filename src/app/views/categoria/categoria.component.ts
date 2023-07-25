@@ -1,6 +1,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IServiceAtualizar, IServiceCadastrar } from '@nvs-helpers/IServiceNomeHelper';
 import { MensagemRequisicao } from '@nvs-helpers/MensagemRequisicaoHelper';
@@ -35,8 +36,10 @@ export class CategoriaComponent extends Componente implements OnInit, Componente
     private spinner: NgxSpinnerService,
     private router: Router,
     private categoriaService: CategoriaService,
-    private activateRouter: ActivatedRoute) {
+    private activateRouter: ActivatedRoute,
+    private title: Title) {
     super();
+    title.setTitle("Categoria")
   }
 
   ngOnInit(): void {

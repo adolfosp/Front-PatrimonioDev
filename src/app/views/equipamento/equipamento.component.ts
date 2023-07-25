@@ -13,6 +13,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { Pagination } from "ngx-easy-table";
 import { SelectService } from "@nvs-services/componente/select.service";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: "app-equipamento",
@@ -54,8 +55,11 @@ export class EquipamentoComponent extends Componente implements OnInit {
     private equipamentoService: EquipamentoService,
     private activateRouter: ActivatedRoute,
     private selectService: SelectService,
+    private title: Title
   ) {
     super();
+    title.setTitle("Equipamento")
+
     this._paginacaoSelectGenerico = configuracaoPaginacao;
     this.paginacaoSelectCategoria = configuracaoPaginacao;
     this.paginacaoSelectFabricante = configuracaoPaginacao;

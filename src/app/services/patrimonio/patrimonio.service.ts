@@ -18,6 +18,7 @@ export class PatrimonioService implements IService {
   constructor(private api: ApiService) {}
   cadastrar<T>(classe: T): Observable<DadosRequisicao> {
     const insercao = classe as InserirPatrimonioDto;
+    debugger;
     return this.api
       .post<DadosRequisicao>(this.baseUrl, {
         patrimonio: insercao.patrimonio,

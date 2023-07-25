@@ -8,6 +8,7 @@ import { Empresa } from "@nvs-models/Empresa";
 import { EmpresaService } from "@nvs-services/empresa/empresa.service";
 import { CLASSE_BOTAO_LIMPAR } from "@nvs-utils/classes-sass.constant";
 import { NgxSpinnerService } from "ngx-spinner";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: "app-empresa",
@@ -33,8 +34,10 @@ export class EmpresaComponent extends Componente implements OnInit {
     private router: Router,
     private empresaService: EmpresaService,
     private activateRouter: ActivatedRoute,
+    private title: Title,
   ) {
     super();
+    title.setTitle("Empresa");
   }
 
   ngOnInit(): void {

@@ -1,14 +1,15 @@
 import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  HostListener,
-  OnInit,
-  TemplateRef,
-  ViewChild,
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    HostListener,
+    OnInit,
+    TemplateRef,
+    ViewChild,
 } from "@angular/core";
 import { PageEvent } from "@angular/material/paginator";
+import { Title } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import Componente from "@nvs-models/Componente";
 import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
@@ -58,8 +59,10 @@ export class ListagemUsuarioComponent extends Componente implements OnInit, Afte
     private router: Router,
     private detectorAlteracao: ChangeDetectorRef,
     private token: TokenService,
+    private title: Title
   ) {
     super();
+    this.title.setTitle("Listagem de usuários");
   }
 
   ngOnInit(): void {

@@ -1,29 +1,30 @@
 import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  HostListener,
-  OnInit,
-  TemplateRef,
-  ViewChild,
-  ViewEncapsulation,
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    HostListener,
+    OnInit,
+    TemplateRef,
+    ViewChild,
+    ViewEncapsulation,
 } from "@angular/core";
+import { PageEvent } from "@angular/material/paginator";
+import { Title } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import Componente from "@nvs-models/Componente";
-import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { Funcionario } from "@nvs-models/Funcionario";
+import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
+import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { FuncionarioService } from "@nvs-services/funcionario/funcionario.service";
 import { TokenService } from "@nvs-services/token/token.service";
+import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
+import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
 import configuracaoTabela from "@nvs-utils/configuracao-tabela";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { API, APIDefinition, Columns, Config, Pagination } from "ngx-easy-table";
 import { NgxSpinnerService } from "ngx-spinner";
 import * as XLSX from "xlsx";
-import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
-import { PageEvent } from "@angular/material/paginator";
-import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
-import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
 
 @Component({
   templateUrl: "./listagem-funcionario.component.html",
@@ -59,8 +60,10 @@ export class ListagemFuncionarioComponent extends Componente implements OnInit, 
     private router: Router,
     private token: TokenService,
     private detectorAlteracao: ChangeDetectorRef,
+    private title: Title
   ) {
     super();
+    this.title.setTitle("Listagem de funcionários");
   }
 
   ngOnInit(): void {

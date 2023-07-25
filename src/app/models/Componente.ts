@@ -1,6 +1,6 @@
 import { inject } from "@angular/core";
-import { TipoMensagem } from "@nvs-models/enums/tipo-mensagem.enum";
 import { MensagemRequisicao } from "@nvs-helpers/MensagemRequisicaoHelper";
+import { TipoMensagem } from "@nvs-models/enums/tipo-mensagem.enum";
 import { ToastrService } from "ngx-toastr";
 
 

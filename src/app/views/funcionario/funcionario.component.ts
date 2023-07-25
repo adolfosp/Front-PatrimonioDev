@@ -11,6 +11,7 @@ import { CLASSE_BOTAO_LIMPAR } from "@nvs-utils/classes-sass.constant";
 import { NgxSpinnerService } from "ngx-spinner";
 import { Pagination } from "ngx-easy-table";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: "app-funcionario",
@@ -42,9 +43,11 @@ export class FuncionarioComponent extends Componente implements OnInit {
     private spinner: NgxSpinnerService,
     private router: Router,
     private activateRouter: ActivatedRoute,
+    private title: Title
   ) {
     super();
     this.paginacaoSelectSetor = configuracaoPaginacao;
+    this.title.setTitle("Listagem de funcionários");
   }
 
   ngOnInit(): void {

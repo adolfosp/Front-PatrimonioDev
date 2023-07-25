@@ -1,15 +1,16 @@
 import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  HostListener,
-  OnInit,
-  TemplateRef,
-  ViewChild,
-  ViewEncapsulation,
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    HostListener,
+    OnInit,
+    TemplateRef,
+    ViewChild,
+    ViewEncapsulation,
 } from "@angular/core";
 import { PageEvent } from "@angular/material/paginator";
+import { Title } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import Componente from "@nvs-models/Componente";
 import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
@@ -59,8 +60,10 @@ export class ListagemSetorComponent extends Componente implements OnInit, AfterV
     private router: Router,
     private token: TokenService,
     private detectorAlteracao: ChangeDetectorRef,
+    private title: Title
   ) {
     super();
+    this.title.setTitle("Listagem de setor")
   }
 
   ngOnInit(): void {

@@ -1,9 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { AbstractControlOptions, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { Title } from "@angular/platform-browser";
 import { ValidacaoCampoSenha } from "@nvs-helpers/ValidacaoSenhaHelper";
 import Componente from "@nvs-models/Componente";
-import { DadosRequisicao } from '@nvs-models/requisicoes/DadosRequisicao';
 import { UsuarioPerfil } from "@nvs-models/UsuarioPerfil";
+import { DadosRequisicao } from '@nvs-models/requisicoes/DadosRequisicao';
 import { TokenService } from "@nvs-services/token/token.service";
 import { UsuarioPerfilService } from "@nvs-services/usuario-perfil/usuario-perfil.service";
 import { NgxSpinnerService } from "ngx-spinner";
@@ -26,8 +27,10 @@ export class PerfilComponent extends Componente implements OnInit {
     private token: TokenService,
     private fb: FormBuilder,
     private spinner: NgxSpinnerService,
+    private title: Title
   ) {
     super();
+    this.title.setTitle("Perfil");
   }
 
   public get f(): any {

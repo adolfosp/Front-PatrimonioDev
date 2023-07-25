@@ -64,9 +64,4 @@ export class PerdaComponent extends Componente implements OnInit {
       })
       .add(() => this.spinner.hide());
   }
-
-  //remover quando refatorar
-  public cssValidator(campoForm: FormControl): any {
-    return { "is-invalid": campoForm.errors && campoForm.touched };
-  }
 }

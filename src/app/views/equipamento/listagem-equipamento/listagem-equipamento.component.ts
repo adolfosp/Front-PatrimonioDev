@@ -30,6 +30,7 @@ import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
 import { PageEvent } from "@angular/material/paginator";
 import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   templateUrl: './listagem-equipamento.component.html',
@@ -67,9 +68,13 @@ export class ListagemEquipamentoComponent
 		private router: Router,
 		private token: TokenService,
 		private detectorAlteracao: ChangeDetectorRef,
+        private title: Title
 	) {
 		super();
+        this.title.setTitle("Listagem de equipamento");
 	}
+
+
 
 	ngOnInit(): void {
         this.paginacao = configuracaoPaginacao;
