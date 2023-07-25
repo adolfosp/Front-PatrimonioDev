@@ -1,21 +1,28 @@
 import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  HostListener,
-  OnInit,
-  TemplateRef,
-  ViewChild,
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    HostListener,
+    OnInit,
+    TemplateRef,
+    ViewChild,
+    ViewEncapsulation,
 } from "@angular/core";
+import { PageEvent } from "@angular/material/paginator";
+import { Title } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import Componente from "@nvs-models/Componente";
-import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { Funcionario } from "@nvs-models/Funcionario";
+import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
+import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { FuncionarioService } from "@nvs-services/funcionario/funcionario.service";
 import { TokenService } from "@nvs-services/token/token.service";
+import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
+import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
 import configuracaoTabela from "@nvs-utils/configuracao-tabela";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
-import { API, APIDefinition, Columns, Config } from "ngx-easy-table";
+import { API, APIDefinition, Columns, Config, Pagination } from "ngx-easy-table";
 import { NgxSpinnerService } from "ngx-spinner";
 import * as XLSX from "xlsx";
 
@@ -23,8 +30,9 @@ import * as XLSX from "xlsx";
   templateUrl: "./listagem-funcionario.component.html",
   styleUrls: ["./listagem-funcionario.component.sass"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
-export class ListagemFuncionarioComponent extends Componente implements OnInit {
+export class ListagemFuncionarioComponent extends Componente implements OnInit, AfterViewInit {
   @ViewChild("table", { static: true }) table: APIDefinition;
 
   public configuracao: Config;
@@ -33,11 +41,15 @@ export class ListagemFuncionarioComponent extends Componente implements OnInit {
   public linhas = 0;
   public innerWidth: number;
   public toggledRows = new Set<number>();
+  public confSpinner = ConfiguracaoSpinner;
+  public readonly rotaCadastro = "/dashboard/funcionario";
 
   public dataFiltradaExcel: Funcionario[] = [];
   public funcionarios: Funcionario[] = [];
   public funcionarioId = 0;
   public ehAdministrador = false;
+  public paginacao: Pagination;
+  public totalItensPaginacao: number;
 
   modalRef?: BsModalRef;
 
@@ -48,11 +60,14 @@ export class ListagemFuncionarioComponent extends Componente implements OnInit {
     private router: Router,
     private token: TokenService,
     private detectorAlteracao: ChangeDetectorRef,
+    private title: Title
   ) {
     super();
+    this.title.setTitle("Listagem de funcionários");
   }
 
   ngOnInit(): void {
+    this.paginacao = configuracaoPaginacao;
     this.ehAdministrador = this.token.ehUsuarioAdministrador();
     this.obterFuncionarios();
 
@@ -61,6 +76,24 @@ export class ListagemFuncionarioComponent extends Componente implements OnInit {
 
     this.colunas = this.obterColunasDaTabela();
     this.checkView();
+
+  }
+
+  ngAfterViewInit(): void {
+    this.totalItensPaginacao = this.table.apiEvent({
+      type: API.getPaginationTotalItems,
+    });
+    this.detectorAlteracao.detectChanges();
+  }
+
+  paginationEvent($event: PageEvent): void {
+    this.paginacao = {
+      ...this.paginacao,
+      limit: $event.pageSize,
+      offset: $event.pageIndex + 1,
+      count: $event.length,
+    };
+    this.obterFuncionarios();
   }
 
   get isMobile(): boolean {
@@ -74,15 +107,18 @@ export class ListagemFuncionarioComponent extends Componente implements OnInit {
   }
 
   private obterFuncionarios(): void {
+    const paginacao = new PaginacaoDto(this.paginacao.offset, this.paginacao.limit);
+
     this.spinner.show("buscando");
 
     this.funcionarioService
-      .obterTodosFuncionarios()
+      .obterRegistros(paginacao)
       .subscribe({
         next: (dados: DadosRequisicao) => {
-          const funcionarios = dados.data as Funcionario[];
+          const funcionarios = dados.data.registros as Funcionario[];
           this.dataFiltradaExcel = funcionarios;
           this.data = funcionarios;
+          this.totalItensPaginacao = dados.data.quantidadePagina * this.paginacao.limit;
         },
         error: (error: unknown) => {
           this.mostrarAvisoErro(error, "Houve um erro ao buscar pelos funcionários.");
@@ -99,7 +135,7 @@ export class ListagemFuncionarioComponent extends Componente implements OnInit {
     this.spinner.show("desativando");
 
     this.funcionarioService
-      .desativarFuncionario(this.funcionarioId)
+      .remover(this.funcionarioId)
       .subscribe({
         next: () => {
           this.mostrarAvisoSucesso("Funcionário desativado com sucesso!");

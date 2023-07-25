@@ -28,8 +28,9 @@ import { NgxSpinnerService } from "ngx-spinner";
 import * as XLSX from "xlsx";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
 import { PageEvent } from "@angular/material/paginator";
-import Paginacao from "@nvs-models/dtos/Paginacao";
+import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
 import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   templateUrl: "./listagem-fabricante.component.html",
@@ -57,7 +58,7 @@ export class ListagemFabricanteComponent
 	public linhas = 0;
 	public innerWidth: number;
 	public toggledRows = new Set<number>();
-	public rotaCadastro = "/dashboard/fabricante";
+	public readonly rotaCadastro = "/dashboard/fabricante";
 	public paginacao: Pagination;
 	public totalItensPaginacao: number;
 
@@ -70,8 +71,10 @@ export class ListagemFabricanteComponent
 		private router: Router,
 		private token: TokenService,
 		private detectorAlteracao: ChangeDetectorRef,
+        private title: Title
 	) {
 		super();
+        this.title.setTitle("Listagem de fabricantes");
 	}
 
 	ngOnInit(): void {
@@ -106,14 +109,14 @@ export class ListagemFabricanteComponent
 	}
 
 	public obterFabricante(): void {
-		const paginacao = new Paginacao(
+		const paginacao = new PaginacaoDto(
 			this.paginacao.offset,
 			this.paginacao.limit,
 		);
 
 		this.spinner.show("buscando");
 		this.fabricanteService
-			.obterFabricantes(paginacao)
+			.obterRegistros(paginacao)
 			.subscribe({
 				next: (dados: DadosRequisicao) => {
 					const fabricantes = dados.data.registros as Fabricante[];
@@ -150,7 +153,7 @@ export class ListagemFabricanteComponent
 		this.spinner.show("excluindo");
 
 		this.fabricanteService
-			.deletarFabricante(this.codigoFabricante)
+			.remover(this.codigoFabricante)
 			.subscribe({
 				next: () => {
 					this.mostrarAvisoSucesso("Fabricante removido com sucesso!");

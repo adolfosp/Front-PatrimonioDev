@@ -1,7 +1,9 @@
-/* eslint-disable rxjs/no-implicit-any-catch */
+
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { IServiceAtualizar, IServiceCadastrar } from '@nvs-helpers/IServiceNomeHelper';
 import { MensagemRequisicao } from '@nvs-helpers/MensagemRequisicaoHelper';
 import { Categoria } from '@nvs-models/Categoria';
 import Componente from '@nvs-models/Componente';
@@ -22,7 +24,7 @@ export class CategoriaComponent extends Componente implements OnInit, Componente
   private _limpandoCampo = false;
 
   public form!: FormGroup;
-  public estadoSalvar = "cadastrarCategoria";
+  public estadoSalvar = IServiceCadastrar;
   public readonly classeBotaoLimpar = CLASSE_BOTAO_LIMPAR;
 
   get f(): any {
@@ -34,8 +36,10 @@ export class CategoriaComponent extends Componente implements OnInit, Componente
     private spinner: NgxSpinnerService,
     private router: Router,
     private categoriaService: CategoriaService,
-    private activateRouter: ActivatedRoute) {
+    private activateRouter: ActivatedRoute,
+    private title: Title) {
     super();
+    title.setTitle("Categoria")
   }
 
   ngOnInit(): void {
@@ -58,12 +62,12 @@ export class CategoriaComponent extends Componente implements OnInit, Componente
 
   public salvarAlteracao(): void {
 
-    const atualizando = this.estadoSalvar == 'atualizarCategoria';
+    const atualizando = this.estadoSalvar === IServiceAtualizar;
     const nomeAcaoRealizada = atualizando ? 'atualizada' : 'cadastrada';
 
     this.spinner.show(nomeAcaoRealizada);
 
-    this._categoria = (this.estadoSalvar === 'cadastrarCategoria') ? { ...this.form.value } : { codigoCategoria: this._categoria.codigoCategoria, ...this.form.value };
+    this._categoria = (this.estadoSalvar === IServiceCadastrar) ? { ...this.form.value } : { codigoCategoria: this._categoria.codigoCategoria, ...this.form.value };
 
     this.categoriaService[this.estadoSalvar](this._categoria).subscribe(
       (dados: DadosRequisicao) => this.mostrarAvisoSucesso(dados.mensagem),
@@ -79,15 +83,14 @@ export class CategoriaComponent extends Componente implements OnInit, Componente
   }
 
   private carregarCategoria(): void {
-
     this._codigoCategoria = +this.activateRouter.snapshot.paramMap?.get('codigoCategoria');
 
     if (this._codigoCategoria == null || this._codigoCategoria == 0) return;
 
-    this.estadoSalvar = 'atualizarCategoria';
+    this.estadoSalvar = IServiceAtualizar;
     this.spinner.show('carregando');
 
-    this.categoriaService.obterApenasUmaCategoria(this._codigoCategoria).subscribe(
+    this.categoriaService.obterRegistro(this._codigoCategoria).subscribe(
       {
         next: (dados: DadosRequisicao) => {
           this._categoria = (dados.data) as Categoria;

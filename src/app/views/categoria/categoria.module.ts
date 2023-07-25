@@ -13,7 +13,7 @@ import { CategoriaRoutingModule } from './categoria-routing.module';
 import { CategoriaComponent } from './categoria.component';
 import { ListagemCategoriaComponent } from './listagem-categoria/listagem-categoria.component';
 import { MatPaginatorModule } from "@angular/material/paginator";
-import { HeaderGridComponent } from "../shared/grid/header-grid/header-grid/header-grid.component";
+import { HeaderGridComponent } from "../shared/grid/header-grid/header-grid.component";
 
 @NgModule({
   imports: [

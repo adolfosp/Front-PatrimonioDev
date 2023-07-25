@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { LocalStorageChave } from '@nvs-enum//local-storage-chave.enum';
-import { Permissao } from '@nvs-enum/permissao.enum';
+import { LocalStorageChave } from '@nvs-models/enums/local-storage-chave.enum';
+import { Permissao } from '@nvs-models/enums/permissao.enum';
 import { CriptografiaService } from '@nvs-services/criptografia/criptografia.service';
 import { LocalStorageService } from '@nvs-services/local-storage/local-storage.service';
 import decode from 'jwt-decode';
@@ -35,25 +35,21 @@ export class TokenService {
 
   public obterPermissaoToken(): boolean {
     const token: string = this.localStorageService.obterChave(LocalStorageChave.Valor);
-    //@ts-ignore
     return decode(this.encriptar.decrypt(token))["descricaoPerfil"]?.toString().toLowerCase() == "administrador";
   }
 
   public obterNomeUsuarioToken(): string {
     const token: string = this.localStorageService.obterChave(LocalStorageChave.Valor);
-    //@ts-ignore
     return decode(this.encriptar.decrypt(token))['nomeUsuario']
   }
 
   public obterDescricaoPerfil(): string {
     const token: string = this.localStorageService.obterChave(LocalStorageChave.Valor);
-    //@ts-ignore
     return decode(this.encriptar.decrypt(token))['descricaoPerfil']
   }
 
   public obterCodigoUsuarioToken(): number {
     const token: string = this.localStorageService.obterChave(LocalStorageChave.Valor);
-    //@ts-ignore
     return +decode(this.encriptar.decrypt(token))['codigoUsuario']
   }
 

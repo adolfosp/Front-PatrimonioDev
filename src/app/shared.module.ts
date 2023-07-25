@@ -1,5 +1,5 @@
 import { NgModule } from "@angular/core";
-import { BooleanoPipe } from './pipes/booleano.pipe';
+import { BooleanoPipe } from './core/pipes/booleano.pipe';
 
 @NgModule({
   imports: [

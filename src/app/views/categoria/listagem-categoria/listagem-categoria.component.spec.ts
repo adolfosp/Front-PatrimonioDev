@@ -90,7 +90,7 @@ describe("ListagemCategoriaComponent", () => {
   });
 });
 
-fdescribe("should open route correctly", () => {
+describe("should open route correctly", () => {
   let location: Location;
   let router: Router;
   let fixture: ComponentFixture<ListagemCategoriaComponent>;

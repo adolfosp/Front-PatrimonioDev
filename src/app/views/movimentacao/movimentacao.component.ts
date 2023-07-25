@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { MovimentacaoEquipamento } from "@nvs-enum/movimentacao-equipamento.enum";
+import { MovimentacaoEquipamento } from "@nvs-models/enums/movimentacao-equipamento.enum";
 import { MensagemRequisicao } from "@nvs-helpers/MensagemRequisicaoHelper";
 import Componente from "@nvs-models/Componente";
 import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";

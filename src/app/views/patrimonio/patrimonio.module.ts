@@ -23,8 +23,17 @@ import { SharedComponentModule } from '../shared/shared-component.module';
 import { ListagemPatrimonioComponent } from './listagem-patrimonio/listagem-patrimonio.component';
 import { PatrimonioRoutingModule } from './patrimonio-routing.module';
 import { PatrimonioComponent } from './patrimonio.component';
+import { HeaderGridComponent } from "../shared/grid/header-grid/header-grid.component";
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
+  providers: [PatrimonioService, EquipamentoService, FuncionarioService, BsModalService],
+  declarations: [
+    PatrimonioComponent,
+    ListagemPatrimonioComponent,
+    EtiquetaCanvasComponent,
+    PerdaComponent
+  ],
   imports: [
     PatrimonioRoutingModule,
     NgxSpinnerModule,
@@ -41,15 +50,9 @@ import { PatrimonioComponent } from './patrimonio.component';
     MatNativeDateModule,
     NgxMaskModule,
     NgxCurrencyModule,
-    SharedComponentModule
-
+    SharedComponentModule,
+    MatPaginatorModule,
+    HeaderGridComponent,
   ],
-  providers: [PatrimonioService, EquipamentoService, FuncionarioService,BsModalService ],
-  declarations: [ PatrimonioComponent,
-                  ListagemPatrimonioComponent,
-                  EtiquetaCanvasComponent,
-                  PerdaComponent]
-
-
 })
-export class PatrimonioModule { }
+export class PatrimonioModule {}

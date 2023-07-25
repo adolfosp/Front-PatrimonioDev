@@ -1,43 +1,43 @@
-import { Injectable } from '@angular/core';
-import { DadosRequisicao } from '@nvs-models/requisicoes/DadosRequisicao';
-import { Equipamento } from '@nvs-models/Equipamento';
-import { ApiService } from '@nvs-services/api/api.service';
-import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
-import Paginacao from '@nvs-models/dtos/Paginacao';
+import { Injectable } from "@angular/core";
+import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
+import { ApiService } from "@nvs-services/api/api.service";
+import { Observable } from "rxjs";
+import { take } from "rxjs/operators";
+import { environment } from "../../../environments/environment";
+import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
+import { IService } from "@nvs-models/interfaces/IService";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
-export class EquipamentoService {
-
-  constructor(private api: ApiService) { }
-
+export class EquipamentoService implements IService {
   baseUrl = `${environment.apiUrl}equipamentos`;
 
-  public cadastrarEquipamento(equipamento: Equipamento): Observable<Equipamento> {
-    return this.api.post<Equipamento>(this.baseUrl, {equipamento}).pipe(take(1));
+  constructor(private api: ApiService) {}
+
+  cadastrar<T>(equipamento: T): Observable<DadosRequisicao> {
+    return this.api.post<DadosRequisicao>(this.baseUrl, { equipamento }).pipe(take(1));
   }
 
-  public obterEquipamentos(paginacao: Paginacao): Observable<DadosRequisicao> {
-    return this.api.get<DadosRequisicao>(`${this.baseUrl}?paginaAtual=${paginacao.paginaAtual}&quantidadePorPagina=${paginacao.quantidadePorPagina}`).pipe(take(1))
-  }
-
-  public deletarEquipamento(codigoEquipamento: number): Observable<any>{
+  obterRegistros(paginacao: PaginacaoDto): Observable<DadosRequisicao> {
     return this.api
-    .delete(`${this.baseUrl}/${codigoEquipamento}`)
-    .pipe(take(1));
+      .get<DadosRequisicao>(
+        `${this.baseUrl}?paginaAtual=${paginacao.paginaAtual}&quantidadePorPagina=${paginacao.quantidadePorPagina}`,
+      )
+      .pipe(take(1));
   }
 
-  public obterApenasUmEquipamento(codigoEquipamento: number): Observable<DadosRequisicao> {
+  remover(codigoEquipamento: number): Observable<DadosRequisicao> {
+    return this.api.delete<DadosRequisicao>(`${this.baseUrl}/${codigoEquipamento}`).pipe(take(1));
+  }
+
+  obterRegistro(codigoEquipamento: number): Observable<DadosRequisicao> {
     return this.api.get<DadosRequisicao>(`${this.baseUrl}/${codigoEquipamento}`).pipe(take(1));
   }
 
-  public atualizarEquipamento(equipamento: Equipamento): Observable<Equipamento>{
+  atualizar<T>(equipamento: T): Observable<DadosRequisicao> {
     return this.api
-    .put<Equipamento>(`${this.baseUrl}/${equipamento.codigoTipoEquipamento}`, {equipamento})
-    .pipe(take(1));
+      .put<DadosRequisicao>(`${this.baseUrl}/${equipamento["codigoTipoEquipamento"]}`, { equipamento })
+      .pipe(take(1));
   }
-
 }

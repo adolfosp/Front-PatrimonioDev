@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { MatSelect } from "@angular/material/select";
-import Paginacao from "@nvs-models/dtos/Paginacao";
+import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
 import { Pagination } from "ngx-easy-table";
 import { quantidadeBuscaPorVezSelect } from "@nvs-utils/configuracao-paginacao";
 
@@ -18,8 +18,8 @@ export class SelectService {
     return false;
   }
 
-  public ObterPaginacao(paginacao: Pagination): Paginacao {
+  public ObterPaginacao(paginacao: Pagination): PaginacaoDto {
     paginacao.limit += quantidadeBuscaPorVezSelect;
-    return new Paginacao(paginacao.offset, paginacao.limit);
+    return new PaginacaoDto(paginacao.offset, paginacao.limit);
   }
 }

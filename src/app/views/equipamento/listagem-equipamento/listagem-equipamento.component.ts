@@ -28,8 +28,9 @@ import { NgxSpinnerService } from "ngx-spinner";
 import * as XLSX from "xlsx";
 import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
 import { PageEvent } from "@angular/material/paginator";
-import Paginacao from "@nvs-models/dtos/Paginacao";
+import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   templateUrl: './listagem-equipamento.component.html',
@@ -54,7 +55,7 @@ export class ListagemEquipamentoComponent
 	public dataFiltradaExcel: Equipamento[] = [];
 	public equipamentoId = 0;
 	public ehAdministrador = false;
-	public rotaCadastro = "/dashboard/equipamento";
+	public readonly rotaCadastro = "/dashboard/equipamento";
 	public paginacao: Pagination;
 	public totalItensPaginacao: number;
 
@@ -67,9 +68,13 @@ export class ListagemEquipamentoComponent
 		private router: Router,
 		private token: TokenService,
 		private detectorAlteracao: ChangeDetectorRef,
+        private title: Title
 	) {
 		super();
+        this.title.setTitle("Listagem de equipamento");
 	}
+
+
 
 	ngOnInit(): void {
         this.paginacao = configuracaoPaginacao;
@@ -118,12 +123,12 @@ export class ListagemEquipamentoComponent
 	}
 
 	private obterEquipamentos(): void {
-        const paginacao = new Paginacao(this.paginacao.offset, this.paginacao.limit);
+        const paginacao = new PaginacaoDto(this.paginacao.offset, this.paginacao.limit);
 
 		this.spinner.show("buscando");
 
 		this.equipamentoService
-			.obterEquipamentos(paginacao)
+			.obterRegistros(paginacao)
 			.subscribe({
 				next: (dados: DadosRequisicao) => {
                     const equipamentos = dados.data.registros as Equipamento[];
@@ -150,7 +155,7 @@ export class ListagemEquipamentoComponent
 		this.spinner.show("excluindo");
 
 		this.equipamentoService
-			.deletarEquipamento(this.equipamentoId)
+			.remover(this.equipamentoId)
 			.subscribe(
 				() => {
 					this.mostrarAvisoSucesso("Equipamento excluído com sucesso!");

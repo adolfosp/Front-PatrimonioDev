@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from '@nvs-guards/auth.guard';
+import { AuthGuard } from 'src/app/core/guards/auth.guard';
 import { CustomPreloader } from './core/configs/custom-preload-strategy';
 import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { GraficoComponent } from './views/grafico/grafico.component';
@@ -11,103 +11,107 @@ import { QrCodeComponent } from './views/qr-code/qr-code.component';
 
 const routes: Routes = [
   {
-    path: '',
-    redirectTo: 'login',
-    pathMatch: 'full',
+    path: "",
+    redirectTo: "login",
+    pathMatch: "full",
   },
   {
-    path: 'login',
+    path: "login",
     component: LoginComponent,
     data: {
-      title: 'Login'
-    }
+      title: "Login",
+    },
   },
   {
-    path: 'registrar',
+    path: "registrar",
     component: RegistrarComponent,
     data: {
-      title: 'registrar'
-    }
+      title: "registrar",
+    },
   },
   {
-    path: 'dashboard',
+    path: "dashboard",
     component: DashboardComponent,
     children: [
       {
-        path: '',
+        path: "",
+        canActivate: [AuthGuard],
         component: GraficoComponent,
         data: {
-          title: 'gráficos'
-        }
+          title: "gráficos",
+        },
       },
       {
-        path: 'qr-code',
+        path: "qr-code",
         component: QrCodeComponent,
         data: {
-          title: 'qr-code'
-        }
+          title: "qr-code",
+        },
       },
       {
-        path: 'perda',
+        path: "perda",
         canActivate: [AuthGuard],
         component: PerdaComponent,
         data: {
-          title: 'perda'
-        }
+          title: "perda",
+        },
       },
       {
-        path: 'empresa',
-        loadChildren: () => import('../app/views/empresa/empresa.module').then(m => m.EmpresaModule),
+        path: "empresa",
+        loadChildren: () => import("../app/views/empresa/empresa.module").then((m) => m.EmpresaModule),
       },
       {
-        path: 'funcionario',
-        loadChildren: () => import('../app/views/funcionario/funcionario.module').then(m => m.FuncionarioModule)
+        path: "funcionario",
+        loadChildren: () => import("../app/views/funcionario/funcionario.module").then((m) => m.FuncionarioModule),
       },
       {
-        path: 'usuario',
-        loadChildren: () => import('../app/views/usuario/usuario.module').then(m => m.UsuarioModule)
+        path: "usuario",
+        loadChildren: () => import("../app/views/usuario/usuario.module").then((m) => m.UsuarioModule),
       },
       {
-        path: 'setor',
-        loadChildren: () => import('../app/views/setor/setor.module').then(m => m.SetorModule)
+        path: "setor",
+        loadChildren: () => import("../app/views/setor/setor.module").then((m) => m.SetorModule),
       },
       {
-        path: 'fabricante',
-        loadChildren: () => import('../app/views/fabricante/fabricante.module').then(m => m.FabricanteModule)
+        path: "fabricante",
+        loadChildren: () => import("../app/views/fabricante/fabricante.module").then((m) => m.FabricanteModule),
       },
       {
-        path: 'permissao',
-        loadChildren: () => import('../app/views/permissao/permissao.module').then(m => m.PermissaoModule)
+        path: "permissao",
+        loadChildren: () => import("../app/views/permissao/permissao.module").then((m) => m.PermissaoModule),
       },
       {
-        path: 'equipamento',
-        loadChildren: () => import('../app/views/equipamento/equipamento.module').then(m => m.EquipamentoModule),
-        data: {preload: true}
+        path: "equipamento",
+        loadChildren: () => import("../app/views/equipamento/equipamento.module").then((m) => m.EquipamentoModule),
+        data: { preload: true },
       },
       {
-        path: 'categoria',
-        loadChildren: () => import('../app/views/categoria/categoria.module').then(m => m.CategoriaModule)
+        path: "categoria",
+        loadChildren: () => import("../app/views/categoria/categoria.module").then((m) => m.CategoriaModule),
       },
       {
-        path: 'relatorio',
-        loadChildren: () => import('../app/views/relatorios/relatorio.module').then(m => m.RelatorioModule)
+        path: "relatorio",
+        loadChildren: () => import("../app/views/relatorios/relatorio.module").then((m) => m.RelatorioModule),
       },
       {
-        path: 'movimentacao',
-        loadChildren: () => import('../app/views/movimentacao/movimentacao.module').then(m => m.MovimentacaoModule),
-        data: {preload: true}
+        path: "perda",
+        loadChildren: () => import("../app/views/perda/perda.module").then((m) => m.PerdaModule),
       },
       {
-        path: 'patrimonio',
-        loadChildren: () => import('../app/views/patrimonio/patrimonio.module').then(m => m.PatrimonioModule),
-        data: {preload: true}
+        path: "movimentacao",
+        loadChildren: () => import("../app/views/movimentacao/movimentacao.module").then((m) => m.MovimentacaoModule),
+        data: { preload: true },
       },
-
+      {
+        path: "patrimonio",
+        loadChildren: () => import("../app/views/patrimonio/patrimonio.module").then((m) => m.PatrimonioModule),
+        data: { preload: true },
+      },
     ],
     data: {
-      title: 'dashboard'
-    }
-  }
+      title: "dashboard",
+    },
+  },
 ];
 
 @NgModule({

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { MovimentacaoEquipamento } from "@nvs-enum/movimentacao-equipamento.enum";
+import { MovimentacaoEquipamento } from "@nvs-models/enums/movimentacao-equipamento.enum";
 import Componente from "@nvs-models/Componente";
 import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { Movimentacao } from "@nvs-models/Movimentacao";

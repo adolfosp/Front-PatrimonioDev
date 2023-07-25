@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { BarcodeFormat, Result } from '@zxing/library';
 import { ZXingScannerComponent } from '@zxing/ngx-scanner';
 
@@ -8,6 +9,10 @@ import { ZXingScannerComponent } from '@zxing/ngx-scanner';
   styleUrls: ['./qr-code.component.sass']
 })
 export class QrCodeComponent implements AfterViewInit {
+    constructor(private title: Title){
+        this.title.setTitle("Leitor de qr-code")
+    }
+
   ngAfterViewInit(): void {
     this.scanner.permissionResponse.subscribe((perm: boolean) => this.hasPermission = perm);
   }

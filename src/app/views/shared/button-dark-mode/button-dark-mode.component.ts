@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LocalStorageChave } from '@nvs-enum/local-storage-chave.enum';
+import { LocalStorageChave } from '@nvs-models/enums/local-storage-chave.enum';
 import { mudarTema } from '@nvs-helpers/ModoDarkLightHelper';
 import { LocalStorageService } from '@nvs-services/local-storage/local-storage.service';
 

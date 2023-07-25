@@ -7,9 +7,11 @@ import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { Funcionario } from "@nvs-models/Funcionario";
 import { Setor } from "@nvs-models/Setor";
 import { FuncionarioService } from "@nvs-services/funcionario/funcionario.service";
-import { SetorService } from "@nvs-services/setor/setor.service";
 import { CLASSE_BOTAO_LIMPAR } from "@nvs-utils/classes-sass.constant";
 import { NgxSpinnerService } from "ngx-spinner";
+import { Pagination } from "ngx-easy-table";
+import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: "app-funcionario",
@@ -21,30 +23,36 @@ export class FuncionarioComponent extends Componente implements OnInit {
   private _codigoFuncionario: number;
   private _limpandoCampo = false;
 
-  public estadoSalvar = "cadastrarFuncionario";
+  public estadoSalvar = "cadastrar";
   public setores: Setor[];
   public readonly classeBotaoLimpar = CLASSE_BOTAO_LIMPAR;
   public form!: FormGroup;
+  public paginacaoSelectSetor: Pagination;
 
   get f(): any {
     return this.form.controls;
   }
 
+  get controlSetor() {
+    return this.form.controls["codigoSetor"] as FormControl;
+  }
+
   constructor(
     private fb: FormBuilder,
     private funcionarioService: FuncionarioService,
-    private setorService: SetorService,
     private spinner: NgxSpinnerService,
     private router: Router,
     private activateRouter: ActivatedRoute,
+    private title: Title
   ) {
     super();
+    this.paginacaoSelectSetor = configuracaoPaginacao;
+    this.title.setTitle("Listagem de funcionários");
   }
 
   ngOnInit(): void {
     this.validacao();
     this.carregarFuncionario();
-    this.carregarSetor();
     this.controlarVisibilidadeCampoAtivo();
   }
 
@@ -53,19 +61,9 @@ export class FuncionarioComponent extends Componente implements OnInit {
     this.validacao();
   }
 
-  private carregarSetor(): void {
-    this.setorService.obterSetor().subscribe({
-      next: (dados: DadosRequisicao) => {
-        this.setores = dados.data as Setor[];
-      },
-      error: (error: unknown) => {
-        this.mostrarAvisoErro(error, "Houve um erro ao carregar o setor.");
-      },
-    });
-  }
 
   private controlarVisibilidadeCampoAtivo(): void {
-    if (this.estadoSalvar == "cadastrarFuncionario") this.form.controls["ativo"].disable();
+    if (this.estadoSalvar == "cadastrar") this.form.controls["ativo"].disable();
     else this.form.controls["ativo"].enable();
   }
 
@@ -80,13 +78,13 @@ export class FuncionarioComponent extends Componente implements OnInit {
   }
 
   public salvarAlteracao(): void {
-    const atualizando = this.estadoSalvar == "atualizarFuncionario";
+    const atualizando = this.estadoSalvar == "atualizar";
     const nomeAcaoRealizada = atualizando ? "atualizado" : "cadastrado";
 
     this.spinner.show(nomeAcaoRealizada);
 
     this._funcionario =
-      this.estadoSalvar === "cadastrarFuncionario"
+      this.estadoSalvar === "cadastrar"
         ? { ...this.form.value }
         : { codigoFuncionario: this._funcionario.codigoFuncionario, ...this.form.value };
 
@@ -115,11 +113,11 @@ export class FuncionarioComponent extends Componente implements OnInit {
     this._codigoFuncionario = +this.activateRouter.snapshot.paramMap.get("codigoFuncionario");
 
     if (this._codigoFuncionario !== null && this._codigoFuncionario !== 0) {
-      this.estadoSalvar = "atualizarFuncionario";
+      this.estadoSalvar = "atualizar";
       this.spinner.show("carregando");
 
       this.funcionarioService
-        .obterApenasUmFuncionario(this._codigoFuncionario)
+        .obterRegistro(this._codigoFuncionario)
         .subscribe({
           next: (dados: DadosRequisicao) => {
             this._funcionario = { ...(dados.data as Funcionario) };

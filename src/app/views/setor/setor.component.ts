@@ -4,8 +4,10 @@ import { ActivatedRoute, Router } from "@angular/router";
 
 import { NgxSpinnerService } from "ngx-spinner";
 
+import { Title } from "@angular/platform-browser";
 import { MensagemRequisicao } from "@nvs-helpers/MensagemRequisicaoHelper";
 import { Setor } from "@nvs-models/Setor";
+import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { SetorService } from "@nvs-services/setor/setor.service";
 import { CLASSE_BOTAO_LIMPAR } from "@nvs-utils/classes-sass.constant";
 import Componente from "../../models/Componente";
@@ -34,8 +36,10 @@ export class SetorComponent extends Componente implements OnInit {
     private spinner: NgxSpinnerService,
     private activateRouter: ActivatedRoute,
     private router: Router,
+    private title: Title
   ) {
     super();
+    this.title.setTitle("Setor");
   }
 
   ngOnInit(): void {
@@ -96,10 +100,10 @@ export class SetorComponent extends Componente implements OnInit {
       this.spinner.show("carregando");
 
       this.setorService
-        .obterApenasUmSetor(this.codigoSetor)
+        .obterRegistro(this.codigoSetor)
         .subscribe({
-          next: (setor: Setor) => {
-            this.setor = { ...setor };
+          next: (setor: DadosRequisicao) => {
+            this.setor = setor.data.registros as Setor;
             this.form.patchValue(this.setor);
           },
           error: (error: unknown) => {

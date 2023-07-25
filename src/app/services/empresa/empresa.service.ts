@@ -1,47 +1,45 @@
 import { Injectable } from '@angular/core';
 import { DadosRequisicao } from '@nvs-models/requisicoes/DadosRequisicao';
-import { Empresa } from '@nvs-models/Empresa';
 import { ApiService } from '@nvs-services/api/api.service';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import Paginacao from "@nvs-models/dtos/Paginacao";
+import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
+import { IService } from '@nvs-models/interfaces/IService';
 
 @Injectable({
   providedIn: 'root'
 })
-export class EmpresaService {
+export class EmpresaService implements IService {
 
   baseUrl = `${environment.apiUrl}empresas`;
 
   constructor(private api: ApiService) { }
+  cadastrar<T>(empresa: T): Observable<DadosRequisicao> {
+    return this.api.post<DadosRequisicao>(this.baseUrl, {empresa}).pipe(take(1));
+  }
 
-  public obterEmpresas(paginacao: Paginacao): Observable<DadosRequisicao>{
+  obterRegistros(paginacao: PaginacaoDto): Observable<DadosRequisicao> {
     return this.api.get<DadosRequisicao>(`${this.baseUrl}?paginaAtual=${paginacao.paginaAtual}&quantidadePorPagina=${paginacao.quantidadePorPagina}`).pipe(take(1))
   }
 
-  public cadastrarEmpresa(empresa: Empresa): Observable<Empresa> {
-    return this.api.post<Empresa>(this.baseUrl, {empresa}).pipe(take(1));
-  }
-
-  public obterEmpresaPadrao(): Observable<string> {
-    return this.api.get<string>(`${this.baseUrl}/empresaPadrao`).pipe(take(1));
-  }
-
-  public deletarEmpresa(codigoEmpresa: number): Observable<any>{
+  remover(codigo: number): Observable<DadosRequisicao> {
     return this.api
-    .delete(`${this.baseUrl}/${codigoEmpresa}`)
+    .delete<DadosRequisicao>(`${this.baseUrl}/${codigo}`)
     .pipe(take(1));
   }
 
-  public obterApenasUmaEmpresa(codigoEmpresa: number): Observable<DadosRequisicao> {
+  obterRegistro(codigoEmpresa: number): Observable<DadosRequisicao> {
     return this.api.get<DadosRequisicao>(`${this.baseUrl}/${codigoEmpresa}`).pipe(take(1));
   }
 
-  public atualizarEmpresa(empresa: Empresa): Observable<Empresa>{
+  atualizar<T>(empresa: T): Observable<DadosRequisicao> {
     return this.api
-    .put<Empresa>(`${this.baseUrl}/${empresa.codigoEmpresa}`, {empresa})
-    .pipe(take(1));
+    .put<DadosRequisicao>(`${this.baseUrl}/${empresa["codigoEmpresa"]}`, {empresa})
+    .pipe(take(1));  }
+
+  public obterEmpresaPadrao(): Observable<string> {
+    return this.api.get<string>(`${this.baseUrl}/empresaPadrao`).pipe(take(1));
   }
 
 }

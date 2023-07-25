@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { Permissao } from '@nvs-enum/permissao.enum';
-import { AuthGuard } from '@nvs-guards/auth.guard';
-import { RoleGuard } from '../../guards/role.guard';
+import { Permissao } from '@nvs-models/enums/permissao.enum';
+import { AuthGuard } from 'src/app/core/guards/auth.guard';
+import { RoleGuard } from '../../core/guards/role.guard';
 import { ListagemUsuarioComponent } from './listagem-usuario/listagem-usuario.component';
 import { PerfilComponent } from './perfil/perfil.component';
 import { UsuarioComponent } from './usuario.component';

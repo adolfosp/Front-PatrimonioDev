@@ -1,4 +1,5 @@
 import {
+    AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -7,15 +8,20 @@ import {
   TemplateRef,
   ViewChild,
 } from "@angular/core";
+import { PageEvent } from "@angular/material/paginator";
+import { Title } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import Componente from "@nvs-models/Componente";
+import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
 import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { UsuarioPermissao } from "@nvs-models/UsuarioPermissao";
 import { PermissaoService } from "@nvs-services/permissao/permissao.service";
 import { TokenService } from "@nvs-services/token/token.service";
+import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
+import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
 import configuracaoTabela from "@nvs-utils/configuracao-tabela";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
-import { API, APIDefinition, Columns, Config } from "ngx-easy-table";
+import { API, APIDefinition, Columns, Config, Pagination } from "ngx-easy-table";
 import { NgxSpinnerService } from "ngx-spinner";
 import * as XLSX from "xlsx";
 
@@ -24,7 +30,7 @@ import * as XLSX from "xlsx";
   styleUrls: ["./listagem-permissao.component.sass"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ListagemPermissaoComponent extends Componente implements OnInit {
+export class ListagemPermissaoComponent extends Componente implements OnInit, AfterViewInit {
   @ViewChild("table", { static: true }) table: APIDefinition;
 
   public configuracao: Config;
@@ -32,11 +38,15 @@ export class ListagemPermissaoComponent extends Componente implements OnInit {
   public linhas = 0;
   public innerWidth: number;
   public toggledRows = new Set<number>();
+  public confSpinner = ConfiguracaoSpinner;
+  public readonly rotaCadastro = "/dashboard/permissao";
 
   public data: UsuarioPermissao[] = [];
   public dataFiltradaExcel: UsuarioPermissao[] = [];
   public permissaoId = 0;
   public ehAdministrador = false;
+  public paginacao: Pagination;
+  public totalItensPaginacao: number;
 
   modalRef?: BsModalRef;
 
@@ -47,8 +57,12 @@ export class ListagemPermissaoComponent extends Componente implements OnInit {
     private router: Router,
     private token: TokenService,
     private detectorAlteracao: ChangeDetectorRef,
+    private title: Title
   ) {
     super();
+    this.title.setTitle("Listagem de permissões");
+    this.paginacao = configuracaoPaginacao;
+
   }
 
   ngOnInit(): void {
@@ -62,6 +76,22 @@ export class ListagemPermissaoComponent extends Componente implements OnInit {
     this.checkView();
   }
 
+  ngAfterViewInit(): void {
+    this.totalItensPaginacao = this.table.apiEvent({
+      type: API.getPaginationTotalItems,
+    });
+    this.detectorAlteracao.detectChanges();
+  }
+
+  paginationEvent($event: PageEvent): void {
+    this.paginacao = {
+      ...this.paginacao,
+      limit: $event.pageSize,
+      offset: $event.pageIndex + 1,
+      count: $event.length,
+    };
+    this.obterPermissoes();
+  }
   get isMobile(): boolean {
     return this.innerWidth <= 768;
   }
@@ -73,15 +103,19 @@ export class ListagemPermissaoComponent extends Componente implements OnInit {
   }
 
   private obterPermissoes(): void {
+    const paginacao = new PaginacaoDto(this.paginacao.offset, this.paginacao.limit);
+
     this.spinner.show("buscando");
 
     this.permissaoService
-      .obterPermissoes()
+      .obterRegistros(paginacao)
       .subscribe({
         next: (dados: DadosRequisicao) => {
-          const permissoes = dados.data as UsuarioPermissao[];
+          const permissoes = dados.data.registros as UsuarioPermissao[];
           this.data = permissoes
           this.dataFiltradaExcel = permissoes;
+          this.totalItensPaginacao = dados.data.quantidadePagina * this.paginacao.limit;
+
         },
         error: (error: unknown) => {
           this.mostrarAvisoErro(error, "Houve um erro ao carregar as permissões.");
@@ -98,7 +132,7 @@ export class ListagemPermissaoComponent extends Componente implements OnInit {
     this.spinner.show("desativando");
 
     this.permissaoService
-      .desativarPermissao(this.permissaoId)
+      .remover(this.permissaoId)
       .subscribe({
         next: () => {
           this.mostrarAvisoSucesso("Permissão desativada com sucesso!");

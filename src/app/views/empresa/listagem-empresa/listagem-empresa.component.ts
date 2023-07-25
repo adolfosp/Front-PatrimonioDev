@@ -21,9 +21,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import * as XLSX from 'xlsx';
 import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
-import Paginacao from "@nvs-models/dtos/Paginacao";
-import { Categoria } from "@nvs-models/Categoria";
+import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
 import { PageEvent } from "@angular/material/paginator";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: 'app-listarempresa',
@@ -58,10 +58,11 @@ export class ListagemEmpresaComponent extends Componente implements OnInit, Afte
     private spinner: NgxSpinnerService,
     private router: Router,
     private token: TokenService,
-    private detectorAlteracao: ChangeDetectorRef
-    ) {
-      super();
-    }
+    private detectorAlteracao: ChangeDetectorRef,
+    private title: Title) {
+    super();
+    title.setTitle("Listagem de empresas")
+  }
 
   ngOnInit(): void {
 
@@ -107,9 +108,9 @@ export class ListagemEmpresaComponent extends Componente implements OnInit, Afte
   private obterEmpresas(): void {
 
     this.spinner.show("buscando");
-    const paginacao = new Paginacao(this.paginacao.offset, this.paginacao.limit);
+    const paginacao = new PaginacaoDto(this.paginacao.offset, this.paginacao.limit);
 
-    this.empresaService.obterEmpresas(paginacao).subscribe({
+    this.empresaService.obterRegistros(paginacao).subscribe({
       next: (dados: DadosRequisicao) => {
 
           const empresa = dados.data.registros as Empresa[];
@@ -132,7 +133,7 @@ export class ListagemEmpresaComponent extends Componente implements OnInit, Afte
     this.modalRef?.hide();
     this.spinner.show("excluindo");
 
-    this.empresaService.deletarEmpresa(this.empresaId).subscribe({
+    this.empresaService.remover(this.empresaId).subscribe({
       next: () =>{
         this.mostrarAvisoSucesso("Empresa excluída com sucesso!");
         this.obterEmpresas();
@@ -186,7 +187,7 @@ export class ListagemEmpresaComponent extends Componente implements OnInit, Afte
 
   private obterColunasDaTabela(): any {
     return [
-      { key: 'codigoEmpresa', title: 'Código', width: '3%' },
+      { key: 'codigoEmpresa', title: 'Código', width: '10%' },
       { key: 'razaoSocial', title: 'Razão Social' },
       { key: 'nomeFantasia', title: 'Nome Fantasia' },
       { key: 'empresaoPadraoImpressao', title: 'Empresa Impressão' },

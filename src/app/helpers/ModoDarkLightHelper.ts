@@ -1,4 +1,4 @@
-import { LocalStorageChave } from "@nvs-enum/local-storage-chave.enum";
+import { LocalStorageChave } from "@nvs-models/enums/local-storage-chave.enum";
 import { LocalStorageService } from "@nvs-services/local-storage/local-storage.service";
 
 //Exportável

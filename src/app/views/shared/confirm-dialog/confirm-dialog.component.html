@@ -1,0 +1,21 @@
+<section class="confirm-content" [class.no-icon]="!data.showIcon">
+
+  <div class="confirm-container">
+    <div class="confirm-text-container">
+      <p class="confirm-textTitle">{{data.title}}</p>
+      <p class="confirm-textMessage" [innerHTML]="data.message"> </p>
+    </div>
+    <div class="confirm-actions">
+      <button (click)="dialogRef.close(false)" *ngIf="data.showCancel" class="confirm-btn confirm-btn-next mr-3 "
+              mat-raised-button
+              type="button">
+        Cancelar
+      </button>
+      <button (click)="dialogRef.close(true)" cdkFocusInitial class="confirm-btn confirm-btn-red "
+              mat-raised-button
+              type="button">
+        Prosseguir
+      </button>
+    </div>
+  </div>
+</section>

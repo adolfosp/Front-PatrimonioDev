@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from '@nvs-guards/auth.guard';
+import { AuthGuard } from 'src/app/core/guards/auth.guard';
 import { ListagemMovimentacaoComponent } from './listagem-movimentacao/listagem-movimentacao.component';
 import { MovimentacaoComponent } from './movimentacao.component';
 

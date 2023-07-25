@@ -8,6 +8,7 @@ import { Empresa } from "@nvs-models/Empresa";
 import { EmpresaService } from "@nvs-services/empresa/empresa.service";
 import { CLASSE_BOTAO_LIMPAR } from "@nvs-utils/classes-sass.constant";
 import { NgxSpinnerService } from "ngx-spinner";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: "app-empresa",
@@ -20,7 +21,7 @@ export class EmpresaComponent extends Componente implements OnInit {
   private _limpandoCampo = false;
 
   public form!: FormGroup;
-  public estadoSalvar = "cadastrarEmpresa";
+  public estadoSalvar = "cadastrar";
   public readonly classeBotaoLimpar = CLASSE_BOTAO_LIMPAR;
 
   get f(): any {
@@ -33,8 +34,10 @@ export class EmpresaComponent extends Componente implements OnInit {
     private router: Router,
     private empresaService: EmpresaService,
     private activateRouter: ActivatedRoute,
+    private title: Title,
   ) {
     super();
+    title.setTitle("Empresa");
   }
 
   ngOnInit(): void {
@@ -58,13 +61,13 @@ export class EmpresaComponent extends Componente implements OnInit {
   }
 
   public salvarAlteracao(): void {
-    const atualizando = this.estadoSalvar == "atualizarEmpresa";
+    const atualizando = this.estadoSalvar == "atualizar";
     const nomeAcaoRealizada = atualizando ? "atualizada" : "cadastrada";
 
     this.spinner.show(nomeAcaoRealizada);
 
     this._empresa =
-      this.estadoSalvar === "cadastrarEmpresa"
+      this.estadoSalvar === "cadastrar"
         ? { ...this.form.value }
         : { codigoEmpresa: this._empresa.codigoEmpresa, ...this.form.value };
     this.empresaService[this.estadoSalvar](this._empresa)
@@ -88,11 +91,11 @@ export class EmpresaComponent extends Componente implements OnInit {
   private carregarEmpresa(): void {
     this._codigoEmpresa = +this.activateRouter.snapshot.paramMap.get("codigoEmpresa");
     if (this._codigoEmpresa !== null && this._codigoEmpresa !== 0) {
-      this.estadoSalvar = "atualizarEmpresa";
+      this.estadoSalvar = "atualizar";
       this.spinner.show("carregando");
 
       this.empresaService
-        .obterApenasUmaEmpresa(this._codigoEmpresa)
+        .obterRegistro(this._codigoEmpresa)
         .subscribe({
           next: (dados: DadosRequisicao) => {
             this._empresa = { ...dados.data };

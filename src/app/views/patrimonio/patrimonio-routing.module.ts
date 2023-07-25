@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
-import { AuthGuard } from "@nvs-guards/auth.guard";
+import { AuthGuard } from "src/app/core/guards/auth.guard";
 import { ListagemPatrimonioComponent } from "./listagem-patrimonio/listagem-patrimonio.component";
 import { PatrimonioComponent } from "./patrimonio.component";
 
@@ -29,7 +29,7 @@ const routes: Routes = [
       title: 'patrimonio',
     }
   }
- 
+
 ]
 
 @NgModule({

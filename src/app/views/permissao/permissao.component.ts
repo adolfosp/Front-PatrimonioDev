@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { Title } from "@angular/platform-browser";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MensagemRequisicao } from "@nvs-helpers/MensagemRequisicaoHelper";
 import Componente from "@nvs-models/Componente";
@@ -33,8 +34,10 @@ export class PermissaoComponent extends Componente implements OnInit {
     private router: Router,
     private permissaoService: PermissaoService,
     private activateRouter: ActivatedRoute,
+    private title: Title
   ) {
     super();
+    this.title.setTitle("Permissão");
   }
 
   ngOnInit(): void {
@@ -179,7 +182,7 @@ export class PermissaoComponent extends Componente implements OnInit {
       this.spinner.show("carregando");
 
       this.permissaoService
-        .obterApenasUmaPermissao(this.codigoPerfil)
+        .obterRegistro(this.codigoPerfil)
         .subscribe({
           next: (dados: DadosRequisicao) => {
             this.usuarioPermissao = dados.data[0];

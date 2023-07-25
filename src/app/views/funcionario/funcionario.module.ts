@@ -14,24 +14,26 @@ import { FuncionarioRoutingModule } from './funcionario-routing.module';
 import { FuncionarioComponent } from './funcionario.component';
 import { ListagemFuncionarioComponent } from './listagem-funcionario/listagem-funcionario.component';
 import { SharedComponentModule } from '../shared/shared-component.module';
+import { HeaderGridComponent } from "../shared/grid/header-grid/header-grid.component";
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
-  imports: [
-    FuncionarioRoutingModule,
-    FormsModule,
-    NgxSpinnerModule,
-    ReactiveFormsModule,
-    CommonModule,
-    TableModule,
-    SharedModule,
-    MatInputModule,
-    MatIconModule,
-    MatSelectModule,
-    SharedComponentModule
-
-  ],
-  providers: [FuncionarioService, BsModalService, SetorService ],
-  declarations: [ FuncionarioComponent, ListagemFuncionarioComponent]
-
+    providers: [FuncionarioService, BsModalService, SetorService],
+    declarations: [FuncionarioComponent, ListagemFuncionarioComponent],
+    imports: [
+        FuncionarioRoutingModule,
+        FormsModule,
+        NgxSpinnerModule,
+        ReactiveFormsModule,
+        CommonModule,
+        TableModule,
+        SharedModule,
+        MatInputModule,
+        MatIconModule,
+        MatSelectModule,
+        HeaderGridComponent,
+        MatPaginatorModule,
+        SharedComponentModule,
+    ]
 })
 export class FuncionarioModule { }

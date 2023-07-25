@@ -8,7 +8,7 @@ export class CustomPaginatorIntl implements MatPaginatorIntl {
 
   firstPageLabel = `Primeira página`;
   itemsPerPageLabel = `Items por página:`;
-  lastPageLabel = `última página`;
+  lastPageLabel = `Última página`;
 
   nextPageLabel = 'Próxima página';
   previousPageLabel = 'Página anterior';

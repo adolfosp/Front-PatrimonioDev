@@ -20,7 +20,8 @@
             "allowedCommonJsDependencies": [
               "moment",
               "crypto-js",
-              "@cordobo/qrcode"
+              "@cordobo/qrcode",
+              "ts-simple-nameof"
             ],
             "outputPath": "dist/patrimonio-ps",
             "index": "src/index.html",

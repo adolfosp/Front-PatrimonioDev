@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from '@nvs-guards/auth.guard';
+import { AuthGuard } from 'src/app/core/guards/auth.guard';
 import { FabricanteComponent } from './fabricante.component';
 import { ListagemFabricanteComponent } from './listagem-fabricante/listagem-fabricante.component';
 
