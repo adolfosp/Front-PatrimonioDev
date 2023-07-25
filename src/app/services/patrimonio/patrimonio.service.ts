@@ -1,13 +1,13 @@
 import { Injectable } from "@angular/core";
-import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { InformacaoAdicional } from "@nvs-models/InformacaoAdicional";
+import InserirPatrimonioDto from "@nvs-models/dtos/InserirPatrimonioDto";
+import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
+import { IService } from "@nvs-models/interfaces/IService";
+import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { ApiService } from "@nvs-services/api/api.service";
 import { Observable, forkJoin } from "rxjs";
 import { take } from "rxjs/operators";
 import { environment } from "../../../environments/environment";
-import { IService } from "@nvs-models/interfaces/IService";
-import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
-import InserirPatrimonioDto from "@nvs-models/dtos/InserirPatrimonioDto";
 
 @Injectable({
   providedIn: "root",
@@ -17,8 +17,10 @@ export class PatrimonioService implements IService {
 
   constructor(private api: ApiService) {}
   cadastrar<T>(classe: T): Observable<DadosRequisicao> {
-    const insercao = classe as InserirPatrimonioDto;
-    debugger;
+
+    const unknownValue = classe as unknown;
+    const insercao = unknownValue as InserirPatrimonioDto
+
     return this.api
       .post<DadosRequisicao>(this.baseUrl, {
         patrimonio: insercao.patrimonio,
