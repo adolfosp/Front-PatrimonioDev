@@ -1,30 +1,45 @@
-<div class="card border-0 rounded m-3" id="formulario">
-  <form [formGroup]="form">
-    <h1 class="col-4 col-lg-3"><span class="texto-destaque">Perda</span></h1>
-    <div class="p-3">
+<ng-container *ngIf="show">
+  <div class="overlay"></div>
 
-      <div class="form-row">
-        <div class="form-group col-12 text-start">
-          <label>Motivo da perda</label>
-          <textarea formControlName="motivoDaPerda"
-            class="form-control" name="motivo" rows="5" cols="50" required></textarea>
-          <div *ngIf="f.motivoDaPerda.errors?.required" class="invalid-feedback">O
-            motivo é obrigatório</div>
-          <div *ngIf="f.motivoDaPerda.errors?.maxlength" class="invalid-feedback">O
-            motivo pode ter no máximo 300 caracteres</div>
-          <div *ngIf="f.motivoDaPerda.errors?.minlength" class="invalid-feedback">O
-            motivo pode ter no mínimo 30 caracteres</div>
-
+  <div class="modal-perda" id="formulario">
+    <form [formGroup]="form">
+      <h1 class="col-4 col-lg-3"><span class="texto-destaque">Perda</span></h1>
+      <div class="p-3">
+        <div class="form-row">
+          <div class="col-lg-12 col-sm-12 mt-2">
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Motivo da perda</mat-label>
+              <textarea rows="5" cols="50" matInput [formControl]="f.motivoDaPerda" name="motivo"></textarea>
+              <mat-error *ngIf="f.motivoDaPerda.errors?.required">O motivo é obrigatório</mat-error>
+              <mat-error *ngIf="f.motivoDaPerda.errors?.maxlength">O motivo pode ter no máximo 300 caracteres</mat-error>
+              <mat-error *ngIf="f.motivoDaPerda.errors?.minlength">O motivo pode ter no mínimo 30 caracteres</mat-error>
+            </mat-form-field>
+          </div>
         </div>
-      </div>
-      <div class="form-row pt-3">
-        <div class="row">
-          <div class="col">
-            <button type="button" class="btn btn-block btn-success btn-lg"
-              [disabled]="!form.valid" (click)="salvarAlteracao()">Declarar</button>
+        <div class="form-row pt-3">
+          <div class="row">
+            <div class="col">
+              <button
+                type="button"
+                class="btn btn-block btn-success btn-lg"
+                [disabled]="!form.valid"
+                (click)="salvarAlteracao()"
+              >
+                Declarar
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </form>
-</div>
+    </form>
+  </div>
+</ng-container>
+<ngx-spinner
+  name="cadastrar"
+  [bdColor]="confSpinner.bdColor"
+  [size]="confSpinner.tamanho"
+  [color]="confSpinner.color"
+  [fullScreen]="confSpinner.fullScren"
+>
+  <p style="color: white">Cadastrando...</p>
+</ngx-spinner>

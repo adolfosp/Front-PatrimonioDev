@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { DadosRequisicao } from '@nvs-models/requisicoes/DadosRequisicao';
 import { PerdaEquipamento } from '@nvs-models/PerdaEquipamento';
+import { DadosRequisicao } from '@nvs-models/requisicoes/DadosRequisicao';
 import { ApiService } from '@nvs-services/api/api.service';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -16,7 +16,7 @@ export class PerdaService {
   constructor(private api: ApiService) { }
 
   public cadastrarPerda(perdaEquipamento: PerdaEquipamento): Observable<PerdaEquipamento>{
-    return this.api.post<PerdaEquipamento>(this.baseUrl, {perdaEquipamento}).pipe(take(1));
+    return this.api.post<PerdaEquipamento>(this.baseUrl, {perdaEquipamentoDto: perdaEquipamento}).pipe(take(1));
   }
 
   public obterPerdas(): Observable<DadosRequisicao>{

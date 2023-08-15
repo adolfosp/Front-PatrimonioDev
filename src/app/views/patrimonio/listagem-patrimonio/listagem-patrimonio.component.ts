@@ -1,32 +1,32 @@
 import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  HostListener,
-  OnInit,
-  TemplateRef,
-  ViewChild,
-  ViewEncapsulation,
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    HostListener,
+    OnInit,
+    TemplateRef,
+    ViewChild,
+    ViewEncapsulation,
 } from "@angular/core";
+import { PageEvent } from "@angular/material/paginator";
+import { Title } from "@angular/platform-browser";
 import { Router } from "@angular/router";
-import { SituacaoEquipamento } from "@nvs-models/enums/situacao-equipamento.enum";
 import Componente from "@nvs-models/Componente";
-import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { Patrimonio } from "@nvs-models/Patrimonio";
+import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
+import { SituacaoEquipamento } from "@nvs-models/enums/situacao-equipamento.enum";
+import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { CriptografiaService } from "@nvs-services/criptografia/criptografia.service";
 import { PatrimonioService } from "@nvs-services/patrimonio/patrimonio.service";
 import { TokenService } from "@nvs-services/token/token.service";
+import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
+import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
 import configuracaoTabela from "@nvs-utils/configuracao-tabela";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { API, APIDefinition, Columns, Config, Pagination } from "ngx-easy-table";
 import { NgxSpinnerService } from "ngx-spinner";
 import * as XLSX from "xlsx";
-import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
-import { PageEvent } from "@angular/material/paginator";
-import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
-import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
-import { Title } from "@angular/platform-browser";
 
 @Component({
   templateUrl: "./listagem-patrimonio.component.html",
@@ -63,7 +63,7 @@ export class ListagemPatrimonioComponent extends Componente implements OnInit, A
     private token: TokenService,
     private encriptacao: CriptografiaService,
     private detectorAlteracao: ChangeDetectorRef,
-    private title: Title
+    private title: Title,
   ) {
     super();
     this.title.setTitle("Listagem de patrimônio");
@@ -106,6 +106,10 @@ export class ListagemPatrimonioComponent extends Componente implements OnInit, A
     event.stopPropagation();
     this.patrimonioId = patrimonioId;
     this.modalRef = this.modalService.show(template, { class: "modal-sm" });
+  }
+
+  reciverFeedbackReload() {
+    this.obterPatrimonios();
   }
 
   private obterPatrimonios(): void {
@@ -215,9 +219,7 @@ export class ListagemPatrimonioComponent extends Componente implements OnInit, A
       this.mostrarAvisoXLS(`Não foi possível exportar a planilha. Mensagem: ${err}`);
     }
   }
-//   public atribuirCodigoPatrimonio(codigoPatrimonio: number): void {
-//     this.patrimonioId = codigoPatrimonio;
-//   }
+
 
   private obterColunasDaTabela(): any {
     return [

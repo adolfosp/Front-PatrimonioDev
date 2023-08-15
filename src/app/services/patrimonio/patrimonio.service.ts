@@ -17,9 +17,8 @@ export class PatrimonioService implements IService {
 
   constructor(private api: ApiService) {}
   cadastrar<T>(classe: T): Observable<DadosRequisicao> {
-
     const unknownValue = classe as unknown;
-    const insercao = unknownValue as InserirPatrimonioDto
+    const insercao = unknownValue as InserirPatrimonioDto;
 
     return this.api
       .post<DadosRequisicao>(this.baseUrl, {
@@ -45,12 +44,11 @@ export class PatrimonioService implements IService {
     return this.api.get<DadosRequisicao>(`${this.baseUrl}/${patrimonioId}`).pipe(take(1));
   }
 
-  atualizar<T>(classe: T): Observable<DadosRequisicao> {
-    const insercao = classe as InserirPatrimonioDto;
+  atualizar<InserirPatrimonioDto>(classe: InserirPatrimonioDto): Observable<DadosRequisicao> {
     return this.api
-      .put<DadosRequisicao>(`${this.baseUrl}/${insercao.patrimonio.codigoPatrimonio}`, {
-        patrimonio: insercao.patrimonio,
-        informacaoAdicional: insercao.informacaoAdicional,
+      .put<DadosRequisicao>(`${this.baseUrl}/${classe["patrimonio"].codigoPatrimonio}`, {
+        patrimonio: classe["patrimonio"],
+        informacaoAdicional: classe["informacaoAdicional"],
       })
       .pipe(take(1));
   }

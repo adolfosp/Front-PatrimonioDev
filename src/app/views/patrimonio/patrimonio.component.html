@@ -191,7 +191,7 @@
               [disabled]="!form.valid || !formAdicional.valid"
               (click)="salvarAlteracao()"
             >
-              {{ this.estadoSalvar === "cadastrarPatrimonio" ? "Cadastrar" : "Atualizar" }}
+              {{ this.estadoSalvar === "cadastrar" ? "Cadastrar" : "Atualizar" }}
             </button>
             <app-button (click)="limparCampos()" [classeBotao]="classeBotaoLimpar">Limpar</app-button>
           </div>

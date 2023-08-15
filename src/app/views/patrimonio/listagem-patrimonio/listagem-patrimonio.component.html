@@ -1,4 +1,4 @@
-<div class="card border-0 rounded shadow-sm p-3 m-5 teste">
+<div class="card border-0 rounded shadow-sm p-3 m-5">
   <app-header-grid
     [ehAdministrador]="ehAdministrador"
     [rotaNovoRegistro]="rotaCadastro"
@@ -65,14 +65,9 @@
             Ações
           </button>
           <div class="dropdown-menu">
-            <a
-              class="dropdown-item tamanho-fonte"
-              role="button"
-              data-toggle="modal"
-              data-target="#modalPerda"
-            >
+            <button class="dropdown-item tamanho-fonte" role="button" (click)="modalPerda.toggle(row.codigoPatrimonio)">
               Declarar Perda
-            </a>
+            </button>
             <div class="dropdown-divider"></div>
             <a
               class="dropdown-item tamanho-fonte"
@@ -115,7 +110,6 @@
   </div>
 </ng-template>
 
-
 <ng-template #noResults>
   <td [attr.colspan]="colunas.length + 1" class="no-results text-center">
     <h4>Não há nenhum patrimônio cadastrado</h4>
@@ -133,15 +127,9 @@
       Ações
     </button>
     <div class="dropdown-menu">
-      <a
-        class="dropdown-item tamanho-fonte"
-        role="button"
-        data-toggle="modal"
-
-        data-target="#modalPerda"
-      >
+      <button class="dropdown-item tamanho-fonte" role="button" (click)="modalPerda.toggle(row.codigoPatrimonio)">
         Declarar Perda
-      </a>
+      </button>
       <div class="dropdown-divider"></div>
       <a
         class="dropdown-item tamanho-fonte"
@@ -156,26 +144,7 @@
     </div>
   </div>
 </ng-template>
-<!-- <div
-  class="modal fade"
-  id="modalPerda"
-  data-backdrop="static"
-  data-keyboard="false"
-  tabindex="-1"
-  aria-labelledby="staticBackdropLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-body">
-        <button type="button" id="botao-fechar-modal-perda" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <app-perda (codigoPatrimonio)="(patrimonioId)" (podeFecharModal)="fecharModalPerda()"></app-perda>
-      </div>
-    </div>
-  </div>
-</div> -->
+
 <ngx-spinner
   name="buscando"
   [bdColor]="confSpinner.bdColor"
@@ -194,3 +163,4 @@
 >
   <p style="color: white">Excluindo...</p>
 </ngx-spinner>
+<app-perda #modalPerda (reloadList)="reciverFeedbackReload()"></app-perda>
