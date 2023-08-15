@@ -54,7 +54,8 @@
 - [ X ] Finalizar PERMISSÃO
 - [ X ] Corrigir title das páginas
 - [ ] Adicionar Directives Composition API NA dashboard login
-- [ ] Arrumar perdas
+- [ X ] Arrumar perdas
+- [ ] Adicionar interface no service da perda
 - [ ] Ajustar permissões
 - [ ] Validar motivo de não aparecer erro dos campos
 
