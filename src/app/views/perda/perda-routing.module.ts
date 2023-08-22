@@ -5,14 +5,14 @@ import { PerdaComponent } from "./perda.component";
 
 const routes: Routes = [
   {
-    path: 'perda',
+    path: "perda",
     canActivate: [AuthGuard],
     component: PerdaComponent,
     data: {
-      title: 'perda'
-    }
+      title: "perda",
+    },
   }
-]
+];
 
 @NgModule({
   imports: [

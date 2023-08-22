@@ -58,7 +58,7 @@ export class PerdaComponent extends Componente implements OnInit {
     this._perda.codigoPatrimonio = this._codigoPatrimonio;
 
     this.perdaService
-      .cadastrarPerda(this._perda)
+      .cadastrar(this._perda)
       .subscribe({
         next: () => {
           this.mostrarAvisoSucesso(`Perda cadastrada com sucesso`);

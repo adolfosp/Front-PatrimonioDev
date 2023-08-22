@@ -1,31 +1,32 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { RouterModule } from "@angular/router";
-import { MatInputModule } from "@angular/material/input";
-import { MatIconModule } from "@angular/material/icon";
 import { CommonModule } from "@angular/common";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
+import { RouterModule } from "@angular/router";
 
 @Component({
-  selector: 'app-header-grid',
-  templateUrl: './header-grid.component.html',
-  styleUrls: ['./header-grid.component.sass'],
+  selector: "app-header-grid",
+  templateUrl: "./header-grid.component.html",
+  styleUrls: ["./header-grid.component.sass"],
   standalone: true,
-  imports: [RouterModule, CommonModule, MatInputModule, MatIconModule]
-
+  imports: [RouterModule, CommonModule, MatInputModule, MatIconModule],
 })
-export class HeaderGridComponent {
-
+export class HeaderGridComponent implements OnInit {
   @Output() public exportar = new EventEmitter();
   @Output() public changeValueInput = new EventEmitter();
   @Input() public ehAdministrador: boolean;
   @Input() public rotaNovoRegistro: string;
+  public shouldRenderButtonNewRegister: boolean;
 
+  ngOnInit(): void {
+    this.shouldRenderButtonNewRegister = this.rotaNovoRegistro.length > 0;
+  }
 
-  public exportarRegistros(e: object): void{
+  public exportarRegistros(e: object): void {
     this.exportar.emit(e);
   }
 
-  public changeValue(e: object): void{
+  public changeValue(e: object): void {
     this.changeValueInput.emit(e);
   }
-
 }
