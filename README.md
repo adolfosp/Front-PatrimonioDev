@@ -55,7 +55,7 @@
 - [ X ] Corrigir title das páginas
 - [ ] Adicionar Directives Composition API NA dashboard login
 - [ X ] Arrumar perdas
-- [ ] Adicionar interface no service da perda
+- [ X ] Adicionar interface no service da perda
 - [ ] Ajustar permissões
 - [ ] Validar motivo de não aparecer erro dos campos
 
