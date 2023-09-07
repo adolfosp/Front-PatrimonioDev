@@ -4,14 +4,15 @@ import { Router } from "@angular/router";
 import { NgxSpinnerService } from "ngx-spinner";
 
 import { LocalStorageService } from "@nvs-services/local-storage/local-storage.service";
-import { UsuarioService } from "@nvs-services/usuario/usuario.service";
 
 import { LocalStorageChave } from "@nvs-models/enums/local-storage-chave.enum";
 
+import { Title } from "@angular/platform-browser";
 import { atribuirModoDarkLightPadrao, atribuirTemaCorretoAoRecarregarPagina } from "@nvs-helpers/ModoDarkLightHelper";
 import Componente from "@nvs-models/Componente";
+import LoginDto from "@nvs-models/dtos/loginDto";
+import { AuthService } from "@nvs-services/auth/auth.service";
 import { CriptografiaService } from "@nvs-services/criptografia/criptografia.service";
-import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: "app-dashboard",
@@ -36,13 +37,13 @@ export class LoginComponent extends Componente implements OnInit {
   }
 
   constructor(
-    private usuarioService: UsuarioService,
     private fb: FormBuilder,
     private router: Router,
     private spinner: NgxSpinnerService,
     private encriptar: CriptografiaService,
     private localStorageService: LocalStorageService,
-    private title: Title
+    private title: Title,
+    private authService: AuthService
   ) {
     super();
     this.title.setTitle("Login");
@@ -79,8 +80,10 @@ export class LoginComponent extends Componente implements OnInit {
     this.ehAutenticacaoAuth = autenticacaoAuth;
     this.spinner.show();
 
-    this.usuarioService
-      .obterUsuarioPorEmailESenha(email, senha, autenticacaoAuth)
+    const loginDto = new LoginDto(senha, email, autenticacaoAuth)
+
+    this.authService
+      .login(loginDto)
       .subscribe({
         next: (result: any) => {
           this.localStorageService.adicionarChave(LocalStorageChave.Valor, this.encriptar.encrypt(result.token));
@@ -91,9 +94,9 @@ export class LoginComponent extends Componente implements OnInit {
         },
         error: (error: unknown) => {
           if (error["status"] == 400 && this.ehAutenticacaoAuth) {
-            this.mostrarAvisoInfo('Para continuar, é necessário preencher o formulário.');
+            this.mostrarAvisoInfo("Para continuar, é necessário preencher o formulário.");
           } else {
-            this.mostrarAvisoErro(error, "Houve um erro ao fazer login.")
+            this.mostrarAvisoErro(error, "Houve um erro ao fazer login.");
           }
         },
       })
