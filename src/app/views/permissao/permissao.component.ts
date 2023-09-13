@@ -8,6 +8,7 @@ import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { UsuarioPermissao } from "@nvs-models/UsuarioPermissao";
 import { PermissaoService } from "@nvs-services/permissao/permissao.service";
 import { CLASSE_BOTAO_LIMPAR } from "@nvs-utils/classes-sass.constant";
+import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
 import { NgxSpinnerService } from "ngx-spinner";
 
 @Component({
@@ -20,8 +21,9 @@ export class PermissaoComponent extends Componente implements OnInit {
   private codigoPerfil: number;
   private limpandoCampo = false;
 
+  public confSpinner = ConfiguracaoSpinner;
   public form!: FormGroup;
-  public estadoSalvar = "cadastrarPermissao";
+  public estadoSalvar = "cadastrar";
   public readonly classeBotaoLimpar = CLASSE_BOTAO_LIMPAR;
   public permissoesPorContexto: Array<any>;
 
@@ -43,9 +45,9 @@ export class PermissaoComponent extends Componente implements OnInit {
 
   ngOnInit(): void {
     this.validacao();
+    this.carregarPermissoesPorContexto();
     this.carregarPermissaoPorId();
     this.controlarVisibilidadeCampoAtivo();
-    this.carregarPermissoesPorContexto();
   }
 
   public limparCampos(): void {
@@ -54,7 +56,7 @@ export class PermissaoComponent extends Componente implements OnInit {
   }
 
   private controlarVisibilidadeCampoAtivo(): void {
-    if (this.estadoSalvar == "cadastrarPermissao") {
+    if (this.estadoSalvar == "cadastrar") {
       this.form.controls["ativo"].disable();
       return;
     }
@@ -80,7 +82,7 @@ export class PermissaoComponent extends Componente implements OnInit {
     this.codigoPerfil = +this.activateRouter.snapshot.paramMap.get("codigoPermissao");
 
     if (this.codigoPerfil !== null && this.codigoPerfil !== 0) {
-      this.estadoSalvar = "atualizarPermissao";
+      this.estadoSalvar = "atualizar";
       this.spinner.show("carregando");
 
       this.permissaoService
@@ -100,7 +102,7 @@ export class PermissaoComponent extends Componente implements OnInit {
   }
 
   private atribuirPermissoesAoControleForm(permissao: UsuarioPermissao[]): void {
-    const acoesPorContexto: FormArray = this.form.get("acoesPorContexto") as FormArray;
+    const permissoesPorContexto: FormArray = this.form.get("acoesPorContexto") as FormArray;
     for (let i = 0; i < permissao.length; i++) {
       for (let k = 0; k < permissao[i].codigosPermissao?.length; k++) {
         this.permissoesPorContexto[permissao[i].codigoContexto - 1].permissoes[
@@ -110,7 +112,7 @@ export class PermissaoComponent extends Componente implements OnInit {
           this.permissoesPorContexto[permissao[i].codigoContexto - 1].permissoes[permissao[i].codigosPermissao[k] - 1]
             .value
         }`;
-        acoesPorContexto.push(new FormControl(permissaoFormatada));
+        permissoesPorContexto.push(new FormControl(permissaoFormatada));
       }
     }
   }
@@ -125,14 +127,14 @@ export class PermissaoComponent extends Componente implements OnInit {
   }
 
   public onCheckBoxMarcada(e) {
-    const acoesPorContexto: FormArray = this.form.get("acoesPorContexto") as FormArray;
+    const permissoesPorContexto: FormArray = this.form.get("acoesPorContexto") as FormArray;
     if (e.checked) {
-      acoesPorContexto.push(new FormControl(e.source.value));
+      permissoesPorContexto.push(new FormControl(e.source.value));
     } else {
       let i = 0;
-      acoesPorContexto.controls.forEach((item: FormControl) => {
+      permissoesPorContexto.controls.forEach((item: FormControl) => {
         if (item.value == e.source.value) {
-          acoesPorContexto.removeAt(i);
+          permissoesPorContexto.removeAt(i);
           return;
         }
         i++;
@@ -141,13 +143,13 @@ export class PermissaoComponent extends Componente implements OnInit {
   }
 
   public salvarAlteracao(): void {
-    const atualizando = this.estadoSalvar == "atualizarPatrimonio";
+    const atualizando = this.estadoSalvar == "atualizar";
     const nomeAcaoRealizada = atualizando ? "atualizada" : "cadastrada";
 
     this.spinner.show(nomeAcaoRealizada);
 
     this.usuarioPermissao =
-      this.estadoSalvar === "cadastrarPermissao"
+      this.estadoSalvar === "cadastrar"
         ? { ...this.form.value }
         : { codigoPerfil: this.usuarioPermissao.codigoPerfil, ...this.form.value };
 
