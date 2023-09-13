@@ -1,19 +1,27 @@
 import { Injectable } from "@angular/core";
+import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
+import { IService } from "@nvs-models/interfaces/IService";
+import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { ApiService } from "@nvs-services/api/api.service";
 import { Observable } from "rxjs";
 import { take } from "rxjs/operators";
 import { environment } from "../../../environments/environment";
-import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
-import { IService } from "@nvs-models/interfaces/IService";
-import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
+
+interface ICustomizePermissaoService extends IService {
+  obterPermissaoPorContexto(): Observable<DadosRequisicao>;
+}
 
 @Injectable({
   providedIn: "root",
 })
-export class PermissaoService implements IService {
+export class PermissaoService implements ICustomizePermissaoService {
   baseUrl = `${environment.apiUrl}permissoes`;
 
   constructor(private api: ApiService) {}
+
+  obterPermissaoPorContexto(): Observable<DadosRequisicao> {
+    return this.api.get<DadosRequisicao>(`${this.baseUrl}/permissoes-contexto`).pipe(take(1));
+  }
 
   cadastrar<T>(usuarioPermissao: T): Observable<DadosRequisicao> {
     return this.api.post<DadosRequisicao>(this.baseUrl, { perfilDto: usuarioPermissao }).pipe(take(1));

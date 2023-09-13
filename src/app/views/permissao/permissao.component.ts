@@ -4,7 +4,7 @@ import { Title } from "@angular/platform-browser";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MensagemRequisicao } from "@nvs-helpers/MensagemRequisicaoHelper";
 import Componente from "@nvs-models/Componente";
-import { DadosRequisicao } from '@nvs-models/requisicoes/DadosRequisicao';
+import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { UsuarioPermissao } from "@nvs-models/UsuarioPermissao";
 import { PermissaoService } from "@nvs-services/permissao/permissao.service";
 import { CLASSE_BOTAO_LIMPAR } from "@nvs-utils/classes-sass.constant";
@@ -23,6 +23,7 @@ export class PermissaoComponent extends Componente implements OnInit {
   public form!: FormGroup;
   public estadoSalvar = "cadastrarPermissao";
   public readonly classeBotaoLimpar = CLASSE_BOTAO_LIMPAR;
+  public permissoesPorContexto: Array<any>;
 
   get f(): any {
     return this.form.controls;
@@ -34,7 +35,7 @@ export class PermissaoComponent extends Componente implements OnInit {
     private router: Router,
     private permissaoService: PermissaoService,
     private activateRouter: ActivatedRoute,
-    private title: Title
+    private title: Title,
   ) {
     super();
     this.title.setTitle("Permissão");
@@ -42,123 +43,10 @@ export class PermissaoComponent extends Componente implements OnInit {
 
   ngOnInit(): void {
     this.validacao();
-    this.carregarPermissao();
+    this.carregarPermissaoPorId();
     this.controlarVisibilidadeCampoAtivo();
+    this.carregarPermissoesPorContexto();
   }
-
-  //TODO: Realizar busca do banco
-  permissoesPorContexto: Array<any> = [
-    {
-      nomeContexto: "Patrimônio",
-      codigo: 1,
-      permissoes: [
-        { name: "Alterar", value: 1, checked: false },
-        { name: "Adicionar", value: 2, checked: false },
-        { name: "Listar", value: 3, checked: false },
-        { name: "Remover", value: 4, checked: false },
-        { name: "Desativar", value: 5, checked: false },
-      ],
-    },
-    {
-      nomeContexto: "Setor",
-      codigo: 2,
-      permissoes: [
-        { name: "Alterar", value: 1, checked: false },
-        { name: "Adicionar", value: 2, checked: false },
-        { name: "Listar", value: 3, checked: false },
-        { name: "Remover", value: 4, checked: false },
-        { name: "Desativar", value: 5, checked: false },
-      ],
-    },
-    {
-      nomeContexto: "Empresa",
-      codigo: 3,
-      permissoes: [
-        { name: "Alterar", value: 1, checked: false },
-        { name: "Adicionar", value: 2, checked: false },
-        { name: "Listar", value: 3, checked: false },
-        { name: "Remover", value: 4, checked: false },
-        { name: "Desativar", value: 5, checked: false },
-      ],
-    },
-    {
-      nomeContexto: "Equipamento",
-      codigo: 4,
-      permissoes: [
-        { name: "Alterar", value: 1, checked: false },
-        { name: "Adicionar", value: 2, checked: false },
-        { name: "Listar", value: 3, checked: false },
-        { name: "Remover", value: 4, checked: false },
-        { name: "Desativar", value: 5, checked: false },
-      ],
-    },
-    {
-      nomeContexto: "Permissão",
-      codigo: 5,
-      permissoes: [
-        { name: "Alterar", value: 1, checked: false },
-        { name: "Adicionar", value: 2, checked: false },
-        { name: "Listar", value: 3, checked: false },
-        { name: "Remover", value: 4, checked: false },
-        { name: "Desativar", value: 5, checked: false },
-      ],
-    },
-    {
-      nomeContexto: "Fabricante",
-      codigo: 6,
-      permissoes: [
-        { name: "Alterar", value: 1, checked: false },
-        { name: "Adicionar", value: 2, checked: false },
-        { name: "Listar", value: 3, checked: false },
-        { name: "Remover", value: 4, checked: false },
-        { name: "Desativar", value: 5, checked: false },
-      ],
-    },
-    {
-      nomeContexto: "Funcionário",
-      codigo: 7,
-      permissoes: [
-        { name: "Alterar", value: 1, checked: false },
-        { name: "Adicionar", value: 2, checked: false },
-        { name: "Listar", value: 3, checked: false },
-        { name: "Remover", value: 4, checked: false },
-        { name: "Desativar", value: 5, checked: false },
-      ],
-    },
-    {
-      nomeContexto: "Movimentação",
-      codigo: 8,
-      permissoes: [
-        { name: "Alterar", value: 1, checked: false },
-        { name: "Adicionar", value: 2, checked: false },
-        { name: "Listar", value: 3, checked: false },
-        { name: "Remover", value: 4, checked: false },
-        { name: "Desativar", value: 5, checked: false },
-      ],
-    },
-    {
-      nomeContexto: "Categoria Equipamento",
-      codigo: 9,
-      permissoes: [
-        { name: "Alterar", value: 1, checked: false },
-        { name: "Adicionar", value: 2, checked: false },
-        { name: "Listar", value: 3, checked: false },
-        { name: "Remover", value: 4, checked: false },
-        { name: "Desativar", value: 5, checked: false },
-      ],
-    },
-    {
-      nomeContexto: "Usuário",
-      codigo: 10,
-      permissoes: [
-        { name: "Alterar", value: 1, checked: false },
-        { name: "Adicionar", value: 2, checked: false },
-        { name: "Listar", value: 3, checked: false },
-        { name: "Remover", value: 4, checked: false },
-        { name: "Desativar", value: 5, checked: false },
-      ],
-    },
-  ];
 
   public limparCampos(): void {
     this.limpandoCampo = true;
@@ -174,7 +62,21 @@ export class PermissaoComponent extends Componente implements OnInit {
     this.form.controls["ativo"].enable();
   }
 
-  public carregarPermissao(): void {
+  private carregarPermissoesPorContexto() {
+    this.permissaoService
+      .obterPermissaoPorContexto()
+      .subscribe({
+        next: (dados: DadosRequisicao) => {
+          this.permissoesPorContexto = dados.data;
+        },
+        error: (error: unknown) => {
+          this.mostrarAvisoErro(error, "Houve um erro ao carregar as permissões.");
+        },
+      })
+      .add(() => this.spinner.hide("carregando"));
+  }
+
+  public carregarPermissaoPorId(): void {
     this.codigoPerfil = +this.activateRouter.snapshot.paramMap.get("codigoPermissao");
 
     if (this.codigoPerfil !== null && this.codigoPerfil !== 0) {
@@ -200,9 +102,6 @@ export class PermissaoComponent extends Componente implements OnInit {
   private atribuirPermissoesAoControleForm(permissao: UsuarioPermissao[]): void {
     const acoesPorContexto: FormArray = this.form.get("acoesPorContexto") as FormArray;
     for (let i = 0; i < permissao.length; i++) {
-      //TODO: IMPLEMENTAR A PERMISSAO DE PERDA E PERFIL
-      if (i >= 10) continue;
-
       for (let k = 0; k < permissao[i].codigosPermissao?.length; k++) {
         this.permissoesPorContexto[permissao[i].codigoContexto - 1].permissoes[
           permissao[i].codigosPermissao[k] - 1
