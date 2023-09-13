@@ -56,7 +56,7 @@
 - [ ] Adicionar Directives Composition API NA dashboard login
 - [ X ] Arrumar perdas
 - [ X ] Adicionar interface no service da perda
-- [ ] Ajustar permissões
+- [ X ] Ajustar permissões
 - [ ] Validar motivo de não aparecer erro dos campos
 
 
