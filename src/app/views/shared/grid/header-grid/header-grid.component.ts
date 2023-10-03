@@ -19,7 +19,7 @@ export class HeaderGridComponent implements OnInit {
   public shouldRenderButtonNewRegister: boolean;
 
   ngOnInit(): void {
-    this.shouldRenderButtonNewRegister = this.rotaNovoRegistro.length > 0;
+    this.shouldRenderButtonNewRegister = this.rotaNovoRegistro?.length > 0;
   }
 
   public exportarRegistros(e: object): void {

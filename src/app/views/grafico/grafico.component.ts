@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import Componente from '@nvs-models/Componente';
 import { EstatisticaService } from '@nvs-services/estatistica/estatistica.service';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -28,8 +29,10 @@ export class GraficoComponent extends Componente implements OnInit {
 
   constructor(
     private estatisticaService: EstatisticaService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private title: Title
   ) {
+    title.setTitle("Dashboard")
     super();
   }
 

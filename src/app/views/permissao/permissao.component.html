@@ -2,29 +2,29 @@
   <form [formGroup]="form">
     <h1 class="col-4 col-lg-3"><span class="texto-destaque">Permissão</span></h1>
     <div class="p-3">
-
       <div class="row">
         <mat-form-field class="full-width" appearance="fill">
           <mat-label>Código do perfil</mat-label>
-          <input matInput name="codigoPerfil" [formControl]="f.codigoPerfil" required>
+          <input matInput name="codigoPerfil" [formControl]="f.codigoPerfil" required />
         </mat-form-field>
       </div>
 
       <div class="row">
         <div class="col-lg-6 col-sm-12">
-
           <mat-form-field class="full-width" appearance="fill">
             <mat-label>Descrição</mat-label>
-            <input matInput placeholder="Descrição da permissão" name="descricaoPerfil"
-              [formControl]="f.descricaoPerfil" required>
-            <mat-error *ngIf="f.descricaoPerfil.errors?.required">A descrição
-              é obrigatório</mat-error>
-            <mat-error *ngIf="f.descricaoPerfil.errors?.maxlength">A
-              descrição pode ter no máximo 20 letras
+            <input
+              matInput
+              placeholder="Descrição da permissão"
+              name="descricaoPerfil"
+              [formControl]="f.descricaoPerfil"
+              required
+            />
+            <mat-error *ngIf="f.descricaoPerfil.errors?.required">A descrição é obrigatório</mat-error>
+            <mat-error *ngIf="f.descricaoPerfil.errors?.maxlength">A descrição pode ter no máximo 20 letras</mat-error>
+            <mat-error *ngIf="f.descricaoPerfil.errors?.minlength">
+              A descrição pode ter no mínimo 3 letras letras
             </mat-error>
-            <mat-error *ngIf="f.descricaoPerfil.errors?.minlength">A
-              descrição pode ter no mínimo 3 letras
-              letras</mat-error>
           </mat-form-field>
         </div>
         <div class="col-lg-6 col-sm-12">
@@ -36,42 +36,69 @@
             </mat-select>
           </mat-form-field>
         </div>
-        <h1 class="pt-3 pb-2"><span class="texto-destaque">Ações do Usuário</span></h1><br>
-        <div *ngFor="let contexto of permissoesPorContexto; let i=index" class="card__contexto">
-          {{contexto.nomeContexto}}
+        <h1 class="pt-3 pb-2"><span class="texto-destaque">Ações do Usuário</span></h1>
+        <br />
+        <ng-template [ngIf]="permissoesPorContexto?.length > 0">
+          <div *ngFor="let contexto of permissoesPorContexto; let i = index" class="card__contexto">
+            {{ contexto.nomeContexto }}
 
-          <div *ngFor="let permissao of contexto.permissoes; let i=index" class="card__contexto__permissao">
-            <mat-checkbox [value]="contexto.codigo + '-'
-                + permissao.value" color="primary" [checked]="permissao.checked" (change)="onCheckBoxMarcada($event)">
-            </mat-checkbox>
-            {{permissao.name}}
+            <div *ngFor="let permissao of contexto.permissoes; let i = index" class="card__contexto__permissao">
+              <mat-checkbox
+                [value]="contexto.codigo + '-' + permissao.value"
+                color="primary"
+                [checked]="permissao.checked"
+                (change)="onCheckBoxMarcada($event)"
+              ></mat-checkbox>
+              {{ permissao.name }}
+            </div>
           </div>
-
-        </div>
+        </ng-template>
+        <ng-template [ngIf]="!permissoesPorContexto">
+            <p>Houve um erro ao obter as permissões.</p>
+        </ng-template>
       </div>
       <div class="form-row pt-3">
         <div class="row">
           <div class="col">
-            <button type="button" class="btn btn-block cadastrar me-2" (click)="salvarAlteracao()"
-              [disabled]="!form.valid">{{this.estadoSalvar.includes('cadastrar')?'Cadastrar':'Atualizar'}}</button>
-            <app-button (click)="limparCampos()" [classeBotao]="classeBotaoLimpar">
-              Limpar
-            </app-button>
+            <button
+              type="button"
+              class="btn btn-block cadastrar me-2"
+              (click)="salvarAlteracao()"
+              [disabled]="!form.valid"
+            >
+              {{ this.estadoSalvar.includes("cadastrar") ? "Cadastrar" : "Atualizar" }}
+            </button>
+            <app-button (click)="limparCampos()" [classeBotao]="classeBotaoLimpar">Limpar</app-button>
           </div>
         </div>
       </div>
     </div>
   </form>
 </div>
-<ngx-spinner name="cadastrada" bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box"
-  [fullScreen]="true">
-  <p style="color: white"> Cadastrando... </p>
+<ngx-spinner
+  name="cadastrada"
+  [bdColor]="confSpinner.bdColor"
+  [size]="confSpinner.tamanho"
+  [color]="confSpinner.color"
+  [fullScreen]="confSpinner.fullScren"
+>
+  <p style="color: white">Cadastrando...</p>
 </ngx-spinner>
-<ngx-spinner name="atualizada" bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box"
-  [fullScreen]="true">
-  <p style="color: white"> Atualizando... </p>
+<ngx-spinner
+  name="atualizada"
+  [bdColor]="confSpinner.bdColor"
+  [size]="confSpinner.tamanho"
+  [color]="confSpinner.color"
+  [fullScreen]="confSpinner.fullScren"
+>
+  <p style="color: white">Atualizando...</p>
 </ngx-spinner>
-<ngx-spinner name="carregando" bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box"
-  [fullScreen]="true">
-  <p style="color: white"> Carregando... </p>
+<ngx-spinner
+  name="carregando"
+  [bdColor]="confSpinner.bdColor"
+  [size]="confSpinner.tamanho"
+  [color]="confSpinner.color"
+  [fullScreen]="confSpinner.fullScren"
+>
+  <p style="color: white">Carregando...</p>
 </ngx-spinner>

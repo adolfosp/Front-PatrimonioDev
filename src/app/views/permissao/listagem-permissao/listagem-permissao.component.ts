@@ -1,12 +1,12 @@
 import {
     AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  HostListener,
-  OnInit,
-  TemplateRef,
-  ViewChild,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    HostListener,
+    OnInit,
+    TemplateRef,
+    ViewChild,
 } from "@angular/core";
 import { PageEvent } from "@angular/material/paginator";
 import { Title } from "@angular/platform-browser";
@@ -104,7 +104,7 @@ export class ListagemPermissaoComponent extends Componente implements OnInit, Af
 
   private obterPermissoes(): void {
     const paginacao = new PaginacaoDto(this.paginacao.offset, this.paginacao.limit);
-
+    console.log(paginacao)
     this.spinner.show("buscando");
 
     this.permissaoService
