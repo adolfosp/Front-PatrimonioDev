@@ -42,22 +42,22 @@
   ```
 
   ## Todo
-
+- [ ] Corrigir parte de permissão do layout anterior
+- [ ] Validar motivo de não aparecer erro dos campos
+- [ ] Adicionar Directives Composition API NA dashboard login
+- [ ] Centralizar obterColunas e criar uma prop para a regra colunas.length + 1
+- [ ] Corrigir hover do menu quando é atualizado a página. https://itnext.io/the-ultimate-sidenav-guide-with-angular-resizeable-dynamic-and-toggleable-c42dc057798d
 - [ X ] Trocar o select do funcionario e equipamento dentro do patrimônio
 - [ X ] Verificar erro de largura da mensagem de nenhum patrimônio cadastrado
 - [ X ] Validar se no construtor, as chamadas de alguns métodos foram removidos
 - [ X ] Validar ngxSpinner
-- [ ] Corrigir hover do menu quando é atualizado a página. https://itnext.io/the-ultimate-sidenav-guide-with-angular-resizeable-dynamic-and-toggleable-c42dc057798d
 - [ X ] Validar token expirado
-- [ ] Centralizar obterColunas e criar uma prop para a regra colunas.length + 1
 - [ X ] Finalizar USUÁRIO
 - [ X ] Finalizar PERMISSÃO
 - [ X ] Corrigir title das páginas
-- [ ] Adicionar Directives Composition API NA dashboard login
 - [ X ] Arrumar perdas
 - [ X ] Adicionar interface no service da perda
 - [ X ] Ajustar permissões
-- [ ] Validar motivo de não aparecer erro dos campos
 
 
 
