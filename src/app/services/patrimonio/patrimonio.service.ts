@@ -58,7 +58,7 @@ export class PatrimonioService implements IService {
   }
 
   private obterEmpresaPadrao(): Observable<string> {
-    return this.api.get<string>(`${environment.apiUrl}empresas/empresaPadrao`, { responseType: "text" }).pipe(take(1));
+    return this.api.get<string>(`${environment.apiUrl}empresas/empresa-padrao`).pipe(take(1));
   }
 
   public obterPatrimonioEInformacaoAdicional(codigoPatrimonio: number): Observable<any[]> {

@@ -42,8 +42,10 @@
   ```
 
   ## Todo
-- [ ] Corrigir parte de permissão do layout anterior
+- [ X ] Corrigir parte de permissão do layout anterior
+- [ ] Adicionar paginacao na movimentação
 - [ ] Validar motivo de não aparecer erro dos campos
+- [ ] URL Patrimonio exposta
 - [ ] Adicionar Directives Composition API NA dashboard login
 - [ ] Centralizar obterColunas e criar uma prop para a regra colunas.length + 1
 - [ ] Corrigir hover do menu quando é atualizado a página. https://itnext.io/the-ultimate-sidenav-guide-with-angular-resizeable-dynamic-and-toggleable-c42dc057798d

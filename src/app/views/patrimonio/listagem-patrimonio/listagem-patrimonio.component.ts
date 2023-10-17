@@ -1,13 +1,13 @@
 import {
-    AfterViewInit,
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    HostListener,
-    OnInit,
-    TemplateRef,
-    ViewChild,
-    ViewEncapsulation,
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  HostListener,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+  ViewEncapsulation,
 } from "@angular/core";
 import { PageEvent } from "@angular/material/paginator";
 import { Title } from "@angular/platform-browser";

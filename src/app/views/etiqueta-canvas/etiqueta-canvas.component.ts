@@ -50,25 +50,25 @@ export class EtiquetaCanvasComponent implements AfterViewInit {
   private desenharImagemQRCode(): void {
     setTimeout(() => {
       const imagemQrCode = document.getElementsByTagName('img')[1];
-      var imagemQr = new Image();
+      const imagemQr = new Image();
       imagemQr.src = imagemQrCode.getAttribute("src");
-      var imagemPropriedadesQr = new CanvasImagem(imagemQr,335,50,140,130);
+      const imagemPropriedadesQr = new CanvasImagem(imagemQr, 335, 50, 140, 130);
       imagemQr.onload= (() => this.desenharImagem(imagemPropriedadesQr))
 
     }, 700);
   }
 
   private desenharImagemTextoPatrimonio(): void {
-    var imagemPatrimonio = new Image();
+    const imagemPatrimonio = new Image();
     imagemPatrimonio.src = '../../../assets/img/patrimonio-texto.png'
-    var imagemPatrimonioPropriedades = new CanvasImagem(imagemPatrimonio,330,10,150,20);
+    const imagemPatrimonioPropriedades = new CanvasImagem(imagemPatrimonio,330,10,150,20);
     imagemPatrimonio.onload= (() => this.desenharImagem(imagemPatrimonioPropriedades));
   }
 
   private desenharImagemLogoPS(): void {
-    var imagem = new Image();
+    const imagem = new Image();
     imagem.src = '../../../assets/img/ps.png'
-    var imagemPropriedades = new CanvasImagem(imagem,20,10,190,150);
+    const imagemPropriedades = new CanvasImagem(imagem, 20, 10, 190, 150);
     imagem.onload= (() => this.desenharImagem(imagemPropriedades))
   }
 
@@ -85,18 +85,18 @@ export class EtiquetaCanvasComponent implements AfterViewInit {
     }
 
 
-    let linkDownload = document.getElementById("download");
-    let image = this.cx.canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+    const linkDownload = document.getElementById("download");
+    const image = this.cx.canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
     linkDownload.setAttribute('href',image)
   }
 
   private atribuirFontes(): void {
-    var link = document.createElement('link');
+    const link = document.createElement("link");
     link.rel = 'stylesheet';
     link.type = 'text/css';
     link.href = 'https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;1,900&display=swap';
 
-    var link1 = document.createElement('link');
+    const link1 = document.createElement("link");
     link1.rel = 'preconnect';
     link1.href = 'https://fonts.googleapis.com';
 

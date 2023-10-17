@@ -1,22 +1,22 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { Title } from "@angular/platform-browser";
 import { ActivatedRoute, Router } from "@angular/router";
-import { SituacaoEquipamento } from "@nvs-models/enums/situacao-equipamento.enum";
 import { MensagemRequisicao } from "@nvs-helpers/MensagemRequisicaoHelper";
 import Componente from "@nvs-models/Componente";
 import { Equipamento } from "@nvs-models/Equipamento";
 import { Funcionario } from "@nvs-models/Funcionario";
 import { InformacaoAdicional } from "@nvs-models/InformacaoAdicional";
 import { Patrimonio } from "@nvs-models/Patrimonio";
+import InserirPatrimonioDto from "@nvs-models/dtos/InserirPatrimonioDto";
+import { SituacaoEquipamento } from "@nvs-models/enums/situacao-equipamento.enum";
 import { PatrimonioService } from "@nvs-services/patrimonio/patrimonio.service";
 import { TokenService } from "@nvs-services/token/token.service";
 import { CLASSE_BOTAO_LIMPAR } from "@nvs-utils/classes-sass.constant";
-import { NgxSpinnerService } from "ngx-spinner";
-import { Pagination } from "ngx-easy-table";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
-import InserirPatrimonioDto from "@nvs-models/dtos/InserirPatrimonioDto";
 import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
-import { Title } from "@angular/platform-browser";
+import { Pagination } from "ngx-easy-table";
+import { NgxSpinnerService } from "ngx-spinner";
 
 @Component({
   selector: "app-patrimonio",
@@ -126,6 +126,7 @@ export class PatrimonioComponent extends Componente implements OnInit {
           ...this.form.value,
         };
   }
+
   private obterInformacaoAdicional(): any {
     return this.estadoSalvar === "cadastrar"
       ? { ...this.formAdicional.value }
@@ -154,11 +155,12 @@ export class PatrimonioComponent extends Componente implements OnInit {
         .obterPatrimonioEInformacaoAdicional(this.codigoPatrimonio)
         .subscribe({
           next: (listaDeResposta) => {
-            this.form.patchValue(listaDeResposta[0]);
-            this.serviceTag = listaDeResposta[0].serviceTag;
-            this.formAdicional.patchValue(listaDeResposta[1]);
-            this.nomeFantasiaEmpresaPadrao = listaDeResposta[2];
-            this.valorAtualSituacaoEquipamento = listaDeResposta[0].situacaoEquipamento.toString();
+            this.form.patchValue(listaDeResposta[0].data);
+            this.serviceTag = listaDeResposta[0].data.serviceTag;
+            this.formAdicional.patchValue(listaDeResposta[1].data);
+
+            this.nomeFantasiaEmpresaPadrao = listaDeResposta[2].data;
+            this.valorAtualSituacaoEquipamento = listaDeResposta[0].data.situacaoEquipamento.toString();
           },
           error: (error: unknown) => {
             this.mostrarAvisoErro(error, "Houve um erro ao tentar carregar o patrimônio.");
