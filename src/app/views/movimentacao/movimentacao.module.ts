@@ -10,10 +10,11 @@ import { MovimentacaoService } from '@nvs-services/movimentacao/movimentacao.ser
 import { TableModule } from 'ngx-easy-table';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from 'src/app/shared.module';
+import { HeaderGridComponent } from '../shared/grid/header-grid/header-grid.component';
+import { SharedComponentModule } from '../shared/shared-component.module';
 import { ListagemMovimentacaoComponent } from './listagem-movimentacao/listagem-movimentacao.component';
 import { MovimentacaoRoutingModule } from './movimentacao-routing.module';
 import { MovimentacaoComponent } from './movimentacao.component';
-import { SharedComponentModule } from '../shared/shared-component.module';
 
 @NgModule({
   imports: [
@@ -29,11 +30,10 @@ import { SharedComponentModule } from '../shared/shared-component.module';
     MatDatepickerModule,
     MatNativeDateModule,
     MatSelectModule,
-    SharedComponentModule
-
+    SharedComponentModule,
+    HeaderGridComponent,
   ],
   providers: [MovimentacaoService],
-  declarations: [ MovimentacaoComponent, ListagemMovimentacaoComponent]
-
+  declarations: [MovimentacaoComponent, ListagemMovimentacaoComponent],
 })
-export class MovimentacaoModule { }
+export class MovimentacaoModule {}

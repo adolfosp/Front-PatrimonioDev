@@ -34,7 +34,7 @@ export class DashboardComponent implements OnInit {
   }
 
   public logOut() {
-    this.token.removerToken();
+    this.token.remover();
     this.router.navigate(["login"]);
   }
 }

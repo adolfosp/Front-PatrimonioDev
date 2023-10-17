@@ -12,8 +12,6 @@ import decode from 'jwt-decode';
 
 export class TokenService {
 
-  private readonly nomeCampoPermissao = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role";
-
   constructor(
     private encriptar: CriptografiaService,
     private jwtHelper: JwtHelperService,
@@ -66,7 +64,7 @@ export class TokenService {
     return !this.jwtHelper.isTokenExpired(this.encriptar.decrypt(token));
   }
 
-  public removerToken() {
+  public remover() {
     this.localStorageService.removerChave(LocalStorageChave.Valor);
   }
 }

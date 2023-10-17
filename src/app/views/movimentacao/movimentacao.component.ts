@@ -1,11 +1,11 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { MovimentacaoEquipamento } from "@nvs-models/enums/movimentacao-equipamento.enum";
 import { MensagemRequisicao } from "@nvs-helpers/MensagemRequisicaoHelper";
 import Componente from "@nvs-models/Componente";
-import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { Movimentacao } from "@nvs-models/Movimentacao";
+import { MovimentacaoEquipamento } from "@nvs-models/enums/movimentacao-equipamento.enum";
+import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { CriptografiaService } from "@nvs-services/criptografia/criptografia.service";
 import { MovimentacaoService } from "@nvs-services/movimentacao/movimentacao.service";
 import { TokenService } from "@nvs-services/token/token.service";
@@ -103,11 +103,7 @@ export class MovimentacaoComponent extends Componente implements OnInit {
         },
         () => {
           setTimeout(() => {
-            this.router.navigate(["dashboard/movimentacao/listagem"], {
-              queryParams: {
-                codigoPatrimonio: this.encriptacao.encrypt(this._movimentacao.codigoPatrimonio.toString()),
-              },
-            });
+            this.router.navigate(["dashboard/patrimonio/listagem"]);
           }, 1700);
         },
       )
