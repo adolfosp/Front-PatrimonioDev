@@ -28,7 +28,7 @@
         />
         <mat-error *ngIf="f.senha.errors?.required">A senha é obrigatória</mat-error>
       </mat-form-field>
-      <mat-slide-toggle color="primary" (change)="alterarLembrarMe()" [(ngModel)]="lembrarMe">
+      <mat-slide-toggle color="primary"  (change)="alterarLembrarMe($event)" >
         Lembrar-me
       </mat-slide-toggle>
 

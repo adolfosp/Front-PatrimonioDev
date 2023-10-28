@@ -43,7 +43,10 @@
 
   ## Todo
 - [ X ] Corrigir parte de permissão do layout anterior
+- [ ] Ver o motivo dos erros não aparecer na tela de cadastrar-se
+- [ ] Validar lembrar me
 - [ ] Adicionar paginacao na movimentação
+- [ ] Adicionar annotation nas funções para perguntar
 - [ ] Validar motivo de não aparecer erro dos campos
 - [ ] URL Patrimonio exposta
 - [ ] Adicionar Directives Composition API NA dashboard login

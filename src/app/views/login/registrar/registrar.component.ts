@@ -4,13 +4,13 @@ import { Router } from "@angular/router";
 
 import { NgxSpinnerService } from "ngx-spinner";
 
+import { Title } from "@angular/platform-browser";
 import { DarkModeImagemHelper } from "@nvs-helpers/DarkModeImagemHelper";
 import { atribuirTemaCorretoAoRecarregarPagina } from "@nvs-helpers/ModoDarkLightHelper";
 import { ValidacaoCampoSenha } from "@nvs-helpers/ValidacaoSenhaHelper";
 import Componente from "@nvs-models/Componente";
 import { Usuario } from "@nvs-models/Usuario";
 import { UsuarioService } from "@nvs-services/usuario/usuario.service";
-import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: "app-registrar",
@@ -34,7 +34,7 @@ export class RegistrarComponent extends Componente implements OnInit {
     private title: Title
   ) {
     super();
-    this.title.setTitle("Cadastra-se");
+    this.title.setTitle("Cadastrar-se");
     const emailURL = this.router.getCurrentNavigation().extras;
     this.emailAuth = typeof emailURL.queryParams == "undefined" ? "" : emailURL.queryParams["email"];
   }

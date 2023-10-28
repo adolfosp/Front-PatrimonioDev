@@ -58,7 +58,8 @@ export class LoginComponent extends Componente implements OnInit {
     atribuirTemaCorretoAoRecarregarPagina();
   }
 
-  public alterarLembrarMe(): void {
+  public alterarLembrarMe(e): void {
+    this.lembrarMe = e.checked;
     const decisaoUsuario = this.lembrarMe == true ? "sim" : "nao";
     this.localStorageService.adicionarChave(LocalStorageChave.LembrarMe, decisaoUsuario);
   }
