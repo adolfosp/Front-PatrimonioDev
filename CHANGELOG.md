@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/adolfosp/Front-PatrimonioDev/compare/v1.0.3...v1.0.4) (2023-10-31)
+
+
+### Bug Fixes
+
+* changes the width of button ([c208733](https://github.com/adolfosp/Front-PatrimonioDev/commit/c20873301072ccdcbcb9813a1856fc4d9a1775c7))
+
 ## [1.0.3](https://github.com/adolfosp/Front-PatrimonioDev/compare/v1.0.2...v1.0.3) (2023-10-31)
 
 
