@@ -41,6 +41,7 @@
   npm run start
   ```
 
+
   ## Todo
 - [ X ] Corrigir parte de permissão do layout anterior
 - [ X ] Ver o motivo dos erros não aparecer na tela de cadastrar-se
