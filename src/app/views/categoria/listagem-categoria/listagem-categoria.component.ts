@@ -1,31 +1,29 @@
 import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  HostListener,
-  OnInit,
-  TemplateRef,
-  ViewChild,
-  ViewEncapsulation,
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    HostListener,
+    OnInit,
+    ViewChild,
+    ViewEncapsulation,
 } from "@angular/core";
 import { PageEvent } from "@angular/material/paginator";
-import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
-import configuracaoTabela from "@nvs-utils/configuracao-tabela";
+import { Title } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import { Categoria } from "@nvs-models/Categoria";
-import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
 import Componente from "@nvs-models/Componente";
+import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
 import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { CategoriaService } from "@nvs-services/categoria/categoria.service";
 import { TokenService } from "@nvs-services/token/token.service";
+import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
+import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
+import configuracaoTabela from "@nvs-utils/configuracao-tabela";
 import { API, APIDefinition, Columns, Config, Pagination } from "ngx-easy-table";
 import { NgxSpinnerService } from "ngx-spinner";
-import * as XLSX from "xlsx";
-import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
-import { Title } from "@angular/platform-browser";
-import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
 import { Confirmable } from "src/app/core/decorators/confirm.decorator";
+import * as XLSX from "xlsx";
 
 @Component({
   selector: "app-listagem-categoria",
@@ -43,7 +41,6 @@ export class ListagemCategoriaComponent extends Componente implements OnInit, Af
   public data: Categoria[] = [];
 
   public categorias: Categoria[] = [];
-  public codigoCategoria: number;
   public ehAdministrador = false;
 
   public dataFiltradaExcel: Categoria[] = [];
@@ -51,13 +48,11 @@ export class ListagemCategoriaComponent extends Componente implements OnInit, Af
   public toggledRows = new Set<number>();
   public totalItensPaginacao: number;
   public paginacao: Pagination;
-  public modalRef?: BsModalRef;
   public readonly rotaCadastro = "/dashboard/categoria";
 
   constructor(
     private categoriaService: CategoriaService,
     private spinner: NgxSpinnerService,
-    private modalService: BsModalService,
     private router: Router,
     private token: TokenService,
     private detectorAlteracao: ChangeDetectorRef,
@@ -121,16 +116,8 @@ export class ListagemCategoriaComponent extends Componente implements OnInit, Af
       .add(() => this.spinner.hide("buscando"));
   }
 
-  public abrirModal(event: any, template: TemplateRef<any>, codigoCategoria: number): void {
-    this.codigoCategoria = codigoCategoria;
-
-    event.stopPropagation();
-    this.modalRef = this.modalService.show(template, { class: "modal-sm" });
-  }
-
   @Confirmable()
   public confirmar(codigoCategoria: number): void {
-    this.modalRef?.hide();
     this.spinner.show("excluindo");
 
     this.categoriaService
@@ -145,10 +132,6 @@ export class ListagemCategoriaComponent extends Componente implements OnInit, Af
         },
       })
       .add(() => this.spinner.hide("excluindo"));
-  }
-
-  public recusar(): void {
-    this.modalRef?.hide();
   }
 
   public onChange(event: Event): void {

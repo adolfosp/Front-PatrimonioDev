@@ -66,7 +66,10 @@
 - [ X ] Ajustar permissões
 
 
-
+- remover dois métodos
+- remover prop
+- remover template grid
+- remover referencia modalref
 
 ## Information about patterns of the code
 - Language: mix (should english)
