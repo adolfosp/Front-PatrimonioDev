@@ -1,16 +1,14 @@
 import { Component, OnInit } from "@angular/core";
 import { AbstractControlOptions, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { Router } from "@angular/router";
-
-import { NgxSpinnerService } from "ngx-spinner";
-
 import { Title } from "@angular/platform-browser";
+import { Router } from "@angular/router";
 import { DarkModeImagemHelper } from "@nvs-helpers/DarkModeImagemHelper";
 import { atribuirTemaCorretoAoRecarregarPagina } from "@nvs-helpers/ModoDarkLightHelper";
 import { ValidacaoCampoSenha } from "@nvs-helpers/ValidacaoSenhaHelper";
 import Componente from "@nvs-models/Componente";
 import { Usuario } from "@nvs-models/Usuario";
 import { UsuarioService } from "@nvs-services/usuario/usuario.service";
+import { NgxSpinnerService } from "ngx-spinner";
 
 @Component({
   selector: "app-registrar",
