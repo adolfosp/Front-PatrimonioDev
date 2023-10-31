@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/adolfosp/Front-PatrimonioDev/compare/v1.0.1...v1.0.2) (2023-10-31)
+
+
+### Bug Fixes
+
+* adds confirmable on the method on grids ([5bc8e7d](https://github.com/adolfosp/Front-PatrimonioDev/commit/5bc8e7db4609186ed64d19219acfdc680f27c984))
+
 ## [1.0.1](https://github.com/adolfosp/Front-PatrimonioDev/compare/v1.0.0...v1.0.1) (2023-10-31)
 
 
