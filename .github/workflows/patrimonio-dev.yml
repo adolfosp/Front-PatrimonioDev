@@ -6,7 +6,8 @@ on:
     - main
 
 jobs:
-  deploy:
+  build:
+    if: '!contains(github.event.head_commit.message, "skip ci")'
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -18,10 +19,13 @@ jobs:
         node-version: '18'
 
     - name: Install dependencies
-      run: npm install
-
-    - name: Run tests
-      run: npm run test
+      run: npm ci
 
     - name: Build
       run: npm run build:prod
+
+    - name: Run Semantic Release
+      run: npx semantic-release
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

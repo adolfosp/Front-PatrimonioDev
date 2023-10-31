@@ -1,6 +1,6 @@
 {
   "name": "patrimonio-ps",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -10,7 +10,8 @@
     "analyze": "webpack-bundle-analyzer dist/patrimonio-ps/stats.json",
     "test": "ng test",
     "lint": "npx ng lint patrimonio-ps",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "semantic-release": "semantic-release"
   },
   "private": true,
   "dependencies": {
@@ -61,6 +62,8 @@
     "@angular/cli": "~14.2.0",
     "@angular/compiler-cli": "^14.0.0-next.0",
     "@bitovi/eslint-config": "^1.4.1",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
     "@types/crypto-js": "^4.1.1",
     "@types/jasmine": "~4.0.0",
     "@typescript-eslint/eslint-plugin": "5.37.0",
@@ -75,7 +78,16 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.0.0",
     "prettier": "2.8.0",
+    "semantic-release": "^22.0.5",
     "typescript": "~4.7.2",
     "webpack-bundle-analyzer": "^4.9.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adolfosp/Front-PatrimonioDev.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/",
+    "pkgRoot": "dist"
   }
 }
