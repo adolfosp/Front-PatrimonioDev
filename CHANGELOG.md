@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/adolfosp/Front-PatrimonioDev/compare/v1.0.2...v1.0.3) (2023-10-31)
+
+
+### Bug Fixes
+
+* adds confirmable decorator and remove modal ([e0737e3](https://github.com/adolfosp/Front-PatrimonioDev/commit/e0737e306a53683de80d45d6bea2fbd110522c0f))
+
 ## [1.0.2](https://github.com/adolfosp/Front-PatrimonioDev/compare/v1.0.1...v1.0.2) (2023-10-31)
 
 
