@@ -5,9 +5,8 @@ import {
     Component,
     HostListener,
     OnInit,
-    TemplateRef,
     ViewChild,
-    ViewEncapsulation,
+    ViewEncapsulation
 } from "@angular/core";
 import { PageEvent } from "@angular/material/paginator";
 import { Title } from "@angular/platform-browser";
@@ -21,7 +20,6 @@ import { TokenService } from "@nvs-services/token/token.service";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
 import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
 import configuracaoTabela from "@nvs-utils/configuracao-tabela";
-import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { API, APIDefinition, Columns, Config, Pagination } from "ngx-easy-table";
 import { NgxSpinnerService } from "ngx-spinner";
 import * as XLSX from "xlsx";
@@ -47,15 +45,11 @@ export class ListagemSetorComponent extends Componente implements OnInit, AfterV
 
   public dataFiltradaExcel: Setor[] = [];
   public setores: Setor[] = [];
-  public setorId = 0;
   public ehAdministrador = false;
   public paginacao: Pagination;
 
-  modalRef?: BsModalRef;
-
   constructor(
     private setorService: SetorService,
-    private modalService: BsModalService,
     private spinner: NgxSpinnerService,
     private router: Router,
     private token: TokenService,
@@ -99,12 +93,6 @@ export class ListagemSetorComponent extends Componente implements OnInit, AfterV
     return this.innerWidth <= 768;
   }
 
-  public abrirModal(event: any, template: TemplateRef<any>, setorId: number): void {
-    event.stopPropagation();
-    this.setorId = setorId;
-    this.modalRef = this.modalService.show(template, { class: "modal-sm" });
-  }
-
   private obterSetores(): void {
     this.spinner.show("buscando");
 
@@ -129,12 +117,11 @@ export class ListagemSetorComponent extends Componente implements OnInit, AfterV
       .add(() => this.spinner.hide("buscando"));
   }
 
-  public confirmar(): void {
-    this.modalRef?.hide();
+  public confirmar(setorId: number): void {
     this.spinner.show("excluindo");
 
     this.setorService
-      .remover(this.setorId)
+      .remover(setorId)
       .subscribe({
         next: () => {
           this.mostrarAvisoSucesso("Setor removido com sucesso!");
@@ -145,10 +132,6 @@ export class ListagemSetorComponent extends Componente implements OnInit, AfterV
         },
       })
       .add(() => this.spinner.hide("excluindo"));
-  }
-
-  public recusar(): void {
-    this.modalRef?.hide();
   }
 
   public detalheSetor(codigoSetor: number): void {

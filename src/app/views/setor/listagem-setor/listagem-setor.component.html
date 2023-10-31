@@ -33,7 +33,7 @@
         <app-botao-editar-grid (detalhe)="detalheSetor(row.codigoSetor)"></app-botao-editar-grid>
       </td>
       <td *ngIf="!isMobile">
-        <app-botao-remover-grid (abrirModal)="abrirModal($event, template, row.codigoSetor)"></app-botao-remover-grid>
+        <app-botao-remover-grid (abrirModal)="confirmar(row.codigoSetor)"></app-botao-remover-grid>
       </td>
     </ng-template>
   </ngx-table>
@@ -47,17 +47,7 @@
     ></mat-paginator>
   </div>
 </div>
-<ng-template #template>
-  <div class="modal-body text-center">
-    <p class="tamanho-fonte">
-      Deseja confirmar a
-      <strong>deleção</strong>
-      do setor de código {{ setorId }}?
-    </p>
-    <button type="button" class="btn btn-default" (click)="confirmar()">Sim</button>
-    <button type="button" class="btn btn-primary" (click)="recusar()">Não</button>
-  </div>
-</ng-template>
+
 <ng-template #mensagemSemCadastro>
   <td [attr.colspan]="colunas.length + 1" class="no-results text-center">
     <h4>Não há nenhum setor cadastrado</h4>
@@ -66,7 +56,7 @@
 
 <ng-template #detailsTemplate let-row>
   <app-botao-editar-grid (detalhe)="detalheSetor(row.codigoSetor)"></app-botao-editar-grid>
-  <app-botao-remover-grid (abrirModal)="abrirModal($event, template, row.codigoSetor)"></app-botao-remover-grid>
+  <app-botao-remover-grid (abrirModal)="confirmar(row.codigoSetor)"></app-botao-remover-grid>
 </ng-template>
 <ngx-spinner name="buscando" [bdColor]="confSpinner.bdColor" [size]="confSpinner.tamanho" [color]="confSpinner.color"
              [fullScreen]="confSpinner.fullScren">

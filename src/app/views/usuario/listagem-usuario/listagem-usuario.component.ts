@@ -5,8 +5,7 @@ import {
     Component,
     HostListener,
     OnInit,
-    TemplateRef,
-    ViewChild,
+    ViewChild
 } from "@angular/core";
 import { PageEvent } from "@angular/material/paginator";
 import { Title } from "@angular/platform-browser";
@@ -20,9 +19,9 @@ import { UsuarioService } from "@nvs-services/usuario/usuario.service";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
 import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
 import configuracaoTabela from "@nvs-utils/configuracao-tabela";
-import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { API, APIDefinition, Columns, Config, Pagination } from "ngx-easy-table";
 import { NgxSpinnerService } from "ngx-spinner";
+import { Confirmable } from "src/app/core/decorators/confirm.decorator";
 import * as XLSX from "xlsx";
 
 @Component({
@@ -49,13 +48,9 @@ export class ListagemUsuarioComponent extends Componente implements OnInit, Afte
 
   public ehAdministrador: boolean;
 
-  modalRef?: BsModalRef;
-  codigoUsuario: number;
-
   constructor(
     private usuarioService: UsuarioService,
     private spinner: NgxSpinnerService,
-    private modalService: BsModalService,
     private router: Router,
     private detectorAlteracao: ChangeDetectorRef,
     private token: TokenService,
@@ -176,12 +171,12 @@ export class ListagemUsuarioComponent extends Componente implements OnInit, Afte
     );
   }
 
-  public confirmar(): void {
-    this.modalRef.hide();
+  @Confirmable()
+  public confirmar(codigoUsuario: number): void {
     this.spinner.show("desativando");
 
     this.usuarioService
-      .remover(this.codigoUsuario)
+      .remover(codigoUsuario)
       .subscribe({
         next: () => {
           this.mostrarAvisoSucesso("Usuário desativado com sucesso!");
@@ -192,16 +187,6 @@ export class ListagemUsuarioComponent extends Componente implements OnInit, Afte
         },
       })
       .add(() => this.spinner.hide("desativando"));
-  }
-
-  public abrirModal(event: any, template: TemplateRef<any>, codigoUsuario: number): void {
-    event.stopPropagation();
-    this.codigoUsuario = codigoUsuario;
-    this.modalRef = this.modalService.show(template, { class: "modal-sm" });
-  }
-
-  public recusar(): void {
-    this.modalRef.hide();
   }
 
   public detalheUsuario(codigoUsuario: number): void {

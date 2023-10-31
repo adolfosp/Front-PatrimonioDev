@@ -29,7 +29,7 @@
         <app-botao-editar-grid (detalhe)="detalheUsuario(row.codigoUsuario)"></app-botao-editar-grid>
       </td>
       <td *ngIf="!isMobile">
-        <app-botao-remover-grid (abrirModal)="abrirModal($event, template, row.codigoUsuario)"></app-botao-remover-grid>
+        <app-botao-remover-grid (abrirModal)="confirmar(row.codigoUsuario)"></app-botao-remover-grid>
       </td>
       <td *ngIf="isMobile">
         <button
@@ -55,17 +55,6 @@
   </div>
 </div>
 
-<ng-template #template>
-  <div class="modal-body text-center">
-    <p class="tamanho-fonte">
-      Deseja confirmar a
-      <strong>desativação</strong>
-      do usuário de código {{ codigoUsuario }}?
-    </p>
-    <button type="button" class="btn btn-default" (click)="confirmar()">Sim</button>
-    <button type="button" class="btn btn-primary" (click)="recusar()">Não</button>
-  </div>
-</ng-template>
 <ng-template #mensagemSemCadastro>
   <td [attr.colspan]="colunas.length + 1" class="no-results text-center">
     <h4>Não há nenhum usuário cadastrado</h4>
@@ -78,7 +67,7 @@
     <p>E-mail: {{ row.email }}</p>
   </div>
   <app-botao-editar-grid (detalhe)="detalheUsuario(row.codigoUsuario)"></app-botao-editar-grid>
-  <app-botao-remover-grid (abrirModal)="abrirModal($event, template, row.codigoUsuario)"></app-botao-remover-grid>
+  <app-botao-remover-grid (abrirModal)="confirmar(row.codigoUsuario)"></app-botao-remover-grid>
 </ng-template>
 <ngx-spinner
   name="buscando"

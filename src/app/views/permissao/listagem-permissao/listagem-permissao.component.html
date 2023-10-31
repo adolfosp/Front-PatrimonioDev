@@ -36,7 +36,7 @@
         <app-botao-editar-grid (detalhe)="detalhePermissao(row.codigoPerfil)"></app-botao-editar-grid>
       </td>
       <td *ngIf="!isMobile">
-        <app-botao-remover-grid (abrirModal)="abrirModal($event, template, row.codigoPerfil)"></app-botao-remover-grid>
+        <app-botao-remover-grid (abrirModal)="confirmar(row.codigoPerfil)"></app-botao-remover-grid>
       </td>
     </ng-template>
   </ngx-table>
@@ -54,17 +54,6 @@
   <p style="color: white">Buscando...</p>
 </ngx-spinner>
 
-<ng-template #template>
-  <div class="modal-body text-center">
-    <p class="tamanho-fonte">
-      Deseja confirmar a
-      <strong>desativação</strong>
-      da permissão de código {{ permissaoId }}?
-    </p>
-    <button type="button" class="btn btn-default" (click)="confirmar()">Sim</button>
-    <button type="button" class="btn btn-primary" (click)="recusar()">Não</button>
-  </div>
-</ng-template>
 <ng-template #mensagemSemCadastro>
   <td [attr.colspan]="colunas.length + 1" class="no-results text-center">
     <h4>Não há nenhuma permissão cadastrada</h4>
@@ -75,7 +64,7 @@
   <p class="font-small">Código: {{ row.codigoPerfil }}</p>
   <p class="font-small">Situação: {{ row.ativo | booleano : true }}</p>
   <app-botao-editar-grid (detalhe)="detalhePermissao(row.codigoPerfil)"></app-botao-editar-grid>
-  <app-botao-remover-grid (abrirModal)="abrirModal($event, template, row.codigoPerfil)"></app-botao-remover-grid>
+  <app-botao-remover-grid (abrirModal)="confirmar(row.codigoPerfil)"></app-botao-remover-grid>
 </ng-template>
 <ngx-spinner
   name="buscando"

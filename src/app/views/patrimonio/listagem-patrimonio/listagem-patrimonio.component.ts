@@ -1,13 +1,12 @@
 import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  HostListener,
-  OnInit,
-  TemplateRef,
-  ViewChild,
-  ViewEncapsulation,
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    HostListener,
+    OnInit,
+    ViewChild,
+    ViewEncapsulation,
 } from "@angular/core";
 import { PageEvent } from "@angular/material/paginator";
 import { Title } from "@angular/platform-browser";
@@ -23,9 +22,9 @@ import { TokenService } from "@nvs-services/token/token.service";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
 import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
 import configuracaoTabela from "@nvs-utils/configuracao-tabela";
-import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { API, APIDefinition, Columns, Config, Pagination } from "ngx-easy-table";
 import { NgxSpinnerService } from "ngx-spinner";
+import { Confirmable } from "src/app/core/decorators/confirm.decorator";
 import * as XLSX from "xlsx";
 
 @Component({
@@ -48,16 +47,12 @@ export class ListagemPatrimonioComponent extends Componente implements OnInit, A
 
   public dataFiltradaExcel: Patrimonio[] = [];
   public patrimonios: Patrimonio[] = [];
-  public patrimonioId = 0;
   public ehAdministrador = false;
   public paginacao: Pagination;
   public totalItensPaginacao: number;
 
-  modalRef?: BsModalRef;
-
   constructor(
     private patrimonioService: PatrimonioService,
-    private modalService: BsModalService,
     private spinner: NgxSpinnerService,
     private router: Router,
     private token: TokenService,
@@ -102,12 +97,6 @@ export class ListagemPatrimonioComponent extends Componente implements OnInit, A
     return this.innerWidth <= 1200;
   }
 
-  public abrirModal(event: any, template: TemplateRef<any>, patrimonioId: number): void {
-    event.stopPropagation();
-    this.patrimonioId = patrimonioId;
-    this.modalRef = this.modalService.show(template, { class: "modal-sm" });
-  }
-
   reciverFeedbackReload() {
     this.obterPatrimonios();
   }
@@ -137,12 +126,12 @@ export class ListagemPatrimonioComponent extends Componente implements OnInit, A
       .add(() => this.spinner.hide("buscando"));
   }
 
-  public confirmar(): void {
-    this.modalRef?.hide();
+  @Confirmable()
+  public confirmar(patrimonioId: number): void {
     this.spinner.show("excluindo");
 
     this.patrimonioService
-      .remover(this.patrimonioId)
+      .remover(patrimonioId)
       .subscribe({
         next: () => {
           this.mostrarAvisoSucesso("Patrimônio excluído com sucesso!");
@@ -153,10 +142,6 @@ export class ListagemPatrimonioComponent extends Componente implements OnInit, A
         },
       })
       .add(() => this.spinner.hide("excluindo"));
-  }
-
-  public recusar(): void {
-    this.modalRef?.hide();
   }
 
   public fecharModalPerda() {
@@ -219,7 +204,6 @@ export class ListagemPatrimonioComponent extends Componente implements OnInit, A
       this.mostrarAvisoXLS(`Não foi possível exportar a planilha. Mensagem: ${err}`);
     }
   }
-
 
   private obterColunasDaTabela(): any {
     return [

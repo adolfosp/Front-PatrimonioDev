@@ -50,9 +50,7 @@
         ></app-botao-editar-grid>
       </td>
       <td *ngIf="!isMobile">
-        <app-botao-remover-grid
-          (abrirModal)="abrirModal($event, template, row.codigoPatrimonio)"
-        ></app-botao-remover-grid>
+        <app-botao-remover-grid (abrirModal)="confirmar(row.codigoPatrimonio)"></app-botao-remover-grid>
       </td>
       <td *ngIf="!isMobile">
         <div class="dropdown">
@@ -98,17 +96,6 @@
     ></mat-paginator>
   </div>
 </div>
-<ng-template #template>
-  <div class="modal-body text-center">
-    <p class="tamanho-fonte">
-      Deseja confirmar a
-      <strong>deleção</strong>
-      do patrimônio de código {{ patrimonioId }}?
-    </p>
-    <button type="button" class="btn btn-default" (click)="confirmar()">Sim</button>
-    <button type="button" class="btn btn-primary" (click)="recusar()">Não</button>
-  </div>
-</ng-template>
 
 <ng-template #noResults>
   <td [attr.colspan]="colunas.length + 1" class="no-results text-center">
@@ -121,7 +108,7 @@
   <p>Situação do equipamento: {{ obterDescricaoEnum(row.situacaoEquipamento) }}</p>
   <p>Modelo: {{ row.modelo }}</p>
   <app-botao-editar-grid (detalhe)="detalhePatrimonio(row.codigoPatrimonio, row.serviceTag)"></app-botao-editar-grid>
-  <app-botao-remover-grid (abrirModal)="abrirModal($event, template, row.codigoPatrimonio)"></app-botao-remover-grid>
+  <app-botao-remover-grid (abrirModal)="confirmar(row.codigoPatrimonio)"></app-botao-remover-grid>
   <div class="dropdown">
     <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
       Ações

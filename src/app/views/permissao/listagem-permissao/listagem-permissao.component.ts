@@ -5,7 +5,6 @@ import {
     Component,
     HostListener,
     OnInit,
-    TemplateRef,
     ViewChild,
 } from "@angular/core";
 import { PageEvent } from "@angular/material/paginator";
@@ -20,9 +19,9 @@ import { TokenService } from "@nvs-services/token/token.service";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
 import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
 import configuracaoTabela from "@nvs-utils/configuracao-tabela";
-import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { API, APIDefinition, Columns, Config, Pagination } from "ngx-easy-table";
 import { NgxSpinnerService } from "ngx-spinner";
+import { Confirmable } from "src/app/core/decorators/confirm.decorator";
 import * as XLSX from "xlsx";
 
 @Component({
@@ -43,26 +42,21 @@ export class ListagemPermissaoComponent extends Componente implements OnInit, Af
 
   public data: UsuarioPermissao[] = [];
   public dataFiltradaExcel: UsuarioPermissao[] = [];
-  public permissaoId = 0;
   public ehAdministrador = false;
   public paginacao: Pagination;
   public totalItensPaginacao: number;
 
-  modalRef?: BsModalRef;
-
   constructor(
     private permissaoService: PermissaoService,
-    private modalService: BsModalService,
     private spinner: NgxSpinnerService,
     private router: Router,
     private token: TokenService,
     private detectorAlteracao: ChangeDetectorRef,
-    private title: Title
+    private title: Title,
   ) {
     super();
     this.title.setTitle("Listagem de permissões");
     this.paginacao = configuracaoPaginacao;
-
   }
 
   ngOnInit(): void {
@@ -96,15 +90,9 @@ export class ListagemPermissaoComponent extends Componente implements OnInit, Af
     return this.innerWidth <= 768;
   }
 
-  public abrirModal(event: any, template: TemplateRef<any>, permissaoId: number): void {
-    event.stopPropagation();
-    this.permissaoId = permissaoId;
-    this.modalRef = this.modalService.show(template, { class: "modal-sm" });
-  }
-
   private obterPermissoes(): void {
     const paginacao = new PaginacaoDto(this.paginacao.offset, this.paginacao.limit);
-    console.log(paginacao)
+    console.log(paginacao);
     this.spinner.show("buscando");
 
     this.permissaoService
@@ -112,10 +100,9 @@ export class ListagemPermissaoComponent extends Componente implements OnInit, Af
       .subscribe({
         next: (dados: DadosRequisicao) => {
           const permissoes = dados.data.registros as UsuarioPermissao[];
-          this.data = permissoes
+          this.data = permissoes;
           this.dataFiltradaExcel = permissoes;
           this.totalItensPaginacao = dados.data.quantidadePagina * this.paginacao.limit;
-
         },
         error: (error: unknown) => {
           this.mostrarAvisoErro(error, "Houve um erro ao carregar as permissões.");
@@ -126,13 +113,12 @@ export class ListagemPermissaoComponent extends Componente implements OnInit, Af
       })
       .add(() => this.spinner.hide("buscando"));
   }
-
-  public confirmar(): void {
-    this.modalRef?.hide();
+  @Confirmable()
+  public confirmar(permissaoId: number): void {
     this.spinner.show("desativando");
 
     this.permissaoService
-      .remover(this.permissaoId)
+      .remover(permissaoId)
       .subscribe({
         next: () => {
           this.mostrarAvisoSucesso("Permissão desativada com sucesso!");
@@ -143,10 +129,6 @@ export class ListagemPermissaoComponent extends Componente implements OnInit, Af
         },
       })
       .add(() => this.spinner.hide("desativando"));
-  }
-
-  public recusar(): void {
-    this.modalRef?.hide();
   }
 
   public detalhePermissao(codigoPermissao: number): void {

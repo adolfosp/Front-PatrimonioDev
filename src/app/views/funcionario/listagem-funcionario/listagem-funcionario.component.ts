@@ -5,7 +5,6 @@ import {
     Component,
     HostListener,
     OnInit,
-    TemplateRef,
     ViewChild,
     ViewEncapsulation,
 } from "@angular/core";
@@ -21,7 +20,6 @@ import { TokenService } from "@nvs-services/token/token.service";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
 import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
 import configuracaoTabela from "@nvs-utils/configuracao-tabela";
-import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { API, APIDefinition, Columns, Config, Pagination } from "ngx-easy-table";
 import { NgxSpinnerService } from "ngx-spinner";
 import * as XLSX from "xlsx";
@@ -46,21 +44,17 @@ export class ListagemFuncionarioComponent extends Componente implements OnInit, 
 
   public dataFiltradaExcel: Funcionario[] = [];
   public funcionarios: Funcionario[] = [];
-  public funcionarioId = 0;
   public ehAdministrador = false;
   public paginacao: Pagination;
   public totalItensPaginacao: number;
 
-  modalRef?: BsModalRef;
-
   constructor(
     private funcionarioService: FuncionarioService,
-    private modalService: BsModalService,
     private spinner: NgxSpinnerService,
     private router: Router,
     private token: TokenService,
     private detectorAlteracao: ChangeDetectorRef,
-    private title: Title
+    private title: Title,
   ) {
     super();
     this.title.setTitle("Listagem de funcionários");
@@ -76,7 +70,6 @@ export class ListagemFuncionarioComponent extends Componente implements OnInit, 
 
     this.colunas = this.obterColunasDaTabela();
     this.checkView();
-
   }
 
   ngAfterViewInit(): void {
@@ -98,12 +91,6 @@ export class ListagemFuncionarioComponent extends Componente implements OnInit, 
 
   get isMobile(): boolean {
     return this.innerWidth <= 768;
-  }
-
-  public abrirModal(event: any, template: TemplateRef<any>, funcionarioId: number): void {
-    event.stopPropagation();
-    this.funcionarioId = funcionarioId;
-    this.modalRef = this.modalService.show(template, { class: "modal-sm" });
   }
 
   private obterFuncionarios(): void {
@@ -130,12 +117,11 @@ export class ListagemFuncionarioComponent extends Componente implements OnInit, 
       .add(() => this.spinner.hide("buscando"));
   }
 
-  public confirmar(): void {
-    this.modalRef?.hide();
+  public confirmar(funcionarioId: number): void {
     this.spinner.show("desativando");
 
     this.funcionarioService
-      .remover(this.funcionarioId)
+      .remover(funcionarioId)
       .subscribe({
         next: () => {
           this.mostrarAvisoSucesso("Funcionário desativado com sucesso!");
@@ -148,9 +134,6 @@ export class ListagemFuncionarioComponent extends Componente implements OnInit, 
       .add(() => this.spinner.hide("desativando"));
   }
 
-  public recusar(): void {
-    this.modalRef?.hide();
-  }
 
   public detalheFuncionario(codigoFuncionario: number): void {
     this.router.navigate([`dashboard/funcionario/${codigoFuncionario}`]);
