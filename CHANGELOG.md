@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/adolfosp/Front-PatrimonioDev/compare/v1.0.0...v1.0.1) (2023-10-31)
+
+
+### Bug Fixes
+
+* changes readme to test pipeline ([287779e](https://github.com/adolfosp/Front-PatrimonioDev/commit/287779e17cb90d520933a1c4f46efd593c5f999c))
+
 # 1.0.0 (2023-10-31)
 
 
