@@ -13,12 +13,15 @@ import { LoginComponent } from "./views/login/login.component";
 
 import { CommonModule, HashLocationStrategy, LocationStrategy } from "@angular/common";
 import { MatButtonModule } from "@angular/material/button";
+import { MatDialogModule } from "@angular/material/dialog";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { SidenavService } from "@nvs-services/componente/sidenav.service";
+import { ServiceInjectionFactory } from "@nvs-services/factories/service-injection-factory";
 import { ZXingScannerModule } from "@zxing/ngx-scanner";
 import { QRCodeModule } from "angularx-qrcode";
 import { NgxEchartsModule } from "ngx-echarts";
@@ -31,11 +34,11 @@ import { P404Component } from "./views/error/404.component";
 import { GraficoComponent } from "./views/grafico/grafico.component";
 import { RegistrarComponent } from "./views/login/registrar/registrar.component";
 import { QrCodeComponent } from "./views/qr-code/qr-code.component";
-import { HttpCodeMensagemComponent } from "./views/shared/http-code-mensagem/http-code-mensagem.component";
-import { CustomPaginatorIntlModule } from "./views/shared/grid/custom-paginator-grid/custom-paginator-intl.component";
-import { ServiceInjectionFactory } from "@nvs-services/factories/service-injection-factory";
-import { MatDialogModule } from "@angular/material/dialog";
 import { ConfirmDialogComponent } from "./views/shared/confirm-dialog/confirm-dialog.component";
+import { CustomPaginatorIntlModule } from "./views/shared/grid/custom-paginator-grid/custom-paginator-intl.component";
+import { HttpCodeMensagemComponent } from "./views/shared/http-code-mensagem/http-code-mensagem.component";
+import { SidenavLinkComponent } from "./views/sidenav-link/sidenav-link.component";
+import { SideNavComponent } from "./views/sidenav/sidenav.component";
 
 @NgModule({
   declarations: [
@@ -46,9 +49,11 @@ import { ConfirmDialogComponent } from "./views/shared/confirm-dialog/confirm-di
     P404Component,
     QrCodeComponent,
     RegistrarComponent,
-    DashboardComponent,
+    SideNavComponent,
+    SidenavLinkComponent,
     GraficoComponent,
     ConfirmDialogComponent,
+    DashboardComponent
   ],
   imports: [
     NgxMaskModule.forRoot({
@@ -86,18 +91,18 @@ import { ConfirmDialogComponent } from "./views/shared/confirm-dialog/confirm-di
     MatSlideToggleModule,
     MatExpansionModule,
     CustomPaginatorIntlModule,
-    MatDialogModule
-
+    MatDialogModule,
   ],
   providers: [
     {
       provide: LocationStrategy,
       useClass: HashLocationStrategy,
     },
-    {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'outline'}},
+    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: "outline" } },
     ApiService,
     JwtHelperService,
     ServiceInjectionFactory,
+    SidenavService,
     CustomPreloader,
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
   ],
