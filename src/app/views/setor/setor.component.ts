@@ -49,8 +49,8 @@ export class SetorComponent extends Componente implements OnInit {
 
   private validacao(): void {
     this.form = this.fb.group({
-      codigoSetor: new FormControl(this.limpandoCampo ? this.form.get("codigoSetor").value : 0, []),
-      nome: new FormControl("", [Validators.required, Validators.minLength(4), Validators.maxLength(50)]),
+      codigoSetor: new FormControl<number>(this.limpandoCampo ? this.form.get("codigoSetor").value : 0, []),
+      nome: new FormControl<string>("", [Validators.required, Validators.minLength(4), Validators.maxLength(50)]),
     });
   }
 

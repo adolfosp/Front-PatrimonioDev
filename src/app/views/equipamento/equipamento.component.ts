@@ -1,19 +1,19 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { Title } from "@angular/platform-browser";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MensagemRequisicao } from "@nvs-helpers/MensagemRequisicaoHelper";
 import { Categoria } from "@nvs-models/Categoria";
 import Componente from "@nvs-models/Componente";
-import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { Equipamento } from "@nvs-models/Equipamento";
 import { Fabricante } from "@nvs-models/Fabricante";
+import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
+import { SelectService } from "@nvs-services/componente/select.service";
 import { EquipamentoService } from "@nvs-services/equipamento/equipamento.service";
 import { CLASSE_BOTAO_LIMPAR } from "@nvs-utils/classes-sass.constant";
-import { NgxSpinnerService } from "ngx-spinner";
-import { Pagination } from "ngx-easy-table";
-import { SelectService } from "@nvs-services/componente/select.service";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
-import { Title } from "@angular/platform-browser";
+import { Pagination } from "ngx-easy-table";
+import { NgxSpinnerService } from "ngx-spinner";
 
 @Component({
   selector: "app-equipamento",
@@ -92,15 +92,15 @@ export class EquipamentoComponent extends Componente implements OnInit {
 
   private validacao(): void {
     this.form = this.fb.group({
-      codigoTipoEquipamento: new FormControl(
+      codigoTipoEquipamento: new FormControl<number>(
         this._limpandoCampo ? this.form.get("codigoTipoEquipamento").value : 0,
         [],
       ),
-      tipoEquipamento: new FormControl("", [Validators.required, Validators.minLength(5), Validators.maxLength(50)]),
-      codigoFabricante: new FormControl("", [Validators.required]),
-      codigoCategoria: new FormControl("", [Validators.required]),
-      nomeFabricante: new FormControl(""),
-      nomeCategoria: new FormControl(""),
+      tipoEquipamento: new FormControl<string>("", [Validators.required, Validators.minLength(5), Validators.maxLength(50)]),
+      codigoFabricante: new FormControl<number>(0, [Validators.required]),
+      codigoCategoria: new FormControl<number>(0, [Validators.required]),
+      nomeFabricante: new FormControl<string>(""),
+      nomeCategoria: new FormControl<string>(""),
     });
   }
 

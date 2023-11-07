@@ -172,20 +172,20 @@ export class PatrimonioComponent extends Componente implements OnInit {
 
   private validarCamposPatrimonio(): void {
     this.form = this.fb.group({
-      codigoPatrimonio: new FormControl(this.limpandoCampo ? this.form.get("codigoPatrimonio").value : 0, []),
-      codigoTipoEquipamento: new FormControl("", [Validators.required]),
-      tipoEquipamento: new FormControl(""),
-      codigoFuncionario: new FormControl("", [Validators.required]),
-      nomeFuncionario: new FormControl(""),
-      codigoUsuario: new FormControl(this.token.obterCodigoUsuarioToken()),
-      nomeUsuario: new FormControl(this.token.obterNomeUsuarioToken()),
-      armazenamento: new FormControl(""),
-      mac: new FormControl(""),
-      memoriaRAM: new FormControl(""),
-      modelo: new FormControl(""),
-      placaDeVideo: new FormControl(""),
-      processador: new FormControl(""),
-      serviceTag: new FormControl("", [Validators.required, Validators.minLength(4), Validators.maxLength(20)]),
+      codigoPatrimonio: new FormControl<number>(this.limpandoCampo ? this.form.get("codigoPatrimonio").value : 0, []),
+      codigoTipoEquipamento: new FormControl<number>(0, [Validators.required]),
+      tipoEquipamento: new FormControl<string>(""),
+      codigoFuncionario: new FormControl<number>(0, [Validators.required]),
+      nomeFuncionario: new FormControl<string>(""),
+      codigoUsuario: new FormControl<number>(this.token.obterCodigoUsuarioToken()),
+      nomeUsuario: new FormControl<string>(this.token.obterNomeUsuarioToken()),
+      armazenamento: new FormControl<string>(""),
+      mac: new FormControl<string>(""),
+      memoriaRAM: new FormControl<string>(""),
+      modelo: new FormControl<string>(""),
+      placaDeVideo: new FormControl<string>(""),
+      processador: new FormControl<string>(""),
+      serviceTag: new FormControl<string>("", [Validators.required, Validators.minLength(4), Validators.maxLength(20)]),
       situacaoEquipamento: new FormControl(),
     });
   }
@@ -196,11 +196,11 @@ export class PatrimonioComponent extends Componente implements OnInit {
         this.limpandoCampo ? this.formAdicional.get("codigoInformacaoAdicional").value : 0,
         [],
       ),
-      versaoWindows: new FormControl(""),
-      antivirus: new FormControl(""),
-      dataCompra: new FormControl(new Date(Date.now()).toISOString()),
-      dataExpiracaoGarantia: new FormControl(new Date(Date.now()).toISOString()),
-      valorPago: new FormControl("", [Validators.required]),
+      versaoWindows: new FormControl<string>(""),
+      antivirus: new FormControl<string>(""),
+      dataCompra: new FormControl<string>(new Date(Date.now()).toISOString()),
+      dataExpiracaoGarantia: new FormControl<string>(new Date(Date.now()).toISOString()),
+      valorPago: new FormControl<string>("", [Validators.required]),
     });
   }
 }

@@ -67,14 +67,14 @@ export class PerfilComponent extends Componente implements OnInit {
     this.form = this.fb.group(
       {
         codigoUsuario: new FormControl(null),
-        nomeUsuario: new FormControl("", [Validators.required, Validators.minLength(4), Validators.maxLength(50)]),
+        nomeUsuario: new FormControl<string>("", [Validators.required, Validators.minLength(4), Validators.maxLength(50)]),
         nomeSetor: new FormControl(null),
         razaoSocial: new FormControl(null),
         descricaoPermissao: new FormControl(null),
         email: new FormControl(null),
-        senha: new FormControl("", [Validators.required, Validators.minLength(5), Validators.maxLength(25)]),
-        imagemUrl: new FormControl(""),
-        confirmeSenha: new FormControl("", [Validators.required, Validators.minLength(5), Validators.maxLength(25)]),
+        senha: new FormControl<string>("", [Validators.required, Validators.minLength(5), Validators.maxLength(25)]),
+        imagemUrl: new FormControl<string>(""),
+        confirmeSenha: new FormControl<string>("", [Validators.required, Validators.minLength(5), Validators.maxLength(25)]),
       },
       formOptions,
     );

@@ -46,8 +46,8 @@ export class PerdaComponent extends Componente implements OnInit {
   private validacao(): void {
     this.form = this.fb.group({
       codigoPerdaEquipamento: new FormControl(),
-      motivoDaPerda: new FormControl("", [Validators.required, Validators.minLength(30), Validators.maxLength(300)]),
-      codigoPatrimonio: new FormControl(""),
+      motivoDaPerda: new FormControl<string>("", [Validators.required, Validators.minLength(30), Validators.maxLength(300)]),
+      codigoPatrimonio: new FormControl<number>(0),
     });
   }
 

@@ -93,15 +93,15 @@ export class UsuarioComponent extends Componente implements OnInit {
 
     this.form = this.fb.group(
       {
-        codigoUsuario: new FormControl(this.limpandoCampo ? this.form.get("codigoUsuario").value : 0, []),
-        codigoPerfil: new FormControl("", [Validators.required]),
-        codigoEmpresa: new FormControl("", [Validators.required]),
-        codigoSetor: new FormControl("", [Validators.required]),
-        nome: new FormControl("", [Validators.required, Validators.minLength(4), Validators.maxLength(25)]),
-        email: new FormControl("", [Validators.required, Validators.minLength(10), Validators.email]),
-        confirmeSenha: new FormControl("", [Validators.required, Validators.minLength(5), Validators.maxLength(25)]),
-        senha: new FormControl("", [Validators.required, Validators.minLength(5), Validators.maxLength(25)]),
-        ativo: new FormControl(true),
+        codigoUsuario: new FormControl<number>(this.limpandoCampo ? this.form.get("codigoUsuario").value : 0, []),
+        codigoPerfil: new FormControl<string>("", [Validators.required]),
+        codigoEmpresa: new FormControl<string>("", [Validators.required]),
+        codigoSetor: new FormControl<string>("", [Validators.required]),
+        nome: new FormControl<string>("", [Validators.required, Validators.minLength(4), Validators.maxLength(25)]),
+        email: new FormControl<string>("", [Validators.required, Validators.minLength(10), Validators.email]),
+        confirmeSenha: new FormControl<string>("", [Validators.required, Validators.minLength(5), Validators.maxLength(25)]),
+        senha: new FormControl<string>("", [Validators.required, Validators.minLength(5), Validators.maxLength(25)]),
+        ativo: new FormControl<boolean>(true),
       },
       formOptions,
     );

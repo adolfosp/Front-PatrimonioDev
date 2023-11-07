@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { NgxSpinnerService } from "ngx-spinner";
 
@@ -43,7 +43,7 @@ export class LoginComponent extends Componente implements OnInit {
     private encriptar: CriptografiaService,
     private localStorageService: LocalStorageService,
     private title: Title,
-    private authService: AuthService
+    private authService: AuthService,
   ) {
     super();
     this.title.setTitle("Login");
@@ -81,7 +81,7 @@ export class LoginComponent extends Componente implements OnInit {
     this.ehAutenticacaoAuth = autenticacaoAuth;
     this.spinner.show();
 
-    const loginDto = new LoginDto(senha, email, autenticacaoAuth)
+    const loginDto = new LoginDto(senha, email, autenticacaoAuth);
 
     this.authService
       .login(loginDto)
@@ -110,8 +110,8 @@ export class LoginComponent extends Componente implements OnInit {
 
   public validarCamposFormulario(): void {
     this.form = this.fb.group({
-      email: ["", [Validators.required, Validators.minLength(10), Validators.email]],
-      senha: ["", [Validators.required, Validators.minLength(5)]],
+      email: new FormControl<string>("", [Validators.required, Validators.minLength(10), Validators.email]),
+      senha: new FormControl<string>("", [Validators.required, Validators.minLength(5)]),
     });
   }
 

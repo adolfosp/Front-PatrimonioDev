@@ -1,7 +1,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Meta, Title } from '@angular/platform-browser';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IServiceAtualizar, IServiceCadastrar } from '@nvs-helpers/IServiceNomeHelper';
 import { MensagemRequisicao } from '@nvs-helpers/MensagemRequisicaoHelper';
@@ -54,8 +54,8 @@ export class CategoriaComponent extends Componente implements OnInit, Componente
 
   private validacao(): void {
     this.form = this.fb.group({
-      codigoCategoria: new FormControl(this._limpandoCampo ? this.form.get('codigoCategoria')?.value : 0, [],),
-      descricao: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(50)])
+      codigoCategoria: new FormControl<number>(this._limpandoCampo ? this.form.get('codigoCategoria')?.value : 0, [],),
+      descricao: new FormControl<string>('', [Validators.required, Validators.minLength(2), Validators.maxLength(50)])
 
     });
   }

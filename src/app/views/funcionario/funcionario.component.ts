@@ -1,17 +1,17 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { Title } from "@angular/platform-browser";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MensagemRequisicao } from "@nvs-helpers/MensagemRequisicaoHelper";
 import Componente from "@nvs-models/Componente";
-import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { Funcionario } from "@nvs-models/Funcionario";
 import { Setor } from "@nvs-models/Setor";
+import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { FuncionarioService } from "@nvs-services/funcionario/funcionario.service";
 import { CLASSE_BOTAO_LIMPAR } from "@nvs-utils/classes-sass.constant";
-import { NgxSpinnerService } from "ngx-spinner";
-import { Pagination } from "ngx-easy-table";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
-import { Title } from "@angular/platform-browser";
+import { Pagination } from "ngx-easy-table";
+import { NgxSpinnerService } from "ngx-spinner";
 
 @Component({
   selector: "app-funcionario",
@@ -69,11 +69,11 @@ export class FuncionarioComponent extends Componente implements OnInit {
 
   private validacao(): void {
     this.form = this.fb.group({
-      codigoFuncionario: new FormControl(this._limpandoCampo ? this.form.get("codigoFuncionario").value : 0, []),
-      nomeFuncionario: new FormControl("", [Validators.required, Validators.minLength(10), Validators.maxLength(100)]),
-      ativo: new FormControl(true),
-      codigoSetor: new FormControl("", [Validators.required]),
-      observacao: new FormControl(""),
+      codigoFuncionario: new FormControl<number>(this._limpandoCampo ? this.form.get("codigoFuncionario").value : 0, []),
+      nomeFuncionario: new FormControl<string>("", [Validators.required, Validators.minLength(10), Validators.maxLength(100)]),
+      ativo: new FormControl<boolean>(true),
+      codigoSetor: new FormControl<number>(0, [Validators.required]),
+      observacao: new FormControl<string>(""),
     });
   }
 

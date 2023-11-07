@@ -1,14 +1,14 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { Title } from "@angular/platform-browser";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MensagemRequisicao } from "@nvs-helpers/MensagemRequisicaoHelper";
 import Componente from "@nvs-models/Componente";
-import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { Empresa } from "@nvs-models/Empresa";
+import { DadosRequisicao } from "@nvs-models/requisicoes/DadosRequisicao";
 import { EmpresaService } from "@nvs-services/empresa/empresa.service";
 import { CLASSE_BOTAO_LIMPAR } from "@nvs-utils/classes-sass.constant";
 import { NgxSpinnerService } from "ngx-spinner";
-import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: "app-empresa",
@@ -52,11 +52,11 @@ export class EmpresaComponent extends Componente implements OnInit {
 
   private validacao(): void {
     this.form = this.fb.group({
-      codigoEmpresa: new FormControl(this._limpandoCampo ? this.form.get("codigoEmpresa").value : 0, []),
-      nomeFantasia: new FormControl("", [Validators.required, Validators.minLength(10), Validators.maxLength(70)]),
-      cnpj: new FormControl("", [Validators.required, Validators.minLength(18), Validators.maxLength(18)]),
-      razaoSocial: new FormControl("", [Validators.required, Validators.minLength(10), Validators.maxLength(70)]),
-      empresaPadraoImpressao: new FormControl(false),
+      codigoEmpresa: new FormControl<number>(this._limpandoCampo ? this.form.get("codigoEmpresa").value : 0, []),
+      nomeFantasia: new FormControl<string>("", [Validators.required, Validators.minLength(10), Validators.maxLength(70)]),
+      cnpj: new FormControl<string>("", [Validators.required, Validators.minLength(18), Validators.maxLength(18)]),
+      razaoSocial: new FormControl<string>("", [Validators.required, Validators.minLength(10), Validators.maxLength(70)]),
+      empresaPadraoImpressao: new FormControl<boolean>(false),
     });
   }
 

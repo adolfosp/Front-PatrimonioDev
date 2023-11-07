@@ -119,9 +119,9 @@ export class PermissaoComponent extends Componente implements OnInit {
 
   private validacao(): void {
     this.form = this.fb.group({
-      codigoPerfil: new FormControl(this.limpandoCampo ? this.form.get("codigoUsuarioPermissao").value : 0, []),
-      descricaoPerfil: new FormControl("", [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
-      ativo: new FormControl(true),
+      codigoPerfil: new FormControl<number>(this.limpandoCampo ? this.form.get("codigoUsuarioPermissao").value : 0, []),
+      descricaoPerfil: new FormControl<string>("", [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
+      ativo: new FormControl<boolean>(true),
       acoesPorContexto: this.fb.array([], [Validators.required]),
     });
   }

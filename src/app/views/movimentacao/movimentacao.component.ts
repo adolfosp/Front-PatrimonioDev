@@ -66,15 +66,15 @@ export class MovimentacaoComponent extends Componente implements OnInit {
 
   private validacao(): void {
     this.form = this.fb.group({
-      codigoMovimentacao: new FormControl(this._limpandoCampo ? this.form.get("codigoMovimentacao").value : 0, []),
-      dataApropriacao: new FormControl("", [Validators.required]),
-      dataDevolucao: new FormControl(""),
-      observacao: new FormControl(""),
-      movimentacaoDoEquipamento: new FormControl(+MovimentacaoEquipamento["Em Uso"], [Validators.required]),
-      codigoPatrimonio: new FormControl(this._codigoPatrimonio),
-      codigoUsuario: new FormControl(this.token.obterCodigoUsuarioToken()),
-      nomeUsuario: new FormControl(this.token.obterNomeUsuarioToken()),
-      patrimonio: new FormControl(this._nomePatrimonio),
+      codigoMovimentacao: new FormControl<number>(this._limpandoCampo ? this.form.get("codigoMovimentacao").value : 0, []),
+      dataApropriacao: new FormControl<string>("", [Validators.required]),
+      dataDevolucao: new FormControl<string>(""),
+      observacao: new FormControl<string>(""),
+      movimentacaoDoEquipamento: new FormControl<number>(MovimentacaoEquipamento["Em Uso"], [Validators.required]),
+      codigoPatrimonio: new FormControl<number>(this._codigoPatrimonio),
+      codigoUsuario: new FormControl<number>(this.token.obterCodigoUsuarioToken()),
+      nomeUsuario: new FormControl<string>(this.token.obterNomeUsuarioToken()),
+      patrimonio: new FormControl<string>(this._nomePatrimonio),
     });
   }
 
