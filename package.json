@@ -15,16 +15,16 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^16.2.12",
-    "@angular/cdk": "^15.2.9",
-    "@angular/common": "^16.2.12",
-    "@angular/compiler": "^16.2.12",
-    "@angular/core": "^15.2.10",
-    "@angular/forms": "^16.2.12",
+    "@angular/animations": "^17.0.0",
+    "@angular/cdk": "^16.2.12",
+    "@angular/common": "^17.0.0",
+    "@angular/compiler": "^17.0.0",
+    "@angular/core": "^17.0.0",
+    "@angular/forms": "^17.0.0",
     "@angular/material": "^15.2.9",
-    "@angular/platform-browser": "^16.2.12",
-    "@angular/platform-browser-dynamic": "^16.2.12",
-    "@angular/router": "^16.2.12",
+    "@angular/platform-browser": "^17.0.0",
+    "@angular/platform-browser-dynamic": "^17.0.0",
+    "@angular/router": "^17.0.0",
     "@auth0/angular-jwt": "^5.1.2",
     "@fortawesome/fontawesome-free": "^6.4.0",
     "@ng-idle/core": "^11.1.0",
@@ -50,7 +50,7 @@
     "ts-simple-nameof": "^1.3.1",
     "tslib": "^2.5.0",
     "xlsx": "^0.18.5",
-    "zone.js": "~0.11.4"
+    "zone.js": "~0.14.2"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^16.2.10",
@@ -60,7 +60,7 @@
     "@angular-eslint/schematics": "16.2.0",
     "@angular-eslint/template-parser": "16.2.0",
     "@angular/cli": "~16.2.10",
-    "@angular/compiler-cli": "^16.2.12",
+    "@angular/compiler-cli": "^17.0.0",
     "@bitovi/eslint-config": "^1.4.1",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
@@ -79,7 +79,7 @@
     "karma-jasmine-html-reporter": "~2.0.0",
     "prettier": "2.8.0",
     "semantic-release": "^22.0.5",
-    "typescript": "~4.9.5",
+    "typescript": "~5.2.2",
     "webpack-bundle-analyzer": "^4.9.1"
   },
   "repository": {
