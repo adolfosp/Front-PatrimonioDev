@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { MatSelect } from "@angular/material/select";
+import { MatLegacySelect as MatSelect } from "@angular/material/legacy-select";
 import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
 import { Pagination } from "ngx-easy-table";
 import { quantidadeBuscaPorVezSelect } from "@nvs-utils/configuracao-paginacao";

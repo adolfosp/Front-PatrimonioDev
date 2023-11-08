@@ -12,13 +12,13 @@ import { AppComponent } from "./app.component";
 import { LoginComponent } from "./views/login/login.component";
 
 import { CommonModule, HashLocationStrategy, LocationStrategy } from "@angular/common";
-import { MatButtonModule } from "@angular/material/button";
-import { MatDialogModule } from "@angular/material/dialog";
+import { MatLegacyButtonModule as MatButtonModule } from "@angular/material/legacy-button";
+import { MatLegacyDialogModule as MatDialogModule } from "@angular/material/legacy-dialog";
 import { MatExpansionModule } from "@angular/material/expansion";
-import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule } from "@angular/material/form-field";
+import { MAT_LEGACY_FORM_FIELD_DEFAULT_OPTIONS as MAT_FORM_FIELD_DEFAULT_OPTIONS, MatLegacyFormFieldModule as MatFormFieldModule } from "@angular/material/legacy-form-field";
 import { MatIconModule } from "@angular/material/icon";
-import { MatInputModule } from "@angular/material/input";
-import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { MatLegacyInputModule as MatInputModule } from "@angular/material/legacy-input";
+import { MatLegacySlideToggleModule as MatSlideToggleModule } from "@angular/material/legacy-slide-toggle";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { SidenavService } from "@nvs-services/componente/sidenav.service";
 import { ServiceInjectionFactory } from "@nvs-services/factories/service-injection-factory";

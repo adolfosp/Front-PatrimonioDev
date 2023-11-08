@@ -16,22 +16,39 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "es2020",
+    "target": "ES2022",
     "module": "es2020",
     "lib": [
       "es2020",
       "dom"
     ],
     "paths": {
-      "@nvs-services/*": ["src/app/services/*"],
-      "@nvs-enum/*": ["src/app/models/enums/*"],
-      "@nvs-models/*": ["src/app/models/*"],
-      "@nvs-guards/*": ["src/app/core/guards/*"],
-      "@nvs-helpers/*": ["src/app/helpers/*"],
-      "@nvs-assets/*": ["src/assets/*"],
-      "@nvs-pipes/*": ["src/app/core/pipes/*"],
-      "@nvs-utils/*": ["src/app/utils/*"],
+      "@nvs-services/*": [
+        "src/app/services/*"
+      ],
+      "@nvs-enum/*": [
+        "src/app/models/enums/*"
+      ],
+      "@nvs-models/*": [
+        "src/app/models/*"
+      ],
+      "@nvs-guards/*": [
+        "src/app/core/guards/*"
+      ],
+      "@nvs-helpers/*": [
+        "src/app/helpers/*"
+      ],
+      "@nvs-assets/*": [
+        "src/assets/*"
+      ],
+      "@nvs-pipes/*": [
+        "src/app/core/pipes/*"
+      ],
+      "@nvs-utils/*": [
+        "src/app/utils/*"
+      ]
     },
+    "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

@@ -4,8 +4,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
+import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
+import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
 
 import { NgSelectModule } from '@ng-select/ng-select';
 import { EquipamentoService } from '@nvs-services/equipamento/equipamento.service';
@@ -24,7 +24,7 @@ import { ListagemPatrimonioComponent } from './listagem-patrimonio/listagem-patr
 import { PatrimonioRoutingModule } from './patrimonio-routing.module';
 import { PatrimonioComponent } from './patrimonio.component';
 import { HeaderGridComponent } from "../shared/grid/header-grid/header-grid.component";
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatLegacyPaginatorModule as MatPaginatorModule } from '@angular/material/legacy-paginator';
 
 @NgModule({
   providers: [PatrimonioService, EquipamentoService, FuncionarioService, BsModalService],

@@ -8,7 +8,7 @@ import {
     ViewChild,
     ViewEncapsulation
 } from "@angular/core";
-import { PageEvent } from "@angular/material/paginator";
+import { LegacyPageEvent as PageEvent } from "@angular/material/legacy-paginator";
 import { Title } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import Componente from "@nvs-models/Componente";

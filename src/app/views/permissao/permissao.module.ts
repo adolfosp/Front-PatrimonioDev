@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatLegacyCheckboxModule as MatCheckboxModule } from '@angular/material/legacy-checkbox';
 import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
+import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
+import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { TableModule } from 'ngx-easy-table';
 import { NgxSpinnerModule } from 'ngx-spinner';
@@ -15,7 +15,7 @@ import { PermissaoRoutingModule } from './permissao-routing.module';
 import { PermissaoComponent } from './permissao.component';
 import { SharedComponentModule } from '../shared/shared-component.module';
 import { HeaderGridComponent } from '../shared/grid/header-grid/header-grid.component';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatLegacyPaginatorModule as MatPaginatorModule } from '@angular/material/legacy-paginator';
 
 @NgModule({
   imports: [

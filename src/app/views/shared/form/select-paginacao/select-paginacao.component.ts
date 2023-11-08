@@ -1,6 +1,6 @@
 import { Attribute, Component, Input, OnInit, ViewChild } from "@angular/core";
 import { FormControl } from "@angular/forms";
-import { MatSelect } from "@angular/material/select";
+import { MatLegacySelect as MatSelect } from "@angular/material/legacy-select";
 import { RegistroNeutroLabel } from "@nvs-enum/registro-neutro-label.enum";
 import Componente from "@nvs-models/Componente";
 import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";
