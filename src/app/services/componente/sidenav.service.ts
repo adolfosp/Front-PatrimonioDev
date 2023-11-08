@@ -10,11 +10,11 @@ export class SidenavService {
 
   public toggleSidenav() {
     const valueExpanded = !this.isExpanded;
-    this.setWidthBasedByCurrentStateSideNav(valueExpanded);
+    this.#setWidthBasedByCurrentStateSideNav(valueExpanded);
     this.isExpanded = valueExpanded;
   }
 
-  private setWidthBasedByCurrentStateSideNav(valueExpanded: boolean) {
+  #setWidthBasedByCurrentStateSideNav(valueExpanded: boolean) {
     if (valueExpanded) {
       document.body.style.setProperty("--sidenav-width-resizing", `${this.sidenavWidth}px`);
       return;
