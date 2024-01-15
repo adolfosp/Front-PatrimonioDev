@@ -1,6 +1,6 @@
 import { Component, Injectable, NgModule } from "@angular/core";
-import {MatLegacyPaginatorIntl as MatPaginatorIntl, MatLegacyPaginatorModule as MatPaginatorModule} from '@angular/material/legacy-paginator';
-import {Subject} from 'rxjs';
+import { MatPaginatorIntl, MatPaginatorModule } from "@angular/material/paginator";
+import { Subject } from "rxjs";
 
 @Injectable()
 export class CustomPaginatorIntl implements MatPaginatorIntl {
@@ -10,8 +10,8 @@ export class CustomPaginatorIntl implements MatPaginatorIntl {
   itemsPerPageLabel = `Items por página:`;
   lastPageLabel = `Última página`;
 
-  nextPageLabel = 'Próxima página';
-  previousPageLabel = 'Página anterior';
+  nextPageLabel = "Próxima página";
+  previousPageLabel = "Página anterior";
 
   getRangeLabel(page: number, pageSize: number, length: number): string {
     if (length === 0) {
@@ -20,20 +20,17 @@ export class CustomPaginatorIntl implements MatPaginatorIntl {
     const amountPages = Math.ceil(length / pageSize);
     return `Página ${page + 1} de ${amountPages}`;
   }
-
 }
-
 
 @Component({
   selector: "app-paginator-intl",
-  templateUrl: 'custom-paginator-intl.component.html',
+  templateUrl: "custom-paginator-intl.component.html",
 })
 export class CustomPaginatorIntlComponent {}
-
 
 @NgModule({
   imports: [MatPaginatorModule],
   declarations: [CustomPaginatorIntlComponent],
-  providers: [{provide: MatPaginatorIntl, useClass: CustomPaginatorIntl}],
+  providers: [{ provide: MatPaginatorIntl, useClass: CustomPaginatorIntl }],
 })
 export class CustomPaginatorIntlModule {}

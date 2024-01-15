@@ -1,13 +1,13 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from 'src/app/core/guards/auth.guard';
-import { CustomPreloader } from './core/configs/custom-preload-strategy';
-import { DashboardComponent } from './views/dashboard/dashboard.component';
-import { GraficoComponent } from './views/grafico/grafico.component';
-import { LoginComponent } from './views/login/login.component';
-import { RegistrarComponent } from './views/login/registrar/registrar.component';
-import { PerdaComponent } from './views/perda/perda.component';
-import { QrCodeComponent } from './views/qr-code/qr-code.component';
+import { NgModule } from "@angular/core";
+import { RouterModule, Routes } from "@angular/router";
+import { AuthGuard } from "src/app/core/guards/auth.guard";
+import { CustomPreloader } from "./core/configs/custom-preload-strategy";
+import { DashboardComponent } from "./views/dashboard/dashboard.component";
+import { GraficoComponent } from "./views/grafico/grafico.component";
+import { LoginComponent } from "./views/login/login.component";
+import { RegistrarComponent } from "./views/login/registrar/registrar.component";
+import { PerdaComponent } from "./views/perda/perda.component";
+import { QrCodeComponent } from "./views/qr-code/qr-code.component";
 
 const routes: Routes = [
   {
@@ -115,8 +115,8 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, {preloadingStrategy: CustomPreloader})],
-  exports: [RouterModule]
+  imports: [RouterModule.forRoot(routes, { preloadingStrategy: CustomPreloader })],
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
 export default routes;

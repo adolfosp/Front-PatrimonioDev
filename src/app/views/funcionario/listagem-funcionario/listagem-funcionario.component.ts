@@ -8,7 +8,7 @@ import {
     ViewChild,
     ViewEncapsulation,
 } from "@angular/core";
-import { LegacyPageEvent as PageEvent } from "@angular/material/legacy-paginator";
+import { PageEvent } from "@angular/material/paginator";
 import { Title } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import Componente from "@nvs-models/Componente";
@@ -133,7 +133,6 @@ export class ListagemFuncionarioComponent extends Componente implements OnInit, 
       })
       .add(() => this.spinner.hide("desativando"));
   }
-
 
   public detalheFuncionario(codigoFuncionario: number): void {
     this.router.navigate([`dashboard/funcionario/${codigoFuncionario}`]);

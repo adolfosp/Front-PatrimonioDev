@@ -6,9 +6,9 @@ import {
     HostListener,
     OnInit,
     ViewChild,
-    ViewEncapsulation
+    ViewEncapsulation,
 } from "@angular/core";
-import { LegacyPageEvent as PageEvent } from "@angular/material/legacy-paginator";
+import { PageEvent } from "@angular/material/paginator";
 import { Title } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import Componente from "@nvs-models/Componente";
@@ -20,13 +20,7 @@ import { TokenService } from "@nvs-services/token/token.service";
 import { configuracaoPaginacao } from "@nvs-utils/configuracao-paginacao";
 import { ConfiguracaoSpinner } from "@nvs-utils/configuracao-spinner";
 import configuracaoTabela from "@nvs-utils/configuracao-tabela";
-import {
-    API,
-    APIDefinition,
-    Columns,
-    Config,
-    Pagination,
-} from "ngx-easy-table";
+import { API, APIDefinition, Columns, Config, Pagination } from "ngx-easy-table";
 import { NgxSpinnerService } from "ngx-spinner";
 import { Confirmable } from "src/app/core/decorators/confirm.decorator";
 import * as XLSX from "xlsx";

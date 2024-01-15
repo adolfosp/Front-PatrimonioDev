@@ -1,4 +1,6 @@
+import type { Type as Component } from "@angular/core";
 import { Injectable } from "@angular/core";
+import { SidenavContentAreaDirective } from "src/app/directives/sidenav-content-area.directive";
 
 @Injectable({
   providedIn: "root",
@@ -7,6 +9,33 @@ export class SidenavService {
   isExpanded = true;
   readonly sidenavMinWidth = 250;
   readonly sidenavMaxWidth = window.innerWidth - 300;
+  #stack = [] as Component<unknown>[];
+  #contentArea?: SidenavContentAreaDirective;
+
+  setDynamicContentArea(host: SidenavContentAreaDirective) {
+    this.#contentArea = host;
+  }
+
+  #setContent(component: Component<unknown>): void {
+    this.#contentArea?.viewContainerRef.clear();
+
+    this.#contentArea?.viewContainerRef.createComponent(component);
+  }
+
+  push(component: Component<unknown>): void {
+    this.#stack.push(component);
+    this.#setContent(component);
+  }
+
+  pop(): void {
+    if (this.#stack.length === 1) {
+      return;
+    }
+
+    this.#stack.pop();
+
+    this.#setContent(this.#stack[this.#stack.length - 1]);
+  }
 
   public toggleSidenav() {
     const valueExpanded = !this.isExpanded;

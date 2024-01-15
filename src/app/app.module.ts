@@ -12,14 +12,16 @@ import { AppComponent } from "./app.component";
 import { LoginComponent } from "./views/login/login.component";
 
 import { CommonModule, HashLocationStrategy, LocationStrategy } from "@angular/common";
-import { MatLegacyButtonModule as MatButtonModule } from "@angular/material/legacy-button";
-import { MatLegacyDialogModule as MatDialogModule } from "@angular/material/legacy-dialog";
+import { MatButtonModule } from "@angular/material/button";
+import { MatDialogModule } from "@angular/material/dialog";
 import { MatExpansionModule } from "@angular/material/expansion";
-import { MAT_LEGACY_FORM_FIELD_DEFAULT_OPTIONS as MAT_FORM_FIELD_DEFAULT_OPTIONS, MatLegacyFormFieldModule as MatFormFieldModule } from "@angular/material/legacy-form-field";
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
-import { MatLegacyInputModule as MatInputModule } from "@angular/material/legacy-input";
-import { MatLegacySlideToggleModule as MatSlideToggleModule } from "@angular/material/legacy-slide-toggle";
+import { MatInputModule } from "@angular/material/input";
+import { MatPaginatorModule } from "@angular/material/paginator";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { AuthService } from "@nvs-services/auth/auth.service";
 import { SidenavService } from "@nvs-services/componente/sidenav.service";
 import { ServiceInjectionFactory } from "@nvs-services/factories/service-injection-factory";
 import { ZXingScannerModule } from "@zxing/ngx-scanner";
@@ -28,6 +30,7 @@ import { NgxEchartsModule } from "ngx-echarts";
 import { NgxMaskModule } from "ngx-mask";
 import { ToastrModule } from "ngx-toastr";
 import { CustomPreloader } from "./core/configs/custom-preload-strategy";
+import { SidenavContentAreaDirective } from "./directives/sidenav-content-area.directive";
 import { DashboardComponent } from "./views/dashboard/dashboard.component";
 import { P403Component } from "./views/error/403.component";
 import { P404Component } from "./views/error/404.component";
@@ -38,6 +41,8 @@ import { ConfirmDialogComponent } from "./views/shared/confirm-dialog/confirm-di
 import { CustomPaginatorIntlModule } from "./views/shared/grid/custom-paginator-grid/custom-paginator-intl.component";
 import { HttpCodeMensagemComponent } from "./views/shared/http-code-mensagem/http-code-mensagem.component";
 import { SidenavLinkComponent } from "./views/sidenav-link/sidenav-link.component";
+import { DefaultSidenavComponent } from "./views/sidenav/default-sidenav/default-sidenav.component";
+import { PessoaSidenavComponent } from "./views/sidenav/default-sidenav/pessoa-sidenav.component";
 import { SideNavComponent } from "./views/sidenav/sidenav.component";
 
 @NgModule({
@@ -53,7 +58,10 @@ import { SideNavComponent } from "./views/sidenav/sidenav.component";
     SidenavLinkComponent,
     GraficoComponent,
     ConfirmDialogComponent,
-    DashboardComponent
+    DashboardComponent,
+    SidenavContentAreaDirective,
+    PessoaSidenavComponent,
+    DefaultSidenavComponent,
   ],
   imports: [
     NgxMaskModule.forRoot({
@@ -92,6 +100,7 @@ import { SideNavComponent } from "./views/sidenav/sidenav.component";
     MatExpansionModule,
     CustomPaginatorIntlModule,
     MatDialogModule,
+    MatPaginatorModule,
   ],
   providers: [
     {
@@ -103,6 +112,7 @@ import { SideNavComponent } from "./views/sidenav/sidenav.component";
     JwtHelperService,
     ServiceInjectionFactory,
     SidenavService,
+    AuthService,
     CustomPreloader,
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
   ],

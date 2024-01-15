@@ -1,5 +1,13 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild, ViewEncapsulation } from "@angular/core";
-import { LegacyPageEvent as PageEvent } from "@angular/material/legacy-paginator";
+import {
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    OnInit,
+    ViewChild,
+    ViewEncapsulation,
+} from "@angular/core";
+import { PageEvent } from "@angular/material/paginator";
 import { Title } from "@angular/platform-browser";
 import Componente from "@nvs-models/Componente";
 import PaginacaoDto from "@nvs-models/dtos/PaginacaoDto";

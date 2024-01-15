@@ -3,6 +3,7 @@
 ## Introduction
 
 > Esse é um projeto realizado para o gerenciamento de patrimônios voltado à equipamentos tecnológicos da empresa. O projeto foi desenvolvido com intuito de facilitar o gerenciamento dos equipamentos disponibilizados pelas empresa para os seus funcionários.
+- Projeto pausado, pois não é mais viável a construção do mesmo. Em caso de retorno, será necessário continuar construindo o sideBar
 
 ## Technologies used
 <p align="left"> <a href="https://angular.io" target="_blank">

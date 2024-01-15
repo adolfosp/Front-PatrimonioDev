@@ -55,6 +55,9 @@
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictDomEventTypes": false,
-    "strictTemplates": true
+    "strictTemplates": true,
+    "fullTemplateTypeCheck": true,
+    "enableIvy": false
+
   }
 }

@@ -17,14 +17,14 @@
     padding: 16px
     box-sizing: border-box
 
-.resize-handle
+.button-flipped
     height: 100%
     background-color: rgb(165, 165, 165)
     width: 2px
     position: absolute
     top: 0
+    right: 0
     left: var(--sidenav-width-resizing)
-    cursor: ew-resize
     -webkit-touch-callout: none
     -webkit-user-select: none
     -khtml-user-select: none
@@ -33,20 +33,6 @@
     user-select: none
     transition: background-color 0.2s ease-out, width 0.2s ease-out
     transition: left 0.6s cubic-bezier(0.02, 0.68, 0.63, 0.98)
-    &:hover
-        width: 3px
-        background-color: rgb(93, 159, 235)
-    &::after
-        content: ""
-        display: block
-        height: 100%
-        width: 24px
-        position: absolute
-        right: -12px
-        z-index: 1
-    &.resizing::after
-        width: 100px
-        right: calc(-100px / 2)
 
 .sidenav-body
     width: 100%
