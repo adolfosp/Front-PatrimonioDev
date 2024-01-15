@@ -1,3 +1,10 @@
+## [1.0.5](https://github.com/adolfosp/Front-PatrimonioDev/compare/v1.0.4...v1.0.5) (2023-11-07)
+
+
+### Bug Fixes
+
+* adds type forms ([10c9c54](https://github.com/adolfosp/Front-PatrimonioDev/commit/10c9c54db8a443996e442105e7d35b09007e5fd2))
+
 ## [1.0.4](https://github.com/adolfosp/Front-PatrimonioDev/compare/v1.0.3...v1.0.4) (2023-10-31)
 
 
